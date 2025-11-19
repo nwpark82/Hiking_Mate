@@ -40,6 +40,7 @@ function ActiveRecordContent() {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [pausedTime, setPausedTime] = useState(0);
+  const [pauseStartTime, setPauseStartTime] = useState<number | null>(null);
   const [gpsPoints, setGpsPoints] = useState<GPSPoint[]>([]);
   const [photos, setPhotos] = useState<string[]>([]);
 
@@ -94,13 +95,16 @@ function ActiveRecordContent() {
 
   const handlePause = () => {
     setIsPaused(true);
-    const now = Date.now();
-    setPausedTime(prev => prev + (now - (startTime || now)));
+    setPauseStartTime(Date.now());
   };
 
   const handleResume = () => {
     setIsPaused(false);
-    setStartTime(Date.now());
+    if (pauseStartTime) {
+      const pauseDuration = Date.now() - pauseStartTime;
+      setPausedTime(prev => prev + pauseDuration);
+      setPauseStartTime(null);
+    }
   };
 
   const handleStop = () => {

@@ -190,16 +190,22 @@ export async function getUserStats(userId: string) {
       .select('*', { count: 'exact', head: true })
       .eq('user_id', userId);
 
-    // 받은 좋아요 수 조회
-    const { count: likesCount } = await supabase
-      .from('likes')
-      .select('post_id', { count: 'exact', head: true })
-      .in('post_id',
-        supabase
-          .from('posts')
-          .select('id')
-          .eq('user_id', userId)
-      );
+    // 받은 좋아요 수 조회 (2단계: 먼저 게시글 ID 조회, 그 다음 좋아요 수 조회)
+    const { data: userPosts } = await supabase
+      .from('posts')
+      .select('id')
+      .eq('user_id', userId);
+
+    const postIds = userPosts?.map(p => p.id) || [];
+
+    let likesCount = 0;
+    if (postIds.length > 0) {
+      const { count } = await supabase
+        .from('likes')
+        .select('post_id', { count: 'exact', head: true })
+        .in('post_id', postIds);
+      likesCount = count || 0;
+    }
 
     return {
       stats: {

@@ -6,7 +6,8 @@ import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { getMyProfile, getUserStats, type UserProfile } from '@/lib/services/users';
 import { getMyTrackingStats } from '@/lib/services/tracking';
-import { formatDistance, formatDuration } from '@/lib/utils/helpers';
+import { formatDistance } from '@/lib/utils/helpers';
+import { formatDuration } from '@/lib/utils/gps';
 import {
   User,
   Calendar,

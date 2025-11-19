@@ -2,24 +2,22 @@ import { supabase } from '@/lib/supabase/client';
 
 export async function signUp(email: string, password: string, username: string) {
   try {
-    // 1. 이메일/비밀번호로 회원가입
-    const { data: authData, error: authError } = await supabase.auth.signUp({
+    // Database trigger가 자동으로 users 테이블에 프로필 생성
+    // metadata로 username 전달
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          username: username,
+        }
+      }
     });
 
-    if (authError) throw authError;
-    if (!authData.user) throw new Error('회원가입에 실패했습니다.');
+    if (error) throw error;
+    if (!data.user) throw new Error('회원가입에 실패했습니다.');
 
-    // 2. users 테이블에 프로필 생성
-    const { error: profileError } = await supabase.from('users').insert({
-      id: authData.user.id,
-      username: username,
-    });
-
-    if (profileError) throw profileError;
-
-    return { user: authData.user, error: null };
+    return { user: data.user, error: null };
   } catch (error: any) {
     return { user: null, error: error.message };
   }
@@ -52,8 +50,13 @@ export async function signOut() {
 
 export async function resetPassword(email: string) {
   try {
+    // Get base URL from environment variable or window.location
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+      redirectTo: `${baseUrl}/auth/reset-password`,
     });
 
     if (error) throw error;

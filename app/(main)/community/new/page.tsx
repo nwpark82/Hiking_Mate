@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { createPost } from '@/lib/services/posts';
+import { uploadMultipleImages } from '@/lib/services/storage';
 import { Loader2, Image as ImageIcon, X } from 'lucide-react';
 
 const CATEGORIES = [
@@ -23,6 +24,8 @@ export default function NewPostPage() {
   const [category, setCategory] = useState('question');
   const [images, setImages] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -32,8 +35,38 @@ export default function NewPostPage() {
   }, [user, authLoading, router]);
 
   const handleImageAdd = () => {
-    // TODO: 실제 이미지 업로드 구현
-    alert('이미지 업로드 기능은 다음 단계에서 구현됩니다');
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    if (images.length + files.length > 5) {
+      alert('이미지는 최대 5장까지 업로드할 수 있습니다.');
+      return;
+    }
+
+    setUploadingImages(true);
+    try {
+      const fileArray = Array.from(files);
+      const { urls, errors } = await uploadMultipleImages(fileArray, 'post-images', user?.id);
+
+      if (errors.length > 0) {
+        alert(`일부 이미지 업로드 실패: ${errors.join(', ')}`);
+      }
+
+      if (urls.length > 0) {
+        setImages(prev => [...prev, ...urls]);
+      }
+    } catch (error: any) {
+      alert('이미지 업로드에 실패했습니다: ' + error.message);
+    } finally {
+      setUploadingImages(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const handleImageRemove = (index: number) => {
@@ -179,13 +212,26 @@ export default function NewPostPage() {
                 <button
                   type="button"
                   onClick={handleImageAdd}
-                  className="flex-shrink-0 w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-primary-600 hover:text-primary-600 transition"
+                  disabled={uploadingImages}
+                  className="flex-shrink-0 w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-primary-600 hover:text-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <ImageIcon className="w-6 h-6 mb-1" />
-                  <span className="text-xs">추가</span>
+                  {uploadingImages ? (
+                    <Loader2 className="w-6 h-6 mb-1 animate-spin" />
+                  ) : (
+                    <ImageIcon className="w-6 h-6 mb-1" />
+                  )}
+                  <span className="text-xs">{uploadingImages ? '업로드 중...' : '추가'}</span>
                 </button>
               )}
             </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileChange}
+              className="hidden"
+            />
           </div>
 
           {/* Submit Button */}

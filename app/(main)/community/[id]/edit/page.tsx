@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { getPost, updatePost, Post } from '@/lib/services/posts';
+import { getPost, updatePost } from '@/lib/services/posts';
+import { uploadMultipleImages } from '@/lib/services/storage';
 import { Loader2, Image as ImageIcon, X } from 'lucide-react';
 
 const CATEGORIES = [
@@ -18,55 +19,89 @@ const CATEGORIES = [
 export default function EditPostPage() {
   const router = useRouter();
   const params = useParams();
+  const postId = params.id as string;
   const { user, loading: authLoading } = useAuth();
-  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('question');
   const [images, setImages] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!authLoading && !user) {
-      alert('로그인이 필요합니다.');
       router.push('/auth/login');
       return;
     }
 
-    if (params.id) {
-      loadPost(params.id as string);
+    if (user && postId) {
+      loadPost();
     }
-  }, [params.id, user, authLoading, router]);
+  }, [user, authLoading, postId, router]);
 
-  const loadPost = async (id: string) => {
-    setLoading(true);
-    const { post: data, error } = await getPost(id);
+  const loadPost = async () => {
+    try {
+      const { post, error } = await getPost(postId);
 
-    if (error || !data) {
-      alert('게시글을 불러오는데 실패했습니다.');
-      router.push('/community');
-      return;
+      if (error) throw new Error(error);
+      if (!post) throw new Error('게시글을 찾을 수 없습니다.');
+
+      // Check if user is the author
+      if (post.user_id !== user?.id) {
+        alert('본인의 게시글만 수정할 수 있습니다.');
+        router.back();
+        return;
+      }
+
+      // Load post data
+      setCategory(post.category);
+      setTitle(post.title);
+      setContent(post.content);
+      setImages(post.images || []);
+    } catch (error: any) {
+      console.error('Error loading post:', error);
+      alert(error.message || '게시글을 불러오는데 실패했습니다.');
+      router.back();
+    } finally {
+      setLoading(false);
     }
-
-    // Check if user is the author
-    if (user && data.user_id !== user.id) {
-      alert('수정 권한이 없습니다.');
-      router.push(`/community/${id}`);
-      return;
-    }
-
-    setPost(data);
-    setTitle(data.title);
-    setContent(data.content);
-    setCategory(data.category);
-    setImages(data.images || []);
-    setLoading(false);
   };
 
   const handleImageAdd = () => {
-    // TODO: 실제 이미지 업로드 구현
-    alert('이미지 업로드 기능은 다음 단계에서 구현됩니다');
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    if (images.length + files.length > 5) {
+      alert('이미지는 최대 5장까지 업로드할 수 있습니다.');
+      return;
+    }
+
+    setUploadingImages(true);
+    try {
+      const fileArray = Array.from(files);
+      const { urls, errors } = await uploadMultipleImages(fileArray, 'post-images', user?.id);
+
+      if (errors.length > 0) {
+        alert(`일부 이미지 업로드 실패: ${errors.join(', ')}`);
+      }
+
+      if (urls.length > 0) {
+        setImages(prev => [...prev, ...urls]);
+      }
+    } catch (error: any) {
+      alert('이미지 업로드에 실패했습니다: ' + error.message);
+    } finally {
+      setUploadingImages(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const handleImageRemove = (index: number) => {
@@ -76,8 +111,8 @@ export default function EditPostPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!user || !post) {
-      alert('잘못된 접근입니다.');
+    if (!user) {
+      alert('로그인이 필요합니다.');
       return;
     }
 
@@ -93,8 +128,8 @@ export default function EditPostPage() {
 
     setIsSubmitting(true);
 
-    const { post: updatedPost, error } = await updatePost(
-      post.id,
+    const { error } = await updatePost(
+      postId,
       user.id,
       title.trim(),
       content.trim(),
@@ -108,9 +143,8 @@ export default function EditPostPage() {
       return;
     }
 
-    if (updatedPost) {
-      router.push(`/community/${updatedPost.id}`);
-    }
+    alert('게시글이 수정되었습니다.');
+    router.push(`/community/${postId}`);
   };
 
   if (authLoading || loading) {
@@ -213,13 +247,26 @@ export default function EditPostPage() {
                 <button
                   type="button"
                   onClick={handleImageAdd}
-                  className="flex-shrink-0 w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-primary-600 hover:text-primary-600 transition"
+                  disabled={uploadingImages}
+                  className="flex-shrink-0 w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 hover:border-primary-600 hover:text-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <ImageIcon className="w-6 h-6 mb-1" />
-                  <span className="text-xs">추가</span>
+                  {uploadingImages ? (
+                    <Loader2 className="w-6 h-6 mb-1 animate-spin" />
+                  ) : (
+                    <ImageIcon className="w-6 h-6 mb-1" />
+                  )}
+                  <span className="text-xs">{uploadingImages ? '업로드 중...' : '추가'}</span>
                 </button>
               )}
             </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileChange}
+              className="hidden"
+            />
           </div>
 
           {/* Submit Button */}
