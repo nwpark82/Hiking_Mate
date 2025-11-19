@@ -1,7 +1,7 @@
 {
   "name": "하이킹메이트 - 등산로 정보 & 커뮤니티",
   "short_name": "하이킹메이트",
-  "description": "전국 등산로 정보, GPS 산행 기록, 등산 커뮤니티",
+  "description": "전국 등산로 정보, GPS 산행 기록, 등산 커뮤니티. 나만의 등산 기록을 남기고 다른 등산객들과 정보를 공유하세요.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -21,9 +21,32 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["travel", "lifestyle", "health"],
+  "categories": ["travel", "lifestyle", "health", "sports"],
   "lang": "ko-KR",
   "dir": "ltr",
   "scope": "/",
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "등산로 탐색",
+      "short_name": "탐색",
+      "description": "전국 등산로 검색 및 탐색",
+      "url": "/explore",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "커뮤니티",
+      "short_name": "커뮤니티",
+      "description": "등산 커뮤니티",
+      "url": "/community",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "GPS 기록",
+      "short_name": "기록",
+      "description": "산행 GPS 기록",
+      "url": "/record",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
 }
