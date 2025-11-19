@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { supabase } from '@/lib/supabase/client';
+import { saveTrackingSession } from '@/lib/services/tracking';
 import { formatDistance } from '@/lib/utils/helpers';
 import { formatDuration, formatPace } from '@/lib/utils/gps';
 import {
@@ -64,38 +64,29 @@ export default function SaveRecordPage() {
     setIsSaving(true);
 
     try {
-      const { data: hike, error } = await supabase
-        .from('hikes')
-        .insert({
-          user_id: user.id,
-          trail_id: hikeData.trailId,
-          gpx_data: { points: hikeData.gpsPoints },
-          distance: hikeData.distance,
-          duration: hikeData.duration,
-          avg_pace: hikeData.pace,
-          calories: hikeData.calories,
-          photos: hikeData.photos,
-          notes: notes || null,
-          rating: rating || null,
-          weather: weather || null,
-          is_public: isPublic,
-          started_at: hikeData.startTime,
-          completed_at: new Date().toISOString(),
-          is_completed: true,
-        })
-        .select()
-        .single();
+      const { session, error } = await saveTrackingSession({
+        trail_id: hikeData.trailId,
+        start_time: hikeData.startTime,
+        end_time: new Date().toISOString(),
+        distance: hikeData.distance, // meters
+        duration: hikeData.duration, // seconds
+        track_points: hikeData.gpsPoints,
+        status: 'completed',
+      });
 
-      if (error) throw error;
+      if (error) throw new Error(error);
 
       // 로컬 스토리지에서 제거
       localStorage.removeItem('pendingHike');
 
-      // 성공 페이지로 이동
-      router.push(`/record/detail/${hike.id}?success=true`);
-    } catch (error) {
+      // 성공 메시지 표시
+      alert('산행 기록이 저장되었습니다!');
+
+      // 기록 목록 페이지로 이동
+      router.push('/record');
+    } catch (error: any) {
       console.error('Failed to save hike:', error);
-      alert('산행 기록 저장에 실패했습니다. 다시 시도해주세요.');
+      alert(error.message || '산행 기록 저장에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsSaving(false);
     }
