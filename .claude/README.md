@@ -5,6 +5,36 @@
 
 ---
 
+## 📊 현재 개발 상태
+
+**Phase 1 MVP 진행률: 68% 완료**
+
+### ✅ 완료된 기능
+- 등산로 탐색 (100%): 리스트, 검색, 필터링, 상세페이지, 지도
+- 인증 시스템 (100%): 회원가입, 로그인, 로그아웃, 비밀번호 재설정
+- 커뮤니티 (95%): 게시판, 댓글, 좋아요
+- GPS 트래킹 UI (100%): 실시간 위치, 경로 표시, 통계
+- 배포 환경 (100%): Vercel + GitHub 자동 배포
+
+### 🔄 진행 중인 기능
+- GPS 기록 백엔드: 산행 저장 서비스 구현 필요
+- 프로필 페이지: 수정 기능 및 통계 집계 필요
+- 이미지 업로드: Supabase Storage 통합 필요
+
+### 📋 다음 개발 예정
+1. GPS 산행 저장 기능 (lib/services/tracking.ts)
+2. 이미지 업로드 서비스
+3. 프로필 수정 기능
+4. 사용자 통계 집계
+5. SEO 최적화
+
+### 🔗 개발 워크플로우
+- **Git 브랜치 전략**: GitHub Flow + Feature Branches
+- **자동 배포**: GitHub → Vercel (main: 프로덕션, develop: 프리뷰)
+- **문서**: [BRANCHING_STRATEGY.md](../BRANCHING_STRATEGY.md), [CONTRIBUTING.md](../CONTRIBUTING.md)
+
+---
+
 ## 📚 문서 구성
 
 이 문서는 **하이킹메이트** 서비스를 단계적으로 개발하기 위한 전체 가이드입니다.  
@@ -282,11 +312,11 @@ vercel
 
 #### Phase 1: MVP
 ```
-Frontend:  Next.js 14 + TypeScript + Tailwind CSS
+Frontend:  Next.js 16 + TypeScript + Tailwind CSS
 Backend:   Supabase (PostgreSQL, Auth, Storage)
 지도:      Kakao Map API
-배포:      Vercel (무료)
-PWA:       next-pwa
+배포:      Vercel (무료) + GitHub
+PWA:       next-pwa (예정)
 
 비용: $0/월
 ```
@@ -541,42 +571,52 @@ ROI                692%
 
 ## 🚀 개발 로드맵
 
-### Phase 1: MVP (6-8주)
+### Phase 1: MVP (6-8주) - **진행 중 (68% 완료)**
 
-#### Week 1-2: 환경 설정 & 데이터
+#### Week 1-2: 환경 설정 & 데이터 ✅ 완료
 **배포 환경 먼저!**
 - [x] Supabase 프로젝트 생성
 - [x] Vercel 계정 생성
 - [x] Kakao Developers 앱 등록
+- [x] GitHub 저장소 생성 및 연동
 
 **개발 환경**
-- [x] Next.js 프로젝트 초기화
-- [x] DB 스키마 생성
-- [x] 공공데이터 크롤링
+- [x] Next.js 16 프로젝트 초기화
+- [x] DB 스키마 생성 (8개 테이블)
+- [x] 공공데이터 GPX 파싱 (663개 등산로)
+- [x] 네이처 디자인 시스템 구축
+- [x] Git 브랜치 전략 수립 (GitHub Flow)
 
-#### Week 3-4: 등산로 기능
-- [ ] 등산로 리스트
-- [ ] 검색/필터
-- [ ] 상세 페이지
-- [ ] 지도 통합
+#### Week 3-4: 등산로 기능 ✅ 완료
+- [x] 등산로 리스트 (무한 스크롤)
+- [x] 검색/필터 (난이도, 지역)
+- [x] 상세 페이지
+- [x] 지도 통합 (Kakao Map + 등산로 경로)
 
-#### Week 5: GPS 기록
-- [ ] GPS 트래킹
-- [ ] IndexedDB 저장
-- [ ] 통계 계산
+#### Week 5: GPS 기록 🔄 진행 중
+- [x] GPS 트래킹 UI (실시간 위치 표시)
+- [x] 통계 계산 (거리, 고도, 칼로리)
+- [x] 경로 시각화 (지도에 표시)
+- [ ] 산행 저장 백엔드 서비스 (lib/services/tracking.ts)
+- [ ] IndexedDB 오프라인 저장
 
-#### Week 6: 커뮤니티
-- [ ] 인증 시스템
-- [ ] 게시판 CRUD
-- [ ] 댓글, 좋아요
+#### Week 6: 커뮤니티 ✅ 95% 완료
+- [x] 인증 시스템 (Supabase Auth)
+- [x] 게시판 CRUD
+- [x] 댓글, 좋아요
+- [ ] 이미지 업로드 (Supabase Storage)
 
-#### Week 7: 통합 & 테스트
-- [ ] 프로필 페이지
-- [ ] 설정
+#### Week 7: 통합 & 테스트 🔄 진행 중
+- [x] 프로필 페이지 (기본 표시)
+- [ ] 프로필 수정 기능
+- [ ] 사용자 통계 집계
+- [ ] 설정 페이지
 - [ ] 전체 통합 테스트
 
-#### Week 8: 배포
-- [ ] Vercel 배포
+#### Week 8: 배포 ✅ 완료
+- [x] Vercel 배포 (자동 배포 설정)
+- [x] GitHub 연동 (main/develop 브랜치)
+- [x] 프리뷰 배포 환경
 - [ ] SEO 최적화
 - [ ] 베타 테스트
 
@@ -780,21 +820,26 @@ Phase 3 시작 전:
 
 이 문서는 프로젝트 진행에 따라 지속적으로 업데이트됩니다.
 
-**마지막 업데이트**: 2024년 11월 18일  
-**버전**: 2.0.0  
-**상태**: Phase 1-3 계획 완료
+**마지막 업데이트**: 2025년 11월 19일
+**버전**: 2.1.0
+**상태**: Phase 1 MVP 68% 완료, Phase 2-3 계획 완료
 
 ---
 
 ## 다음 단계
 
-### Phase 1 시작
+### Phase 1 진행 중 (68% 완료)
 1. ✅ 문서 읽기
-2. ⬜ 배포 환경 설정 ([07_deployment_guide.md](./07_deployment_guide.md))
-3. ⬜ 개발 환경 설정 ([06_development_guide.md](./06_development_guide.md))
-4. ⬜ DB 구축 ([03_database_schema.md](./03_database_schema.md))
-5. ⬜ 개발 시작
-6. ⬜ 배포
+2. ✅ 배포 환경 설정 (Supabase + Vercel + GitHub)
+3. ✅ 개발 환경 설정
+4. ✅ DB 구축 (8개 테이블 + RLS + 663개 등산로)
+5. 🔄 **현재 진행 중**: 나머지 기능 구현
+   - [ ] GPS 산행 저장 백엔드 (lib/services/tracking.ts)
+   - [ ] 이미지 업로드 서비스 (lib/services/storage.ts)
+   - [ ] 프로필 수정 기능
+   - [ ] 사용자 통계 집계
+   - [ ] SEO 최적화
+6. ✅ Vercel 배포 완료 (자동 배포 설정됨)
 
 ### Phase 2 시작 (Phase 1 완료 후)
 1. ⬜ [10_deployment_checklist.md](./10_deployment_checklist.md) 확인
@@ -815,13 +860,15 @@ Phase 3 시작 전:
 
 ## 📋 Phase별 체크리스트
 
-### Phase 1 완료 조건
-- [ ] 등산로 1,000개 등록
-- [ ] 회원 200명
-- [ ] 산행 기록 100건
+### Phase 1 완료 조건 (68% 달성)
+- [x] 등산로 663개 등록 (GPX 데이터 파싱 완료)
+- [x] Vercel 배포 완료 (자동 배포 설정)
+- [x] GitHub 연동 및 브랜치 전략 수립
+- [ ] 등산로 1,000개 등록 (337개 추가 필요)
+- [ ] 회원 200명 (베타 테스트 진행 필요)
+- [ ] 산행 기록 100건 (백엔드 서비스 구현 필요)
 - [ ] 커뮤니티 게시글 50개
 - [ ] DAU 50명
-- [ ] Vercel 배포 완료
 
 ### Phase 2 완료 조건
 - [ ] Railway WebSocket 서버 운영
