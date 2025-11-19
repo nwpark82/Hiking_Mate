@@ -31,7 +31,10 @@
       "Bash(npx next lint:*)",
       "Bash(npx eslint:*)",
       "Bash(echo:*)",
-      "Bash(.eslintrc.json)"
+      "Bash(.eslintrc.json)",
+      "Bash(vercel ls:*)",
+      "Bash(public/icon-192.svg)",
+      "Bash(public/icon-512.svg)"
     ],
     "deny": [],
     "ask": []
