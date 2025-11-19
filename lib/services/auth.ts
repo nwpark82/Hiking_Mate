@@ -30,10 +30,29 @@ export async function signIn(email: string, password: string) {
       password,
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase signIn error:', {
+        message: error.message,
+        status: error.status,
+        name: error.name,
+        email: email, // 디버깅용 (프로덕션에서는 제거)
+      });
+      throw error;
+    }
+
+    if (!data.user) {
+      throw new Error('로그인에 실패했습니다.');
+    }
+
+    console.log('Login successful:', { email, userId: data.user.id });
 
     return { user: data.user, error: null };
   } catch (error: any) {
+    console.error('Login failed:', {
+      error,
+      message: error?.message,
+      status: error?.status,
+    });
     return { user: null, error: error.message };
   }
 }
