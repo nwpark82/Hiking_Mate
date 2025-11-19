@@ -108,11 +108,27 @@ export async function getPopularTrails(limit: number = 5) {
       .order('view_count', { ascending: false })
       .limit(limit);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error fetching popular trails:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      });
+      throw error;
+    }
+
+    if (!data || data.length === 0) {
+      console.warn('No trails data found in database');
+    }
 
     return data as Trail[];
-  } catch (error) {
-    console.error('Failed to fetch popular trails:', error);
+  } catch (error: any) {
+    console.error('Failed to fetch popular trails:', {
+      error,
+      message: error?.message,
+      stack: error?.stack
+    });
     return [];
   }
 }
