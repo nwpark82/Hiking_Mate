@@ -34,7 +34,9 @@
       "Bash(.eslintrc.json)",
       "Bash(vercel ls:*)",
       "Bash(public/icon-192.svg)",
-      "Bash(public/icon-512.svg)"
+      "Bash(public/icon-512.svg)",
+      "Bash(curl:*)",
+      "Bash(public/favicon.svg)"
     ],
     "deny": [],
     "ask": []
