@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { supabase } from '@/lib/supabase/client';
+import { getMyProfile, getUserStats, type UserProfile } from '@/lib/services/users';
+import { getMyTrackingStats } from '@/lib/services/tracking';
+import { formatDistance, formatDuration } from '@/lib/utils/helpers';
 import {
   User,
   Calendar,
@@ -17,25 +19,31 @@ import {
   Edit,
 } from 'lucide-react';
 
-interface UserProfile {
-  username: string;
-  avatar_url?: string;
-  bio?: string;
-  created_at: string;
+interface UserStats {
+  totalDistance: number;
+  totalTrails: number;
+  level: number;
+  postsCount: number;
+  commentsCount: number;
+  likesReceived: number;
+  memberSince: string;
 }
 
-interface HikeStats {
+interface TrackingStats {
   totalHikes: number;
   totalDistance: number;
   totalDuration: number;
-  totalCalories: number;
+  averageDistance: number;
+  averageDuration: number;
+  longestHike: number;
 }
 
 export default function ProfilePage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [stats, setStats] = useState<HikeStats | null>(null);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
+  const [trackingStats, setTrackingStats] = useState<TrackingStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,50 +53,30 @@ export default function ProfilePage() {
     }
 
     if (user) {
-      loadProfile();
-      loadStats();
+      loadData();
     }
   }, [user, authLoading, router]);
 
-  const loadProfile = async () => {
+  const loadData = async () => {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('username, avatar_url, bio, created_at')
-        .eq('id', user.id)
-        .single();
+      // Load profile
+      const { profile: profileData, error: profileError } = await getMyProfile();
+      if (profileError) throw new Error(profileError);
+      if (profileData) setProfile(profileData);
 
-      if (error) throw error;
-      setProfile(data);
+      // Load user stats
+      const { stats: userStatsData, error: userStatsError } = await getUserStats(user.id);
+      if (userStatsError) throw new Error(userStatsError);
+      if (userStatsData) setUserStats(userStatsData);
+
+      // Load tracking stats
+      const { stats: trackingStatsData, error: trackingStatsError } = await getMyTrackingStats();
+      if (trackingStatsError) throw new Error(trackingStatsError);
+      if (trackingStatsData) setTrackingStats(trackingStatsData);
     } catch (error) {
-      console.error('Failed to load profile:', error);
-    }
-  };
-
-  const loadStats = async () => {
-    if (!user) return;
-
-    try {
-      const { data: hikes, error } = await supabase
-        .from('hikes')
-        .select('distance, duration, calories')
-        .eq('user_id', user.id)
-        .eq('is_completed', true);
-
-      if (error) throw error;
-
-      const stats: HikeStats = {
-        totalHikes: hikes?.length || 0,
-        totalDistance: hikes?.reduce((sum, h) => sum + (h.distance || 0), 0) || 0,
-        totalDuration: hikes?.reduce((sum, h) => sum + (h.duration || 0), 0) || 0,
-        totalCalories: hikes?.reduce((sum, h) => sum + (h.calories || 0), 0) || 0,
-      };
-
-      setStats(stats);
-    } catch (error) {
-      console.error('Failed to load stats:', error);
+      console.error('Failed to load data:', error);
     } finally {
       setLoading(false);
     }
@@ -105,24 +93,8 @@ export default function ProfilePage() {
     );
   }
 
-  const formatDistance = (meters: number) => {
-    if (meters >= 1000) {
-      return `${(meters / 1000).toFixed(1)}km`;
-    }
-    return `${Math.round(meters)}m`;
-  };
-
-  const formatDuration = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    if (hours > 0) {
-      return `${hours}시간 ${minutes}분`;
-    }
-    return `${minutes}분`;
-  };
-
-  const memberSince = profile?.created_at
-    ? new Date(profile.created_at).toLocaleDateString('ko-KR', {
+  const memberSince = userStats?.memberSince
+    ? new Date(userStats.memberSince).toLocaleDateString('ko-KR', {
         year: 'numeric',
         month: 'long',
       })
@@ -179,7 +151,7 @@ export default function ProfilePage() {
                 <Mountain className="w-5 h-5" />
                 <span className="text-sm text-primary-100">총 산행</span>
               </div>
-              <p className="text-3xl font-bold">{stats?.totalHikes || 0}</p>
+              <p className="text-3xl font-bold">{trackingStats?.totalHikes || 0}</p>
               <p className="text-xs text-primary-100 mt-1">완료</p>
             </div>
 
@@ -189,7 +161,7 @@ export default function ProfilePage() {
                 <span className="text-sm text-green-100">총 거리</span>
               </div>
               <p className="text-3xl font-bold">
-                {formatDistance(stats?.totalDistance || 0)}
+                {formatDistance(trackingStats?.totalDistance || 0)}
               </p>
               <p className="text-xs text-green-100 mt-1">누적</p>
             </div>
@@ -200,7 +172,7 @@ export default function ProfilePage() {
                 <span className="text-sm text-blue-100">총 시간</span>
               </div>
               <p className="text-3xl font-bold">
-                {formatDuration(stats?.totalDuration || 0)}
+                {formatDuration(trackingStats?.totalDuration || 0)}
               </p>
               <p className="text-xs text-blue-100 mt-1">누적</p>
             </div>
@@ -208,10 +180,10 @@ export default function ProfilePage() {
             <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 text-white">
               <div className="flex items-center gap-2 mb-2">
                 <Award className="w-5 h-5" />
-                <span className="text-sm text-orange-100">칼로리</span>
+                <span className="text-sm text-orange-100">레벨</span>
               </div>
-              <p className="text-3xl font-bold">{stats?.totalCalories || 0}</p>
-              <p className="text-xs text-orange-100 mt-1">kcal 소모</p>
+              <p className="text-3xl font-bold">{userStats?.level || 1}</p>
+              <p className="text-xs text-orange-100 mt-1">등산 레벨</p>
             </div>
           </div>
         </section>
@@ -228,7 +200,7 @@ export default function ProfilePage() {
             </button>
           </div>
 
-          {stats?.totalHikes === 0 ? (
+          {trackingStats?.totalHikes === 0 ? (
             <div className="bg-white rounded-xl p-8 text-center">
               <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-3" />
               <p className="text-gray-500 mb-4">아직 완료한 산행이 없습니다</p>
