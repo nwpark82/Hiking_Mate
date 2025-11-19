@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(taskkill /F /PID 33212)",
+      "Bash(npx kill-port:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(del tailwind.config.js)",
+      "Bash(mkdir:*)",
+      "Bash(del apppage.tsx)",
+      "Bash(taskkill /F /PID 15524)",
+      "Bash(taskkill:*)",
+      "Bash(dir:*)",
+      "Bash(npm run parse-all:*)",
+      "Bash(npm run upload-trails:*)",
+      "Bash(npm run build:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

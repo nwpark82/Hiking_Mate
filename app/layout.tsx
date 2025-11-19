@@ -1,0 +1,74 @@
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: {
+    default: "하이킹메이트 - 등산로 정보 & 커뮤니티",
+    template: "%s | 하이킹메이트",
+  },
+  description: "전국 등산로 정보, GPS 산행 기록, 등산 커뮤니티. 나만의 등산 기록을 남기고 다른 등산객들과 정보를 공유하세요.",
+  keywords: ["등산", "산행", "등산로", "GPS", "커뮤니티", "산", "트레킹", "하이킹", "등산 기록", "등산 정보"],
+  authors: [{ name: "HikingMate Team" }],
+  creator: "HikingMate",
+  publisher: "HikingMate",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    url: "https://hiking-mate.vercel.app",
+    title: "하이킹메이트 - 등산로 정보 & 커뮤니티",
+    description: "전국 등산로 정보, GPS 산행 기록, 등산 커뮤니티",
+    siteName: "하이킹메이트",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "하이킹메이트 - 등산로 정보 & 커뮤니티",
+    description: "전국 등산로 정보, GPS 산행 기록, 등산 커뮤니티",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: '#10B981',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="ko">
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="하이킹메이트" />
+        <meta name="mobile-web-app-capable" content="yes" />
+      </head>
+      <body>
+        {children}
+      </body>
+    </html>
+  );
+}

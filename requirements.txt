@@ -1,0 +1,20 @@
+# Python packages for Hiking Mate data processing
+
+# GPX file parsing
+gpxpy==1.6.2
+
+# Geospatial operations and geocoding (for region mapping)
+geopy==2.4.1
+
+# Data manipulation and analysis
+pandas==2.2.0
+numpy==1.26.4
+
+# HTTP requests (for API calls)
+requests==2.31.0
+
+# Environment variable management
+python-dotenv==1.0.1
+
+# XML parsing (alternative GPX parser)
+lxml==5.1.0

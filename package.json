@@ -1,0 +1,53 @@
+{
+  "name": "hiking_mate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "parse-gpx": "ts-node scripts/parse-gpx-data.ts",
+    "parse-all": "ts-node scripts/parse-all-trails.ts",
+    "upload-trails": "ts-node scripts/upload-to-supabase.ts",
+    "import-data": "npm run parse-all && npm run upload-trails"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/supabase-js": "^2.83.0",
+    "@tanstack/react-query": "^5.90.10",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.6",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.17",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.3",
+    "lucide-react": "^0.554.0",
+    "nanoid": "^5.1.6",
+    "next": "^16.0.3",
+    "next-pwa": "^5.6.0",
+    "postcss": "^8.4.33",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-hook-form": "^7.66.1",
+    "react-kakao-maps-sdk": "^1.2.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.9.3",
+    "zod": "^4.1.12",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@types/xml2js": "^0.4.14",
+    "dotenv": "^17.2.3",
+    "ts-node": "^10.9.2",
+    "xml2js": "^0.6.2"
+  }
+}

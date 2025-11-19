@@ -1,0 +1,95 @@
+import { useState, useEffect, useCallback } from 'react';
+
+export interface GeoPosition {
+  latitude: number;
+  longitude: number;
+  accuracy: number;
+  altitude: number | null;
+  altitudeAccuracy: number | null;
+  heading: number | null;
+  speed: number | null;
+  timestamp: number;
+}
+
+export function useGeolocation() {
+  const [position, setPosition] = useState<GeoPosition | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isTracking, setIsTracking] = useState(false);
+  const [watchId, setWatchId] = useState<number | null>(null);
+
+  const startTracking = useCallback(() => {
+    if (!navigator.geolocation) {
+      setError('이 브라우저는 위치 서비스를 지원하지 않습니다.');
+      return;
+    }
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    const handleSuccess = (pos: GeolocationPosition) => {
+      setPosition({
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+        accuracy: pos.coords.accuracy,
+        altitude: pos.coords.altitude,
+        altitudeAccuracy: pos.coords.altitudeAccuracy,
+        heading: pos.coords.heading,
+        speed: pos.coords.speed,
+        timestamp: pos.timestamp,
+      });
+      setError(null);
+    };
+
+    const handleError = (err: GeolocationPositionError) => {
+      switch (err.code) {
+        case err.PERMISSION_DENIED:
+          setError('위치 접근 권한이 거부되었습니다.');
+          break;
+        case err.POSITION_UNAVAILABLE:
+          setError('위치 정보를 사용할 수 없습니다.');
+          break;
+        case err.TIMEOUT:
+          setError('위치 정보 요청 시간이 초과되었습니다.');
+          break;
+        default:
+          setError('알 수 없는 오류가 발생했습니다.');
+      }
+    };
+
+    const id = navigator.geolocation.watchPosition(
+      handleSuccess,
+      handleError,
+      options
+    );
+
+    setWatchId(id);
+    setIsTracking(true);
+  }, []);
+
+  const stopTracking = useCallback(() => {
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+      setWatchId(null);
+      setIsTracking(false);
+    }
+  }, [watchId]);
+
+  useEffect(() => {
+    return () => {
+      if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    };
+  }, [watchId]);
+
+  return {
+    position,
+    error,
+    isTracking,
+    startTracking,
+    stopTracking,
+  };
+}
