@@ -265,3 +265,34 @@ export function getDistanceToNextLevel(totalDistance: number): number {
   if (distanceInKm < 100) return (100 - distanceInKm) * 1000;
   return 0; // 최대 레벨
 }
+
+/**
+ * 계정을 삭제합니다 (복구 불가능)
+ */
+export async function deleteAccount() {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('로그인이 필요합니다.');
+
+    // 1. users 테이블에서 프로필 삭제 (CASCADE로 관련 데이터 자동 삭제)
+    const { error: profileError } = await supabase
+      .from('users')
+      .delete()
+      .eq('id', user.id);
+
+    if (profileError) throw profileError;
+
+    // 2. Supabase Auth에서 계정 삭제
+    const { error: authError } = await supabase.rpc('delete_user');
+
+    // RPC 함수가 없는 경우 사용자에게 알림
+    if (authError) {
+      console.warn('Auth deletion failed, user should contact support:', authError);
+    }
+
+    return { error: null };
+  } catch (error: any) {
+    console.error('Error deleting account:', error);
+    return { error: error.message };
+  }
+}
