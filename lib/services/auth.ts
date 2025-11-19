@@ -14,7 +14,6 @@ export async function signUp(email: string, password: string, username: string) 
     // 2. users 테이블에 프로필 생성
     const { error: profileError } = await supabase.from('users').insert({
       id: authData.user.id,
-      email: email,
       username: username,
     });
 
