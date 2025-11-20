@@ -2,6 +2,7 @@
 
 import { Bell, Settings } from 'lucide-react';
 import Link from 'next/link';
+import { UserMenu } from './UserMenu';
 
 interface HeaderProps {
   title: string;
@@ -24,6 +25,8 @@ export function Header({ title, showNotification = false, showSettings = false, 
               <Bell className="w-5 h-5 text-gray-600" />
             </button>
           )}
+
+          <UserMenu />
 
           {showSettings && (
             <Link href="/settings" className="p-2 hover:bg-gray-100 rounded-full transition">

@@ -130,7 +130,11 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900 placeholder:text-gray-400"
+                  style={{
+                    WebkitTextFillColor: '#111827',
+                    caretColor: '#111827'
+                  }}
                   placeholder="••••••••"
                   aria-label="비밀번호"
                   aria-required="true"
