@@ -4,7 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signUp } from '@/lib/services/auth';
-import { Mail, Lock, User, Loader2, Mountain } from 'lucide-react';
+import { Mail, Lock, User, Loader2, Mountain, Eye, EyeOff } from 'lucide-react';
+import { PasswordRequirements, validatePassword } from '@/components/auth/PasswordRequirements';
+import { PasswordStrengthMeter } from '@/components/auth/PasswordStrengthMeter';
+import { validateEmail, validateEmailRealtime } from '@/lib/utils/email-validation';
+import { EmailValidationFeedback } from '@/components/auth/EmailValidationFeedback';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -14,24 +18,48 @@ export default function SignUpPage() {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [emailValidation, setEmailValidation] = useState<{
+    message?: string;
+    type?: 'error' | 'warning' | 'success';
+  }>({});
+
+  // 이메일 변경 시 실시간 검증
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    const validation = validateEmailRealtime(value);
+    setEmailValidation({
+      message: validation.message,
+      type: validation.type,
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     // 유효성 검사
-    if (password !== confirmPassword) {
-      setError('비밀번호가 일치하지 않습니다.');
-      return;
-    }
-
-    if (password.length < 6) {
-      setError('비밀번호는 최소 6자 이상이어야 합니다.');
-      return;
-    }
-
     if (username.length < 2) {
       setError('사용자 이름은 최소 2자 이상이어야 합니다.');
+      return;
+    }
+
+    // 이메일 검증
+    const emailResult = validateEmail(email);
+    if (!emailResult.isValid) {
+      setError(emailResult.error || '올바른 이메일을 입력해주세요.');
+      return;
+    }
+
+    const { isValid, errors } = validatePassword(password);
+    if (!isValid) {
+      setError(`비밀번호 요구사항을 확인해주세요: ${errors.join(', ')}`);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('비밀번호가 일치하지 않습니다. 다시 한 번 확인해주세요.');
       return;
     }
 
@@ -102,12 +130,18 @@ export default function SignUpPage() {
                   id="email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => handleEmailChange(e.target.value)}
                   required
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
                   placeholder="example@email.com"
+                  aria-describedby="email-validation"
                 />
               </div>
+              <EmailValidationFeedback
+                email={email}
+                message={emailValidation.message}
+                type={emailValidation.type}
+              />
             </div>
 
             <div>
@@ -118,14 +152,29 @@ export default function SignUpPage() {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
                   placeholder="••••••••"
+                  aria-describedby="password-requirements"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
               </div>
+              <PasswordStrengthMeter password={password} />
+              <PasswordRequirements password={password} />
             </div>
 
             <div>
@@ -136,13 +185,25 @@ export default function SignUpPage() {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   id="confirmPassword"
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
                   placeholder="••••••••"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={showConfirmPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
               </div>
             </div>
 

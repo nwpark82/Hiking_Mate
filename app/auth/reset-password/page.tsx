@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { updatePassword } from '@/lib/services/auth';
-import { Lock, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { Lock, CheckCircle, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { PasswordRequirements, validatePassword } from '@/components/auth/PasswordRequirements';
+import { PasswordStrengthMeter } from '@/components/auth/PasswordStrengthMeter';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +17,9 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [validationError, setValidationError] = useState('');
 
   // Check if we have the access token from the email link
   useEffect(() => {
@@ -29,20 +34,22 @@ export default function ResetPasswordPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationError('');
 
     // Validation
     if (!newPassword || !confirmPassword) {
-      alert('비밀번호를 입력해주세요.');
+      setValidationError('비밀번호를 입력해주세요.');
+      return;
+    }
+
+    const { isValid, errors } = validatePassword(newPassword);
+    if (!isValid) {
+      setValidationError(`비밀번호 요구사항을 확인해주세요: ${errors.join(', ')}`);
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      alert('비밀번호가 일치하지 않습니다.');
-      return;
-    }
-
-    if (newPassword.length < 6) {
-      alert('비밀번호는 최소 6자 이상이어야 합니다.');
+      setValidationError('비밀번호가 일치하지 않습니다. 다시 한 번 확인해주세요.');
       return;
     }
 
@@ -53,7 +60,7 @@ export default function ResetPasswordPage() {
 
       setSuccess(true);
     } catch (error: any) {
-      alert(error.message || '비밀번호 변경에 실패했습니다.');
+      setValidationError(error.message || '비밀번호 변경에 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -133,41 +140,68 @@ export default function ResetPasswordPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {validationError && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              {validationError}
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               새 비밀번호
             </label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="새 비밀번호 (최소 6자)"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-              autoFocus
-            />
+            <div className="relative">
+              <input
+                type={showNewPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="새 비밀번호"
+                className="w-full px-4 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
+                autoFocus
+                aria-describedby="password-requirements"
+              />
+              <button
+                type="button"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label={showNewPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+              >
+                {showNewPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+            <PasswordStrengthMeter password={newPassword} />
+            <PasswordRequirements password={newPassword} />
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               비밀번호 확인
             </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="비밀번호 확인"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-            />
-          </div>
-
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-            <p className="text-sm text-blue-800">
-              <span className="font-semibold">💡 안전한 비밀번호 만들기</span>
-              <br />
-              • 최소 6자 이상
-              <br />
-              • 영문, 숫자, 특수문자 조합 권장
-            </p>
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="비밀번호 확인"
+                className="w-full px-4 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label={showConfirmPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
+              </button>
+            </div>
           </div>
 
           <button
