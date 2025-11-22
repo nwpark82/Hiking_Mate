@@ -14,14 +14,14 @@ export interface TrailFilters {
 
 export async function getTrails(filters: TrailFilters = {}) {
   try {
-    // path_coordinates 제외 - 리스트에서는 필요 없음 (성능 개선)
+    // 리스트에 필요한 최소한의 컬럼만 선택 (성능 최적화)
     let query = supabase
       .from('trails')
-      .select('id, name, mountain, region, difficulty, distance, duration, elevation_gain, min_altitude, max_altitude, avg_altitude, start_latitude, start_longitude, features, view_count, like_count, hike_count, created_at');
+      .select('id, name, mountain, region, difficulty, distance, duration, elevation_gain, view_count, like_count, created_at');
 
     // 검색어 필터
     if (filters.search) {
-      query = query.or(`name.ilike.%${filters.search}%,mountain.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+      query = query.or(`name.ilike.%${filters.search}%,mountain.ilike.%${filters.search}%`);
     }
 
     // 난이도 필터
