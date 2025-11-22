@@ -26,6 +26,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/blog" className="hover:text-white transition">
+                  블로그
+                </Link>
+              </li>
+              <li>
                 <Link href="/community" className="hover:text-white transition">
                   커뮤니티
                 </Link>

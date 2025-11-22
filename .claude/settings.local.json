@@ -38,7 +38,9 @@
       "Bash(curl:*)",
       "Bash(public/favicon.svg)",
       "Bash(gh repo view:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(vercel domains:*)",
+      "Bash(nslookup:*)"
     ],
     "deny": [],
     "ask": []

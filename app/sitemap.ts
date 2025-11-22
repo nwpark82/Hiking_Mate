@@ -1,11 +1,12 @@
 import { MetadataRoute } from 'next';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { getAllBlogPosts } from '@/lib/blog';
 
 // Sitemap은 동적으로 생성 (Supabase 데이터를 가져오기 때문)
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://hiking-mate.vercel.app';
+  const baseUrl = 'https://www.hikingmate.co.kr';
 
   // 정적 페이지
   const staticPages: MetadataRoute.Sitemap = [
@@ -69,6 +70,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
   ];
 
   // 동적 등산로 페이지
@@ -94,5 +101,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error generating sitemap for trails:', error);
   }
 
-  return [...staticPages, ...trailPages];
+  // 블로그 포스트 페이지
+  const blogPosts = getAllBlogPosts();
+  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...trailPages, ...blogPages];
 }

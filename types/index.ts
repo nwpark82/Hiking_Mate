@@ -106,6 +106,30 @@ export interface Meetup {
   updated_at: string;
 }
 
+// Blog types
+export interface BlogPost {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+  category: string;
+  tags: string[];
+  readingTime: number;
+  coverImage?: string;
+  content: string;
+}
+
+export interface BlogFrontmatter {
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+  category: string;
+  tags: string[];
+  coverImage?: string;
+}
+
 // GPS types
 export interface GPSPoint {
   latitude: number;
