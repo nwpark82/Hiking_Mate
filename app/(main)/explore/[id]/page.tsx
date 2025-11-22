@@ -148,6 +148,39 @@ export default function TrailDetailPage() {
               latitude={trail.start_latitude}
               longitude={trail.start_longitude}
               level={6}
+              markers={(() => {
+                const pathCoords = (trail.path_coordinates as any) || [];
+                const markers = [];
+
+                // 출발지점 마커
+                if (pathCoords.length > 0) {
+                  markers.push({
+                    lat: pathCoords[0].lat,
+                    lng: pathCoords[0].lng,
+                    title: '🚩 출발',
+                  });
+                }
+
+                // 종료지점 마커 (출발지점과 다른 경우만)
+                if (pathCoords.length > 1) {
+                  const lastIdx = pathCoords.length - 1;
+                  const startLat = pathCoords[0].lat;
+                  const startLng = pathCoords[0].lng;
+                  const endLat = pathCoords[lastIdx].lat;
+                  const endLng = pathCoords[lastIdx].lng;
+
+                  // 출발점과 종료점이 다른 경우만 종료지점 마커 표시
+                  if (Math.abs(startLat - endLat) > 0.0001 || Math.abs(startLng - endLng) > 0.0001) {
+                    markers.push({
+                      lat: endLat,
+                      lng: endLng,
+                      title: '🏁 도착',
+                    });
+                  }
+                }
+
+                return markers;
+              })()}
               pathCoordinates={trail.path_coordinates as any || []}
             />
           ) : (

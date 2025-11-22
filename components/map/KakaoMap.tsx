@@ -59,10 +59,30 @@ export function KakaoMap({
             });
 
             if (marker.title) {
-              const infowindow = new window.kakao.maps.InfoWindow({
-                content: `<div style="padding:5px;font-size:12px;">${marker.title}</div>`,
+              // CustomOverlay로 예쁜 레이블 표시
+              const content = document.createElement('div');
+              content.style.cssText = `
+                padding: 8px 12px;
+                background: white;
+                border: 2px solid #22c55e;
+                border-radius: 8px;
+                font-size: 13px;
+                font-weight: 600;
+                color: #16a34a;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                white-space: nowrap;
+                position: relative;
+                bottom: 50px;
+              `;
+              content.textContent = marker.title;
+
+              const customOverlay = new window.kakao.maps.CustomOverlay({
+                position: markerPosition,
+                content: content,
+                yAnchor: 1,
               });
-              infowindow.open(map, kakaoMarker);
+
+              customOverlay.setMap(map);
             }
           });
         } else {

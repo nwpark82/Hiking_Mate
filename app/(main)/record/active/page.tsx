@@ -41,7 +41,7 @@ function ActiveRecordContent() {
   const trailId = searchParams.get('trailId');
   const { user, loading: authLoading } = useAuth();
 
-  const { position, error: gpsError, isTracking, startTracking, stopTracking } = useGeolocation();
+  const { position, error: gpsError, isTracking, startTracking, stopTracking } = useGeolocation({ continuous: true });
 
   const [isPaused, setIsPaused] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -74,6 +74,48 @@ function ActiveRecordContent() {
     }
     fetchTrail();
   }, [trailId]);
+
+  // GPS 위치 초기 확인 (시작 지점 근처 여부 확인용)
+  const [initialPosition, setInitialPosition] = useState<GeolocationPosition | null>(null);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setInitialPosition(pos);
+          console.log('Initial GPS acquired:', pos.coords.latitude, pos.coords.longitude);
+        },
+        (err) => {
+          console.error('GPS error:', err.message);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000, // 5분간 캐시 사용
+        }
+      );
+
+      // 5분마다 위치 갱신
+      const intervalId = setInterval(() => {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            setInitialPosition(pos);
+            console.log('GPS updated:', pos.coords.latitude, pos.coords.longitude);
+          },
+          (err) => {
+            console.error('GPS update error:', err.message);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          }
+        );
+      }, 5 * 60 * 1000); // 5분
+
+      return () => clearInterval(intervalId);
+    }
+  }, []);
 
   // 통계 계산
   const distance = calculateTotalDistance(gpsPoints);
@@ -124,7 +166,7 @@ function ActiveRecordContent() {
     }
 
     // 현재 위치 확인
-    if (!position) {
+    if (!initialPosition) {
       alert('GPS 위치를 확인할 수 없습니다. 잠시 후 다시 시도해주세요.');
       return;
     }
@@ -132,8 +174,8 @@ function ActiveRecordContent() {
     // 트레일 출발지점 확인
     if (trail && trail.start_latitude && trail.start_longitude) {
       const distanceToStart = calculateDistance(
-        position.latitude,
-        position.longitude,
+        initialPosition.coords.latitude,
+        initialPosition.coords.longitude,
         trail.start_latitude,
         trail.start_longitude
       );
@@ -143,8 +185,8 @@ function ActiveRecordContent() {
       if (distanceToStart > PROXIMITY_THRESHOLD) {
         // 거리와 방향 계산
         const bearing = calculateBearing(
-          position.latitude,
-          position.longitude,
+          initialPosition.coords.latitude,
+          initialPosition.coords.longitude,
           trail.start_latitude,
           trail.start_longitude
         );
@@ -164,6 +206,7 @@ function ActiveRecordContent() {
     setIsRecording(true);
     setIsPaused(false);
     setStartTime(Date.now());
+    // 실시간 GPS tracking 시작 (산행 기록용)
     startTracking();
   };
 
@@ -231,16 +274,16 @@ function ActiveRecordContent() {
       <main className="max-w-screen-lg mx-auto pb-32">
         {/* Map */}
         <section className="h-80 bg-gray-200">
-          {position && gpsPoints.length > 0 ? (
+          {(position && gpsPoints.length > 0) || initialPosition ? (
             <KakaoMap
-              latitude={position.latitude}
-              longitude={position.longitude}
+              latitude={position?.latitude || initialPosition?.coords.latitude || 37.5665}
+              longitude={position?.longitude || initialPosition?.coords.longitude || 126.9780}
               level={3}
               markers={[
                 {
-                  lat: position.latitude,
-                  lng: position.longitude,
-                  title: '현재 위치',
+                  lat: position?.latitude || initialPosition?.coords.latitude || 37.5665,
+                  lng: position?.longitude || initialPosition?.coords.longitude || 126.9780,
+                  title: isRecording ? '현재 위치' : '대기 중',
                 },
               ]}
               pathCoordinates={gpsPoints.map(p => ({ lat: p.latitude, lng: p.longitude }))}
@@ -248,15 +291,8 @@ function ActiveRecordContent() {
           ) : (
             <div className="h-full flex flex-col items-center justify-center p-4">
               <Mountain className="w-16 h-16 text-gray-400 mb-4" />
-              {gpsError ? (
-                <>
-                  <AlertCircle className="w-8 h-8 text-red-500 mb-2" />
-                  <p className="text-red-600 text-center">{gpsError}</p>
-                  <p className="text-sm text-gray-500 mt-2">위치 권한을 허용해주세요</p>
-                </>
-              ) : (
-                <p className="text-gray-500">GPS 위치를 가져오는 중...</p>
-              )}
+              <p className="text-gray-500">GPS 위치를 가져오는 중...</p>
+              <p className="text-xs text-gray-400 mt-2">위치 권한을 허용해주세요</p>
             </div>
           )}
         </section>
@@ -353,11 +389,11 @@ function ActiveRecordContent() {
             {!isRecording ? (
               <button
                 onClick={handleStart}
-                disabled={!!gpsError}
+                disabled={!initialPosition}
                 className="w-full bg-primary-600 text-white py-4 px-6 rounded-xl font-bold text-lg hover:bg-primary-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <Play className="w-6 h-6 fill-current" />
-                산행 시작
+                {initialPosition ? '산행 시작' : 'GPS 대기 중...'}
               </button>
             ) : (
               <div className="flex gap-3">

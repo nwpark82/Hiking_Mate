@@ -11,11 +11,17 @@ export interface GeoPosition {
   timestamp: number;
 }
 
-export function useGeolocation() {
+export interface UseGeolocationOptions {
+  continuous?: boolean; // true: 실시간 업데이트, false: 5분마다
+}
+
+export function useGeolocation(options: UseGeolocationOptions = {}) {
+  const { continuous = false } = options;
   const [position, setPosition] = useState<GeoPosition | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isTracking, setIsTracking] = useState(false);
   const [watchId, setWatchId] = useState<number | null>(null);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const startTracking = useCallback(() => {
     if (!navigator.geolocation) {
@@ -23,7 +29,7 @@ export function useGeolocation() {
       return;
     }
 
-    const options = {
+    const geoOptions = {
       enableHighAccuracy: true,
       timeout: 5000,
       maximumAge: 0,
@@ -59,31 +65,52 @@ export function useGeolocation() {
       }
     };
 
-    const id = navigator.geolocation.watchPosition(
-      handleSuccess,
-      handleError,
-      options
-    );
+    if (continuous) {
+      // 실시간 업데이트 (산행 중)
+      const id = navigator.geolocation.watchPosition(
+        handleSuccess,
+        handleError,
+        geoOptions
+      );
+      setWatchId(id);
+    } else {
+      // 5분마다 업데이트 (대기 모드)
+      // 즉시 한 번 가져오기
+      navigator.geolocation.getCurrentPosition(handleSuccess, handleError, geoOptions);
 
-    setWatchId(id);
+      // 5분(300초)마다 업데이트
+      const id = setInterval(() => {
+        navigator.geolocation.getCurrentPosition(handleSuccess, handleError, geoOptions);
+      }, 5 * 60 * 1000); // 5분 = 300,000ms
+
+      setIntervalId(id);
+    }
+
     setIsTracking(true);
-  }, []);
+  }, [continuous]);
 
   const stopTracking = useCallback(() => {
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
-      setIsTracking(false);
     }
-  }, [watchId]);
+    if (intervalId !== null) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    }
+    setIsTracking(false);
+  }, [watchId, intervalId]);
 
   useEffect(() => {
     return () => {
       if (watchId !== null) {
         navigator.geolocation.clearWatch(watchId);
       }
+      if (intervalId !== null) {
+        clearInterval(intervalId);
+      }
     };
-  }, [watchId]);
+  }, [watchId, intervalId]);
 
   return {
     position,
