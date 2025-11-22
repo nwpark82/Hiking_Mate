@@ -1,14 +1,16 @@
 import { MetadataRoute } from 'next';
+import { createClient } from '@/lib/supabase/client';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://hiking-mate.vercel.app';
 
-  return [
+  // 정적 페이지
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 1,
+      priority: 1.0,
     },
     {
       url: `${baseUrl}/explore`,
@@ -20,31 +22,62 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/record`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.8,
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/community`,
       lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 0.9,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/feedback`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.3,
     },
     {
       url: `${baseUrl}/settings`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.5,
+      priority: 0.4,
     },
     {
       url: `${baseUrl}/auth/login`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.6,
+      priority: 0.5,
     },
     {
       url: `${baseUrl}/auth/signup`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.6,
+      priority: 0.5,
     },
   ];
+
+  // 동적 등산로 페이지
+  let trailPages: MetadataRoute.Sitemap = [];
+
+  try {
+    const supabase = createClient();
+    const { data: trails } = await supabase
+      .from('trails')
+      .select('id, updated_at')
+      .order('updated_at', { ascending: false })
+      .limit(1000); // 최대 1000개 등산로
+
+    if (trails) {
+      trailPages = trails.map((trail) => ({
+        url: `${baseUrl}/explore/${trail.id}`,
+        lastModified: trail.updated_at ? new Date(trail.updated_at) : new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      }));
+    }
+  } catch (error) {
+    console.error('Error generating sitemap for trails:', error);
+  }
+
+  return [...staticPages, ...trailPages];
 }
