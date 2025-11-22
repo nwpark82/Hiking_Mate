@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { User, LogIn, UserPlus, LogOut, Settings as SettingsIcon, ChevronDown } from 'lucide-react';
+import { User, LogIn, UserPlus, LogOut, Settings as SettingsIcon, ChevronDown, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
@@ -69,21 +69,51 @@ export function UserMenu() {
   // 로그인하지 않은 경우
   if (!user) {
     return (
-      <div className="flex items-center gap-2">
-        <Link
-          href="/auth/login"
-          className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-primary-600 transition"
+      <div className="relative" ref={dropdownRef}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-2 p-1.5 hover:bg-gray-100 rounded-full transition"
+          aria-label="메뉴"
+          aria-expanded={isOpen}
         >
-          <LogIn className="w-4 h-4" />
-          <span className="hidden sm:inline">로그인</span>
-        </Link>
-        <Link
-          href="/auth/signup"
-          className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
-        >
-          <UserPlus className="w-4 h-4" />
-          <span className="hidden sm:inline">회원가입</span>
-        </Link>
+          <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center">
+            <User className="w-4 h-4" />
+          </div>
+          <ChevronDown className={`w-4 h-4 text-gray-600 transition-transform hidden sm:block ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
+
+        {isOpen && (
+          <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+            <div className="py-1">
+              <Link
+                href="/auth/login"
+                className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                onClick={() => setIsOpen(false)}
+              >
+                <LogIn className="w-4 h-4" />
+                <span>로그인</span>
+              </Link>
+
+              <Link
+                href="/auth/signup"
+                className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                onClick={() => setIsOpen(false)}
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>회원가입</span>
+              </Link>
+
+              <Link
+                href="/feedback"
+                className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                onClick={() => setIsOpen(false)}
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>문의하기</span>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -133,6 +163,15 @@ export function UserMenu() {
             >
               <SettingsIcon className="w-4 h-4" />
               <span>설정</span>
+            </Link>
+
+            <Link
+              href="/feedback"
+              className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+              onClick={() => setIsOpen(false)}
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>문의하기</span>
             </Link>
           </div>
 
