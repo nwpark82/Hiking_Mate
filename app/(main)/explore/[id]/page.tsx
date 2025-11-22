@@ -50,9 +50,10 @@ export default function TrailDetailPage() {
       });
       setTrail(data);
 
-      // Check if this trail is favorited
-      const favorited = await checkIsFavorite(params.id as string);
-      setIsFavorite(favorited);
+      // Check if this trail is favorited (임시 비활성화 - 디버깅용)
+      // const favorited = await checkIsFavorite(params.id as string);
+      // setIsFavorite(favorited);
+      setIsFavorite(false);
 
       setLoading(false);
     }
