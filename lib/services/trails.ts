@@ -8,13 +8,16 @@ export interface TrailFilters {
   minDistance?: number;
   maxDistance?: number;
   sortBy?: 'popular' | 'distance' | 'recent';
+  limit?: number;
+  offset?: number;
 }
 
 export async function getTrails(filters: TrailFilters = {}) {
   try {
+    // path_coordinates 제외 - 리스트에서는 필요 없음 (성능 개선)
     let query = supabase
       .from('trails')
-      .select('*');
+      .select('id, name, mountain, region, difficulty, distance, duration, elevation_gain, min_altitude, max_altitude, avg_altitude, start_latitude, start_longitude, features, view_count, like_count, hike_count, created_at');
 
     // 검색어 필터
     if (filters.search) {
@@ -52,6 +55,11 @@ export async function getTrails(filters: TrailFilters = {}) {
         query = query.order('created_at', { ascending: false });
         break;
     }
+
+    // 페이지네이션 (기본값: 처음 30개만 로드)
+    const limit = filters.limit || 30;
+    const offset = filters.offset || 0;
+    query = query.range(offset, offset + limit - 1);
 
     const { data, error } = await query;
 
