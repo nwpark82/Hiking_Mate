@@ -74,6 +74,7 @@ export default function RootLayout({
       <head>
         {/* Search Engine Verification */}
         <meta name="google-site-verification" content="QR3VcEuli9CbCjVQM6nxOchfxmKjwaARZRUD838ohvI" />
+        <meta name="naver-site-verification" content="b8c64384ae035e209858722340148f4bc24154f4" />
 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
