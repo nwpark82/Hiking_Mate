@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/client';
+import { supabase } from '@/lib/supabase/client';
 
 export interface Feedback {
   id: string;
@@ -25,7 +25,6 @@ export interface CreateFeedbackData {
  */
 export async function createFeedback(data: CreateFeedbackData): Promise<{ success: boolean; error?: string }> {
   try {
-    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     const feedbackData: any = {
@@ -67,7 +66,6 @@ export async function createFeedback(data: CreateFeedbackData): Promise<{ succes
  */
 export async function getMyFeedback(): Promise<Feedback[]> {
   try {
-    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -97,8 +95,6 @@ export async function getMyFeedback(): Promise<Feedback[]> {
  */
 export async function getAllFeedback(): Promise<Feedback[]> {
   try {
-    const supabase = createClient();
-
     const { data, error } = await supabase
       .from('feedback')
       .select('*')
@@ -125,8 +121,6 @@ export async function updateFeedbackStatus(
   adminNote?: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const supabase = createClient();
-
     const updateData: any = { status };
     if (adminNote !== undefined) {
       updateData.admin_note = adminNote;
@@ -154,7 +148,6 @@ export async function updateFeedbackStatus(
  */
 export async function getUserRole(): Promise<'user' | 'admin' | 'moderator' | null> {
   try {
-    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {

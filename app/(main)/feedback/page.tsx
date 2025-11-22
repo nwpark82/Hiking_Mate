@@ -73,7 +73,7 @@ export default function FeedbackPage() {
 
   return (
     <>
-      <Header title="문의하기" showBackButton />
+      <Header title="문의하기" />
 
       <main className="max-w-screen-lg mx-auto p-4 pb-24">
         {/* Success Message */}

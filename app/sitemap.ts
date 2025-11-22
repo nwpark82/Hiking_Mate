@@ -1,5 +1,8 @@
 import { MetadataRoute } from 'next';
-import { createClient } from '@/lib/supabase/client';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+
+// Sitemap은 동적으로 생성 (Supabase 데이터를 가져오기 때문)
+export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://hiking-mate.vercel.app';
@@ -60,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let trailPages: MetadataRoute.Sitemap = [];
 
   try {
-    const supabase = createClient();
+    const supabase = createServerSupabaseClient();
     const { data: trails } = await supabase
       .from('trails')
       .select('id, updated_at')
