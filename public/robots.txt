@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hiking-mate.vercel.app/sitemap.xml
+Sitemap: https://www.hikingmate.co.kr/sitemap.xml
