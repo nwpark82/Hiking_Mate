@@ -36,7 +36,9 @@
       "Bash(public/icon-192.svg)",
       "Bash(public/icon-512.svg)",
       "Bash(curl:*)",
-      "Bash(public/favicon.svg)"
+      "Bash(public/favicon.svg)",
+      "Bash(gh repo view:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []

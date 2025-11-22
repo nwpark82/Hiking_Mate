@@ -1,0 +1,6599 @@
+{
+  "summary": {
+    "totalTrails": 1000,
+    "trailsWithGaps": 68,
+    "trailsWithoutGaps": 932,
+    "totalGaps": 438,
+    "avgGapsPerTrail": 6.4411764705882355,
+    "gapStats": {
+      "minor": 402,
+      "major": 36,
+      "critical": 0
+    },
+    "thresholds": {
+      "minor": 100,
+      "major": 200,
+      "critical": 500
+    }
+  },
+  "trails": [
+    {
+      "id": "fe12a00e-58c5-4529-ade2-920355d91cd0",
+      "name": "운악산 6번 코스 (역방향)",
+      "mountain": "운악산",
+      "region": "경기",
+      "distance": 10,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 1335,
+      "gapCount": 1,
+      "maxGap": 495.85336982334434,
+      "gaps": [
+        {
+          "index": 1054,
+          "distance": 496,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "37.875367",
+            "lng": "127.291910"
+          },
+          "toPoint": {
+            "lat": "37.879817",
+            "lng": "127.292275"
+          }
+        }
+      ]
+    },
+    {
+      "id": "3dd286af-b0af-489b-afb1-03494659c245",
+      "name": "운악산 6번 코스 (정방향)",
+      "mountain": "운악산",
+      "region": "경기",
+      "distance": 10,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 1335,
+      "gapCount": 1,
+      "maxGap": 495.85336982334434,
+      "gaps": [
+        {
+          "index": 1054,
+          "distance": 496,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "37.875367",
+            "lng": "127.291910"
+          },
+          "toPoint": {
+            "lat": "37.879817",
+            "lng": "127.292275"
+          }
+        }
+      ]
+    },
+    {
+      "id": "34c5ae6a-8153-4ff0-9124-b8f0583a2a2e",
+      "name": "재약산 3번 코스 (역방향)",
+      "mountain": "재약산",
+      "region": "울산",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 815,
+      "gapCount": 2,
+      "maxGap": 476.93004594833513,
+      "gaps": [
+        {
+          "index": 359,
+          "distance": 477,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.566883",
+            "lng": "128.991304"
+          },
+          "toPoint": {
+            "lat": "35.565599",
+            "lng": "128.986273"
+          }
+        },
+        {
+          "index": 469,
+          "distance": 180,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.566804",
+            "lng": "128.991388"
+          },
+          "toPoint": {
+            "lat": "35.568300",
+            "lng": "128.992135"
+          }
+        }
+      ]
+    },
+    {
+      "id": "b733bb67-8550-48d4-a089-7c5a8762dd93",
+      "name": "재약산 3번 코스 (정방향)",
+      "mountain": "재약산",
+      "region": "울산",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 815,
+      "gapCount": 2,
+      "maxGap": 476.93004594833513,
+      "gaps": [
+        {
+          "index": 359,
+          "distance": 477,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.566883",
+            "lng": "128.991304"
+          },
+          "toPoint": {
+            "lat": "35.565599",
+            "lng": "128.986273"
+          }
+        },
+        {
+          "index": 469,
+          "distance": 180,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.566804",
+            "lng": "128.991388"
+          },
+          "toPoint": {
+            "lat": "35.568300",
+            "lng": "128.992135"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2ccc8b5c-1b5b-46cc-b58d-5a12481c3aa9",
+      "name": "관악산 20번 코스 (역방향)",
+      "mountain": "관악산",
+      "region": "경기",
+      "distance": 10,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 983,
+      "gapCount": 1,
+      "maxGap": 465.5837032998161,
+      "gaps": [
+        {
+          "index": 866,
+          "distance": 466,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "37.351791",
+            "lng": "126.936806"
+          },
+          "toPoint": {
+            "lat": "37.355581",
+            "lng": "126.939045"
+          }
+        }
+      ]
+    },
+    {
+      "id": "da61b42c-7e07-4bca-869f-45a25a90b56f",
+      "name": "관악산 20번 코스 (정방향)",
+      "mountain": "관악산",
+      "region": "경기",
+      "distance": 10,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 983,
+      "gapCount": 1,
+      "maxGap": 465.5837032998161,
+      "gaps": [
+        {
+          "index": 866,
+          "distance": 466,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "37.351791",
+            "lng": "126.936806"
+          },
+          "toPoint": {
+            "lat": "37.355581",
+            "lng": "126.939045"
+          }
+        }
+      ]
+    },
+    {
+      "id": "b772daac-ae3f-45bd-a733-e06f87b697fd",
+      "name": "금오산 7번 코스 (역방향)",
+      "mountain": "금오산",
+      "region": "경북",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 526,
+      "gapCount": 1,
+      "maxGap": 445.1013877207403,
+      "gaps": [
+        {
+          "index": 321,
+          "distance": 445,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "36.099499",
+            "lng": "128.325161"
+          },
+          "toPoint": {
+            "lat": "36.103298",
+            "lng": "128.323600"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dad280c7-d46e-44e2-b5cd-6eeee4d7a8dc",
+      "name": "금오산 7번 코스 (정방향)",
+      "mountain": "금오산",
+      "region": "경북",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 526,
+      "gapCount": 1,
+      "maxGap": 445.1013877207403,
+      "gaps": [
+        {
+          "index": 321,
+          "distance": 445,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "36.099499",
+            "lng": "128.325161"
+          },
+          "toPoint": {
+            "lat": "36.103298",
+            "lng": "128.323600"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2fc8a836-b6c4-4469-b87e-b36f9a34dd6c",
+      "name": "변산 1번 코스 (역방향)",
+      "mountain": "변산",
+      "region": "전북",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 791,
+      "gapCount": 2,
+      "maxGap": 416.6650149833671,
+      "gaps": [
+        {
+          "index": 394,
+          "distance": 417,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.609647",
+            "lng": "126.587282"
+          },
+          "toPoint": {
+            "lat": "35.606466",
+            "lng": "126.584846"
+          }
+        },
+        {
+          "index": 396,
+          "distance": 417,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.606466",
+            "lng": "126.584846"
+          },
+          "toPoint": {
+            "lat": "35.609647",
+            "lng": "126.587282"
+          }
+        }
+      ]
+    },
+    {
+      "id": "10442406-ed2e-488d-9e45-28258e32589f",
+      "name": "변산 1번 코스 (정방향)",
+      "mountain": "변산",
+      "region": "전북",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 791,
+      "gapCount": 2,
+      "maxGap": 416.6650149833671,
+      "gaps": [
+        {
+          "index": 394,
+          "distance": 417,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.609647",
+            "lng": "126.587282"
+          },
+          "toPoint": {
+            "lat": "35.606466",
+            "lng": "126.584846"
+          }
+        },
+        {
+          "index": 396,
+          "distance": 417,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.606466",
+            "lng": "126.584846"
+          },
+          "toPoint": {
+            "lat": "35.609647",
+            "lng": "126.587282"
+          }
+        }
+      ]
+    },
+    {
+      "id": "20a1ee06-949f-4f04-92d1-32fcc49a89e2",
+      "name": "미륵산 5번 코스 (역방향)",
+      "mountain": "미륵산",
+      "region": "경남",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 509,
+      "gapCount": 3,
+      "maxGap": 323.9624752619398,
+      "gaps": [
+        {
+          "index": 133,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.813518",
+            "lng": "128.411893"
+          },
+          "toPoint": {
+            "lat": "34.814560",
+            "lng": "128.412108"
+          }
+        },
+        {
+          "index": 394,
+          "distance": 109,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.813965",
+            "lng": "128.410835"
+          },
+          "toPoint": {
+            "lat": "34.813518",
+            "lng": "128.411893"
+          }
+        },
+        {
+          "index": 491,
+          "distance": 324,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "34.803745",
+            "lng": "128.420998"
+          },
+          "toPoint": {
+            "lat": "34.805843",
+            "lng": "128.423460"
+          }
+        }
+      ]
+    },
+    {
+      "id": "c1c962d5-a70b-4887-b5d3-d1dcf3fdeec3",
+      "name": "미륵산 5번 코스 (정방향)",
+      "mountain": "미륵산",
+      "region": "경남",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 509,
+      "gapCount": 3,
+      "maxGap": 323.9624752619398,
+      "gaps": [
+        {
+          "index": 133,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.813518",
+            "lng": "128.411893"
+          },
+          "toPoint": {
+            "lat": "34.814560",
+            "lng": "128.412108"
+          }
+        },
+        {
+          "index": 394,
+          "distance": 109,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.813965",
+            "lng": "128.410835"
+          },
+          "toPoint": {
+            "lat": "34.813518",
+            "lng": "128.411893"
+          }
+        },
+        {
+          "index": 491,
+          "distance": 324,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "34.803745",
+            "lng": "128.420998"
+          },
+          "toPoint": {
+            "lat": "34.805843",
+            "lng": "128.423460"
+          }
+        }
+      ]
+    },
+    {
+      "id": "b4d1a96d-f1c2-4a19-b6a1-b2d6b334af5b",
+      "name": "청량산 2번 코스 (역방향)",
+      "mountain": "청량산",
+      "region": "경북",
+      "distance": 6,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 773,
+      "gapCount": 3,
+      "maxGap": 301.6448238723664,
+      "gaps": [
+        {
+          "index": 325,
+          "distance": 281,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "36.777781",
+            "lng": "128.926288"
+          },
+          "toPoint": {
+            "lat": "36.780066",
+            "lng": "128.927638"
+          }
+        },
+        {
+          "index": 480,
+          "distance": 302,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "36.780066",
+            "lng": "128.927638"
+          },
+          "toPoint": {
+            "lat": "36.777363",
+            "lng": "128.927351"
+          }
+        },
+        {
+          "index": 607,
+          "distance": 167,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.774215",
+            "lng": "128.914824"
+          },
+          "toPoint": {
+            "lat": "36.774340",
+            "lng": "128.912951"
+          }
+        }
+      ]
+    },
+    {
+      "id": "3091969b-7f07-46d4-a48a-2f5b027a26b5",
+      "name": "청량산 2번 코스 (정방향)",
+      "mountain": "청량산",
+      "region": "경북",
+      "distance": 6,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 773,
+      "gapCount": 3,
+      "maxGap": 301.6448238723664,
+      "gaps": [
+        {
+          "index": 325,
+          "distance": 281,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "36.777781",
+            "lng": "128.926288"
+          },
+          "toPoint": {
+            "lat": "36.780066",
+            "lng": "128.927638"
+          }
+        },
+        {
+          "index": 480,
+          "distance": 302,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "36.780066",
+            "lng": "128.927638"
+          },
+          "toPoint": {
+            "lat": "36.777363",
+            "lng": "128.927351"
+          }
+        },
+        {
+          "index": 607,
+          "distance": 167,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.774215",
+            "lng": "128.914824"
+          },
+          "toPoint": {
+            "lat": "36.774340",
+            "lng": "128.912951"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2c0c567e-9d23-4955-86ba-4770bb0cef68",
+      "name": "북한산 21번 코스 (역방향)",
+      "mountain": "북한산",
+      "region": "서울",
+      "distance": 10,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 548,
+      "gapCount": 1,
+      "maxGap": 268.839481125871,
+      "gaps": [
+        {
+          "index": 380,
+          "distance": 269,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "37.667142",
+            "lng": "126.967354"
+          },
+          "toPoint": {
+            "lat": "37.667786",
+            "lng": "126.970298"
+          }
+        }
+      ]
+    },
+    {
+      "id": "92d4bf4f-a49a-467c-91a6-41ba3761cc70",
+      "name": "북한산 21번 코스 (정방향)",
+      "mountain": "북한산",
+      "region": "서울",
+      "distance": 10,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 548,
+      "gapCount": 1,
+      "maxGap": 268.839481125871,
+      "gaps": [
+        {
+          "index": 380,
+          "distance": 269,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "37.667142",
+            "lng": "126.967354"
+          },
+          "toPoint": {
+            "lat": "37.667786",
+            "lng": "126.970298"
+          }
+        }
+      ]
+    },
+    {
+      "id": "56bf756d-3cdb-4132-a6d9-f765b85ee794",
+      "name": "비슬산 2번 코스 (역방향)",
+      "mountain": "비슬산",
+      "region": "대구",
+      "distance": 11,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 1194,
+      "gapCount": 1,
+      "maxGap": 261.16262238853466,
+      "gaps": [
+        {
+          "index": 833,
+          "distance": 261,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.736727",
+            "lng": "128.535800"
+          },
+          "toPoint": {
+            "lat": "35.735870",
+            "lng": "128.538494"
+          }
+        }
+      ]
+    },
+    {
+      "id": "eb7b8ec3-1825-44c4-bdf1-f2f4f908c142",
+      "name": "비슬산 2번 코스 (정방향)",
+      "mountain": "비슬산",
+      "region": "대구",
+      "distance": 11,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 1194,
+      "gapCount": 1,
+      "maxGap": 261.16262238853466,
+      "gaps": [
+        {
+          "index": 833,
+          "distance": 261,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.736727",
+            "lng": "128.535800"
+          },
+          "toPoint": {
+            "lat": "35.735870",
+            "lng": "128.538494"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a7073ab3-74a7-4a9d-ac1c-0f1140da4e10",
+      "name": "마이산 2번 코스 (역방향)",
+      "mountain": "마이산",
+      "region": "전북",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 481,
+      "gapCount": 1,
+      "maxGap": 241.10814578800924,
+      "gaps": [
+        {
+          "index": 347,
+          "distance": 241,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.763069",
+            "lng": "127.406163"
+          },
+          "toPoint": {
+            "lat": "35.763824",
+            "lng": "127.408668"
+          }
+        }
+      ]
+    },
+    {
+      "id": "633277d3-c2e5-4128-ac26-a02ff3d5b30a",
+      "name": "마이산 2번 코스 (정방향)",
+      "mountain": "마이산",
+      "region": "전북",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 481,
+      "gapCount": 1,
+      "maxGap": 241.10814578800924,
+      "gaps": [
+        {
+          "index": 347,
+          "distance": 241,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.763069",
+            "lng": "127.406163"
+          },
+          "toPoint": {
+            "lat": "35.763824",
+            "lng": "127.408668"
+          }
+        }
+      ]
+    },
+    {
+      "id": "b98445a2-4d5c-4e3a-a951-b9deae00c9f5",
+      "name": "백두대간트레일 2번 코스 (역방향)",
+      "mountain": "백두대간트레일",
+      "region": "강원",
+      "distance": 112,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 6093,
+      "gapCount": 132,
+      "maxGap": 225.39044095841533,
+      "gaps": [
+        {
+          "index": 1,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.286583",
+            "lng": "128.146454"
+          },
+          "toPoint": {
+            "lat": "38.285675",
+            "lng": "128.147034"
+          }
+        },
+        {
+          "index": 5,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.284840",
+            "lng": "128.146790"
+          },
+          "toPoint": {
+            "lat": "38.283882",
+            "lng": "128.147232"
+          }
+        },
+        {
+          "index": 8,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283504",
+            "lng": "128.148712"
+          },
+          "toPoint": {
+            "lat": "38.283268",
+            "lng": "128.149857"
+          }
+        },
+        {
+          "index": 9,
+          "distance": 184,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283268",
+            "lng": "128.149857"
+          },
+          "toPoint": {
+            "lat": "38.283051",
+            "lng": "128.151947"
+          }
+        },
+        {
+          "index": 10,
+          "distance": 176,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283051",
+            "lng": "128.151947"
+          },
+          "toPoint": {
+            "lat": "38.283482",
+            "lng": "128.153885"
+          }
+        },
+        {
+          "index": 13,
+          "distance": 150,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283661",
+            "lng": "128.155487"
+          },
+          "toPoint": {
+            "lat": "38.282639",
+            "lng": "128.156601"
+          }
+        },
+        {
+          "index": 18,
+          "distance": 164,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.281151",
+            "lng": "128.156555"
+          },
+          "toPoint": {
+            "lat": "38.280212",
+            "lng": "128.155106"
+          }
+        },
+        {
+          "index": 23,
+          "distance": 131,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279552",
+            "lng": "128.156387"
+          },
+          "toPoint": {
+            "lat": "38.279510",
+            "lng": "128.157883"
+          }
+        },
+        {
+          "index": 26,
+          "distance": 140,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279167",
+            "lng": "128.158508"
+          },
+          "toPoint": {
+            "lat": "38.279602",
+            "lng": "128.160019"
+          }
+        },
+        {
+          "index": 45,
+          "distance": 225,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "38.281960",
+            "lng": "128.164536"
+          },
+          "toPoint": {
+            "lat": "38.279972",
+            "lng": "128.164032"
+          }
+        },
+        {
+          "index": 49,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279972",
+            "lng": "128.164032"
+          },
+          "toPoint": {
+            "lat": "38.279682",
+            "lng": "128.165131"
+          }
+        },
+        {
+          "index": 62,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279480",
+            "lng": "128.168518"
+          },
+          "toPoint": {
+            "lat": "38.278812",
+            "lng": "128.169449"
+          }
+        },
+        {
+          "index": 100,
+          "distance": 140,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.267860",
+            "lng": "128.158966"
+          },
+          "toPoint": {
+            "lat": "38.266628",
+            "lng": "128.158630"
+          }
+        },
+        {
+          "index": 103,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.265194",
+            "lng": "128.159073"
+          },
+          "toPoint": {
+            "lat": "38.264210",
+            "lng": "128.159195"
+          }
+        },
+        {
+          "index": 105,
+          "distance": 143,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.263535",
+            "lng": "128.159088"
+          },
+          "toPoint": {
+            "lat": "38.262627",
+            "lng": "128.160248"
+          }
+        },
+        {
+          "index": 112,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.260029",
+            "lng": "128.157745"
+          },
+          "toPoint": {
+            "lat": "38.259193",
+            "lng": "128.157013"
+          }
+        },
+        {
+          "index": 113,
+          "distance": 115,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.259193",
+            "lng": "128.157013"
+          },
+          "toPoint": {
+            "lat": "38.258953",
+            "lng": "128.155731"
+          }
+        },
+        {
+          "index": 114,
+          "distance": 100,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.258953",
+            "lng": "128.155731"
+          },
+          "toPoint": {
+            "lat": "38.258221",
+            "lng": "128.155060"
+          }
+        },
+        {
+          "index": 118,
+          "distance": 100,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.257053",
+            "lng": "128.153549"
+          },
+          "toPoint": {
+            "lat": "38.256981",
+            "lng": "128.152405"
+          }
+        },
+        {
+          "index": 119,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256981",
+            "lng": "128.152405"
+          },
+          "toPoint": {
+            "lat": "38.256714",
+            "lng": "128.150970"
+          }
+        },
+        {
+          "index": 120,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256714",
+            "lng": "128.150970"
+          },
+          "toPoint": {
+            "lat": "38.256248",
+            "lng": "128.149963"
+          }
+        },
+        {
+          "index": 154,
+          "distance": 121,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.246712",
+            "lng": "128.150116"
+          },
+          "toPoint": {
+            "lat": "38.245857",
+            "lng": "128.149261"
+          }
+        },
+        {
+          "index": 239,
+          "distance": 146,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.239227",
+            "lng": "128.147430"
+          },
+          "toPoint": {
+            "lat": "38.239552",
+            "lng": "128.149048"
+          }
+        },
+        {
+          "index": 246,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.239227",
+            "lng": "128.150864"
+          },
+          "toPoint": {
+            "lat": "38.238407",
+            "lng": "128.150284"
+          }
+        },
+        {
+          "index": 247,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.238407",
+            "lng": "128.150284"
+          },
+          "toPoint": {
+            "lat": "38.237488",
+            "lng": "128.150406"
+          }
+        },
+        {
+          "index": 248,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.237488",
+            "lng": "128.150406"
+          },
+          "toPoint": {
+            "lat": "38.236622",
+            "lng": "128.150848"
+          }
+        },
+        {
+          "index": 256,
+          "distance": 135,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.232513",
+            "lng": "128.152313"
+          },
+          "toPoint": {
+            "lat": "38.231297",
+            "lng": "128.152328"
+          }
+        },
+        {
+          "index": 274,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.226200",
+            "lng": "128.156021"
+          },
+          "toPoint": {
+            "lat": "38.226620",
+            "lng": "128.157059"
+          }
+        },
+        {
+          "index": 279,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.226196",
+            "lng": "128.160431"
+          },
+          "toPoint": {
+            "lat": "38.225494",
+            "lng": "128.161194"
+          }
+        },
+        {
+          "index": 476,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.198574",
+            "lng": "128.206329"
+          },
+          "toPoint": {
+            "lat": "38.199486",
+            "lng": "128.206528"
+          }
+        },
+        {
+          "index": 664,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183296",
+            "lng": "128.254349"
+          },
+          "toPoint": {
+            "lat": "38.183472",
+            "lng": "128.255539"
+          }
+        },
+        {
+          "index": 666,
+          "distance": 133,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183529",
+            "lng": "128.255951"
+          },
+          "toPoint": {
+            "lat": "38.183220",
+            "lng": "128.257416"
+          }
+        },
+        {
+          "index": 667,
+          "distance": 127,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183220",
+            "lng": "128.257416"
+          },
+          "toPoint": {
+            "lat": "38.182934",
+            "lng": "128.258820"
+          }
+        },
+        {
+          "index": 670,
+          "distance": 120,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183155",
+            "lng": "128.259964"
+          },
+          "toPoint": {
+            "lat": "38.183697",
+            "lng": "128.261154"
+          }
+        },
+        {
+          "index": 671,
+          "distance": 125,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183697",
+            "lng": "128.261154"
+          },
+          "toPoint": {
+            "lat": "38.184258",
+            "lng": "128.262390"
+          }
+        },
+        {
+          "index": 742,
+          "distance": 160,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.174480",
+            "lng": "128.265442"
+          },
+          "toPoint": {
+            "lat": "38.173054",
+            "lng": "128.265701"
+          }
+        },
+        {
+          "index": 748,
+          "distance": 149,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171959",
+            "lng": "128.268341"
+          },
+          "toPoint": {
+            "lat": "38.171917",
+            "lng": "128.270050"
+          }
+        },
+        {
+          "index": 752,
+          "distance": 149,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171917",
+            "lng": "128.270050"
+          },
+          "toPoint": {
+            "lat": "38.171959",
+            "lng": "128.268341"
+          }
+        },
+        {
+          "index": 755,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171207",
+            "lng": "128.267654"
+          },
+          "toPoint": {
+            "lat": "38.170574",
+            "lng": "128.266769"
+          }
+        },
+        {
+          "index": 785,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.162865",
+            "lng": "128.263794"
+          },
+          "toPoint": {
+            "lat": "38.161930",
+            "lng": "128.264114"
+          }
+        },
+        {
+          "index": 786,
+          "distance": 157,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.161930",
+            "lng": "128.264114"
+          },
+          "toPoint": {
+            "lat": "38.160534",
+            "lng": "128.263870"
+          }
+        },
+        {
+          "index": 791,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.158283",
+            "lng": "128.262970"
+          },
+          "toPoint": {
+            "lat": "38.157234",
+            "lng": "128.262329"
+          }
+        },
+        {
+          "index": 795,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.155952",
+            "lng": "128.262009"
+          },
+          "toPoint": {
+            "lat": "38.155388",
+            "lng": "128.261078"
+          }
+        },
+        {
+          "index": 798,
+          "distance": 143,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.155346",
+            "lng": "128.259811"
+          },
+          "toPoint": {
+            "lat": "38.155319",
+            "lng": "128.258179"
+          }
+        },
+        {
+          "index": 804,
+          "distance": 117,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.153477",
+            "lng": "128.256424"
+          },
+          "toPoint": {
+            "lat": "38.152451",
+            "lng": "128.256729"
+          }
+        },
+        {
+          "index": 846,
+          "distance": 114,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.143757",
+            "lng": "128.256042"
+          },
+          "toPoint": {
+            "lat": "38.142803",
+            "lng": "128.256531"
+          }
+        },
+        {
+          "index": 894,
+          "distance": 141,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.136181",
+            "lng": "128.257614"
+          },
+          "toPoint": {
+            "lat": "38.136173",
+            "lng": "128.255997"
+          }
+        },
+        {
+          "index": 953,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.127029",
+            "lng": "128.255386"
+          },
+          "toPoint": {
+            "lat": "38.126179",
+            "lng": "128.256027"
+          }
+        },
+        {
+          "index": 963,
+          "distance": 119,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.124477",
+            "lng": "128.259399"
+          },
+          "toPoint": {
+            "lat": "38.123428",
+            "lng": "128.259674"
+          }
+        },
+        {
+          "index": 975,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.122040",
+            "lng": "128.264252"
+          },
+          "toPoint": {
+            "lat": "38.121124",
+            "lng": "128.264603"
+          }
+        },
+        {
+          "index": 1061,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.100250",
+            "lng": "128.264435"
+          },
+          "toPoint": {
+            "lat": "38.099552",
+            "lng": "128.263535"
+          }
+        },
+        {
+          "index": 1062,
+          "distance": 223,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "38.099552",
+            "lng": "128.263535"
+          },
+          "toPoint": {
+            "lat": "38.098740",
+            "lng": "128.261200"
+          }
+        },
+        {
+          "index": 1064,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.098526",
+            "lng": "128.260178"
+          },
+          "toPoint": {
+            "lat": "38.098034",
+            "lng": "128.258987"
+          }
+        },
+        {
+          "index": 1726,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.035645",
+            "lng": "128.336395"
+          },
+          "toPoint": {
+            "lat": "38.035732",
+            "lng": "128.337570"
+          }
+        },
+        {
+          "index": 2819,
+          "distance": 130,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.956116",
+            "lng": "128.362595"
+          },
+          "toPoint": {
+            "lat": "37.955109",
+            "lng": "128.361832"
+          }
+        },
+        {
+          "index": 2830,
+          "distance": 169,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.954613",
+            "lng": "128.364120"
+          },
+          "toPoint": {
+            "lat": "37.955257",
+            "lng": "128.365860"
+          }
+        },
+        {
+          "index": 2886,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.948837",
+            "lng": "128.385513"
+          },
+          "toPoint": {
+            "lat": "37.948154",
+            "lng": "128.386322"
+          }
+        },
+        {
+          "index": 2893,
+          "distance": 121,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.945351",
+            "lng": "128.390091"
+          },
+          "toPoint": {
+            "lat": "37.944527",
+            "lng": "128.390991"
+          }
+        },
+        {
+          "index": 2894,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944527",
+            "lng": "128.390991"
+          },
+          "toPoint": {
+            "lat": "37.943714",
+            "lng": "128.391571"
+          }
+        },
+        {
+          "index": 2902,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.943714",
+            "lng": "128.391571"
+          },
+          "toPoint": {
+            "lat": "37.944527",
+            "lng": "128.390991"
+          }
+        },
+        {
+          "index": 2907,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944965",
+            "lng": "128.393417"
+          },
+          "toPoint": {
+            "lat": "37.944427",
+            "lng": "128.394440"
+          }
+        },
+        {
+          "index": 2910,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.943939",
+            "lng": "128.395020"
+          },
+          "toPoint": {
+            "lat": "37.943253",
+            "lng": "128.396042"
+          }
+        },
+        {
+          "index": 2916,
+          "distance": 141,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.942135",
+            "lng": "128.397812"
+          },
+          "toPoint": {
+            "lat": "37.941334",
+            "lng": "128.399063"
+          }
+        },
+        {
+          "index": 2919,
+          "distance": 177,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.940655",
+            "lng": "128.399353"
+          },
+          "toPoint": {
+            "lat": "37.939438",
+            "lng": "128.400650"
+          }
+        },
+        {
+          "index": 2921,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.938770",
+            "lng": "128.401199"
+          },
+          "toPoint": {
+            "lat": "37.938366",
+            "lng": "128.402267"
+          }
+        },
+        {
+          "index": 3038,
+          "distance": 107,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.934143",
+            "lng": "128.431152"
+          },
+          "toPoint": {
+            "lat": "37.934418",
+            "lng": "128.432327"
+          }
+        },
+        {
+          "index": 3055,
+          "distance": 107,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.934418",
+            "lng": "128.432327"
+          },
+          "toPoint": {
+            "lat": "37.934143",
+            "lng": "128.431152"
+          }
+        },
+        {
+          "index": 3172,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.938366",
+            "lng": "128.402267"
+          },
+          "toPoint": {
+            "lat": "37.938770",
+            "lng": "128.401199"
+          }
+        },
+        {
+          "index": 3174,
+          "distance": 177,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.939438",
+            "lng": "128.400650"
+          },
+          "toPoint": {
+            "lat": "37.940655",
+            "lng": "128.399353"
+          }
+        },
+        {
+          "index": 3177,
+          "distance": 141,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.941334",
+            "lng": "128.399063"
+          },
+          "toPoint": {
+            "lat": "37.942135",
+            "lng": "128.397812"
+          }
+        },
+        {
+          "index": 3183,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.943253",
+            "lng": "128.396042"
+          },
+          "toPoint": {
+            "lat": "37.943939",
+            "lng": "128.395020"
+          }
+        },
+        {
+          "index": 3186,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944427",
+            "lng": "128.394440"
+          },
+          "toPoint": {
+            "lat": "37.944965",
+            "lng": "128.393417"
+          }
+        },
+        {
+          "index": 3190,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944935",
+            "lng": "128.391968"
+          },
+          "toPoint": {
+            "lat": "37.944069",
+            "lng": "128.392410"
+          }
+        },
+        {
+          "index": 3198,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944069",
+            "lng": "128.392410"
+          },
+          "toPoint": {
+            "lat": "37.944935",
+            "lng": "128.391968"
+          }
+        },
+        {
+          "index": 3200,
+          "distance": 121,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944527",
+            "lng": "128.390991"
+          },
+          "toPoint": {
+            "lat": "37.945351",
+            "lng": "128.390091"
+          }
+        },
+        {
+          "index": 3207,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.948154",
+            "lng": "128.386322"
+          },
+          "toPoint": {
+            "lat": "37.948837",
+            "lng": "128.385513"
+          }
+        },
+        {
+          "index": 3263,
+          "distance": 169,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.955257",
+            "lng": "128.365860"
+          },
+          "toPoint": {
+            "lat": "37.954613",
+            "lng": "128.364120"
+          }
+        },
+        {
+          "index": 3274,
+          "distance": 130,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.955109",
+            "lng": "128.361832"
+          },
+          "toPoint": {
+            "lat": "37.956116",
+            "lng": "128.362595"
+          }
+        },
+        {
+          "index": 4367,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.035732",
+            "lng": "128.337570"
+          },
+          "toPoint": {
+            "lat": "38.035645",
+            "lng": "128.336395"
+          }
+        },
+        {
+          "index": 5029,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.098034",
+            "lng": "128.258987"
+          },
+          "toPoint": {
+            "lat": "38.098526",
+            "lng": "128.260178"
+          }
+        },
+        {
+          "index": 5031,
+          "distance": 223,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "38.098740",
+            "lng": "128.261200"
+          },
+          "toPoint": {
+            "lat": "38.099552",
+            "lng": "128.263535"
+          }
+        },
+        {
+          "index": 5032,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.099552",
+            "lng": "128.263535"
+          },
+          "toPoint": {
+            "lat": "38.100250",
+            "lng": "128.264435"
+          }
+        },
+        {
+          "index": 5118,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.121124",
+            "lng": "128.264603"
+          },
+          "toPoint": {
+            "lat": "38.122040",
+            "lng": "128.264252"
+          }
+        },
+        {
+          "index": 5130,
+          "distance": 119,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.123428",
+            "lng": "128.259674"
+          },
+          "toPoint": {
+            "lat": "38.124477",
+            "lng": "128.259399"
+          }
+        },
+        {
+          "index": 5140,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.126179",
+            "lng": "128.256027"
+          },
+          "toPoint": {
+            "lat": "38.127029",
+            "lng": "128.255386"
+          }
+        },
+        {
+          "index": 5199,
+          "distance": 141,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.136173",
+            "lng": "128.255997"
+          },
+          "toPoint": {
+            "lat": "38.136181",
+            "lng": "128.257614"
+          }
+        },
+        {
+          "index": 5247,
+          "distance": 114,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.142803",
+            "lng": "128.256531"
+          },
+          "toPoint": {
+            "lat": "38.143757",
+            "lng": "128.256042"
+          }
+        },
+        {
+          "index": 5289,
+          "distance": 117,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.152451",
+            "lng": "128.256729"
+          },
+          "toPoint": {
+            "lat": "38.153477",
+            "lng": "128.256424"
+          }
+        },
+        {
+          "index": 5295,
+          "distance": 143,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.155319",
+            "lng": "128.258179"
+          },
+          "toPoint": {
+            "lat": "38.155346",
+            "lng": "128.259811"
+          }
+        },
+        {
+          "index": 5298,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.155388",
+            "lng": "128.261078"
+          },
+          "toPoint": {
+            "lat": "38.155952",
+            "lng": "128.262009"
+          }
+        },
+        {
+          "index": 5302,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.157234",
+            "lng": "128.262329"
+          },
+          "toPoint": {
+            "lat": "38.158283",
+            "lng": "128.262970"
+          }
+        },
+        {
+          "index": 5307,
+          "distance": 157,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.160534",
+            "lng": "128.263870"
+          },
+          "toPoint": {
+            "lat": "38.161930",
+            "lng": "128.264114"
+          }
+        },
+        {
+          "index": 5308,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.161930",
+            "lng": "128.264114"
+          },
+          "toPoint": {
+            "lat": "38.162865",
+            "lng": "128.263794"
+          }
+        },
+        {
+          "index": 5338,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.170574",
+            "lng": "128.266769"
+          },
+          "toPoint": {
+            "lat": "38.171207",
+            "lng": "128.267654"
+          }
+        },
+        {
+          "index": 5340,
+          "distance": 116,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171448",
+            "lng": "128.268555"
+          },
+          "toPoint": {
+            "lat": "38.171822",
+            "lng": "128.269791"
+          }
+        },
+        {
+          "index": 5344,
+          "distance": 116,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171822",
+            "lng": "128.269791"
+          },
+          "toPoint": {
+            "lat": "38.171448",
+            "lng": "128.268555"
+          }
+        },
+        {
+          "index": 5351,
+          "distance": 160,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.173054",
+            "lng": "128.265701"
+          },
+          "toPoint": {
+            "lat": "38.174480",
+            "lng": "128.265442"
+          }
+        },
+        {
+          "index": 5422,
+          "distance": 125,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.184258",
+            "lng": "128.262390"
+          },
+          "toPoint": {
+            "lat": "38.183697",
+            "lng": "128.261154"
+          }
+        },
+        {
+          "index": 5423,
+          "distance": 120,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183697",
+            "lng": "128.261154"
+          },
+          "toPoint": {
+            "lat": "38.183155",
+            "lng": "128.259964"
+          }
+        },
+        {
+          "index": 5426,
+          "distance": 127,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.182934",
+            "lng": "128.258820"
+          },
+          "toPoint": {
+            "lat": "38.183220",
+            "lng": "128.257416"
+          }
+        },
+        {
+          "index": 5427,
+          "distance": 133,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183220",
+            "lng": "128.257416"
+          },
+          "toPoint": {
+            "lat": "38.183529",
+            "lng": "128.255951"
+          }
+        },
+        {
+          "index": 5429,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183472",
+            "lng": "128.255539"
+          },
+          "toPoint": {
+            "lat": "38.183296",
+            "lng": "128.254349"
+          }
+        },
+        {
+          "index": 5619,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.199398",
+            "lng": "128.206818"
+          },
+          "toPoint": {
+            "lat": "38.198574",
+            "lng": "128.206329"
+          }
+        },
+        {
+          "index": 5816,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.225494",
+            "lng": "128.161194"
+          },
+          "toPoint": {
+            "lat": "38.226196",
+            "lng": "128.160431"
+          }
+        },
+        {
+          "index": 5821,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.226620",
+            "lng": "128.157059"
+          },
+          "toPoint": {
+            "lat": "38.226200",
+            "lng": "128.156021"
+          }
+        },
+        {
+          "index": 5839,
+          "distance": 135,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.231297",
+            "lng": "128.152328"
+          },
+          "toPoint": {
+            "lat": "38.232513",
+            "lng": "128.152313"
+          }
+        },
+        {
+          "index": 5847,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.236622",
+            "lng": "128.150848"
+          },
+          "toPoint": {
+            "lat": "38.237488",
+            "lng": "128.150406"
+          }
+        },
+        {
+          "index": 5848,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.237488",
+            "lng": "128.150406"
+          },
+          "toPoint": {
+            "lat": "38.238407",
+            "lng": "128.150284"
+          }
+        },
+        {
+          "index": 5849,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.238407",
+            "lng": "128.150284"
+          },
+          "toPoint": {
+            "lat": "38.239227",
+            "lng": "128.150864"
+          }
+        },
+        {
+          "index": 5856,
+          "distance": 146,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.239552",
+            "lng": "128.149048"
+          },
+          "toPoint": {
+            "lat": "38.239227",
+            "lng": "128.147430"
+          }
+        },
+        {
+          "index": 5941,
+          "distance": 121,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.245857",
+            "lng": "128.149261"
+          },
+          "toPoint": {
+            "lat": "38.246712",
+            "lng": "128.150116"
+          }
+        },
+        {
+          "index": 5975,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256248",
+            "lng": "128.149963"
+          },
+          "toPoint": {
+            "lat": "38.256714",
+            "lng": "128.150970"
+          }
+        },
+        {
+          "index": 5976,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256714",
+            "lng": "128.150970"
+          },
+          "toPoint": {
+            "lat": "38.256981",
+            "lng": "128.152405"
+          }
+        },
+        {
+          "index": 5977,
+          "distance": 100,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256981",
+            "lng": "128.152405"
+          },
+          "toPoint": {
+            "lat": "38.257053",
+            "lng": "128.153549"
+          }
+        },
+        {
+          "index": 5981,
+          "distance": 100,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.258221",
+            "lng": "128.155060"
+          },
+          "toPoint": {
+            "lat": "38.258953",
+            "lng": "128.155731"
+          }
+        },
+        {
+          "index": 5982,
+          "distance": 115,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.258953",
+            "lng": "128.155731"
+          },
+          "toPoint": {
+            "lat": "38.259193",
+            "lng": "128.157013"
+          }
+        },
+        {
+          "index": 5983,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.259193",
+            "lng": "128.157013"
+          },
+          "toPoint": {
+            "lat": "38.260029",
+            "lng": "128.157745"
+          }
+        },
+        {
+          "index": 5990,
+          "distance": 143,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.262627",
+            "lng": "128.160248"
+          },
+          "toPoint": {
+            "lat": "38.263535",
+            "lng": "128.159088"
+          }
+        },
+        {
+          "index": 5992,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.264210",
+            "lng": "128.159195"
+          },
+          "toPoint": {
+            "lat": "38.265194",
+            "lng": "128.159073"
+          }
+        },
+        {
+          "index": 5995,
+          "distance": 140,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.266628",
+            "lng": "128.158630"
+          },
+          "toPoint": {
+            "lat": "38.267860",
+            "lng": "128.158966"
+          }
+        },
+        {
+          "index": 6033,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.278812",
+            "lng": "128.169449"
+          },
+          "toPoint": {
+            "lat": "38.279480",
+            "lng": "128.168518"
+          }
+        },
+        {
+          "index": 6046,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279682",
+            "lng": "128.165131"
+          },
+          "toPoint": {
+            "lat": "38.279476",
+            "lng": "128.163895"
+          }
+        },
+        {
+          "index": 6048,
+          "distance": 225,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "38.279972",
+            "lng": "128.164032"
+          },
+          "toPoint": {
+            "lat": "38.281960",
+            "lng": "128.164536"
+          }
+        },
+        {
+          "index": 6067,
+          "distance": 140,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279602",
+            "lng": "128.160019"
+          },
+          "toPoint": {
+            "lat": "38.279167",
+            "lng": "128.158508"
+          }
+        },
+        {
+          "index": 6070,
+          "distance": 131,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279510",
+            "lng": "128.157883"
+          },
+          "toPoint": {
+            "lat": "38.279552",
+            "lng": "128.156387"
+          }
+        },
+        {
+          "index": 6075,
+          "distance": 164,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.280212",
+            "lng": "128.155106"
+          },
+          "toPoint": {
+            "lat": "38.281151",
+            "lng": "128.156555"
+          }
+        },
+        {
+          "index": 6080,
+          "distance": 150,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.282639",
+            "lng": "128.156601"
+          },
+          "toPoint": {
+            "lat": "38.283661",
+            "lng": "128.155487"
+          }
+        },
+        {
+          "index": 6083,
+          "distance": 176,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283482",
+            "lng": "128.153885"
+          },
+          "toPoint": {
+            "lat": "38.283051",
+            "lng": "128.151947"
+          }
+        },
+        {
+          "index": 6084,
+          "distance": 184,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283051",
+            "lng": "128.151947"
+          },
+          "toPoint": {
+            "lat": "38.283268",
+            "lng": "128.149857"
+          }
+        },
+        {
+          "index": 6085,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283268",
+            "lng": "128.149857"
+          },
+          "toPoint": {
+            "lat": "38.283504",
+            "lng": "128.148712"
+          }
+        },
+        {
+          "index": 6088,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283882",
+            "lng": "128.147232"
+          },
+          "toPoint": {
+            "lat": "38.284840",
+            "lng": "128.146790"
+          }
+        },
+        {
+          "index": 6092,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.285675",
+            "lng": "128.147034"
+          },
+          "toPoint": {
+            "lat": "38.286583",
+            "lng": "128.146454"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fd12a70e-60af-48a5-badb-b0faa70956ea",
+      "name": "백두대간트레일 2번 코스 (정방향)",
+      "mountain": "백두대간트레일",
+      "region": "강원",
+      "distance": 112,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 6093,
+      "gapCount": 132,
+      "maxGap": 225.39044095841533,
+      "gaps": [
+        {
+          "index": 1,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.286583",
+            "lng": "128.146454"
+          },
+          "toPoint": {
+            "lat": "38.285675",
+            "lng": "128.147034"
+          }
+        },
+        {
+          "index": 5,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.284840",
+            "lng": "128.146790"
+          },
+          "toPoint": {
+            "lat": "38.283882",
+            "lng": "128.147232"
+          }
+        },
+        {
+          "index": 8,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283504",
+            "lng": "128.148712"
+          },
+          "toPoint": {
+            "lat": "38.283268",
+            "lng": "128.149857"
+          }
+        },
+        {
+          "index": 9,
+          "distance": 184,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283268",
+            "lng": "128.149857"
+          },
+          "toPoint": {
+            "lat": "38.283051",
+            "lng": "128.151947"
+          }
+        },
+        {
+          "index": 10,
+          "distance": 176,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283051",
+            "lng": "128.151947"
+          },
+          "toPoint": {
+            "lat": "38.283482",
+            "lng": "128.153885"
+          }
+        },
+        {
+          "index": 13,
+          "distance": 150,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283661",
+            "lng": "128.155487"
+          },
+          "toPoint": {
+            "lat": "38.282639",
+            "lng": "128.156601"
+          }
+        },
+        {
+          "index": 18,
+          "distance": 164,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.281151",
+            "lng": "128.156555"
+          },
+          "toPoint": {
+            "lat": "38.280212",
+            "lng": "128.155106"
+          }
+        },
+        {
+          "index": 23,
+          "distance": 131,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279552",
+            "lng": "128.156387"
+          },
+          "toPoint": {
+            "lat": "38.279510",
+            "lng": "128.157883"
+          }
+        },
+        {
+          "index": 26,
+          "distance": 140,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279167",
+            "lng": "128.158508"
+          },
+          "toPoint": {
+            "lat": "38.279602",
+            "lng": "128.160019"
+          }
+        },
+        {
+          "index": 45,
+          "distance": 225,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "38.281960",
+            "lng": "128.164536"
+          },
+          "toPoint": {
+            "lat": "38.279972",
+            "lng": "128.164032"
+          }
+        },
+        {
+          "index": 49,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279972",
+            "lng": "128.164032"
+          },
+          "toPoint": {
+            "lat": "38.279682",
+            "lng": "128.165131"
+          }
+        },
+        {
+          "index": 62,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279480",
+            "lng": "128.168518"
+          },
+          "toPoint": {
+            "lat": "38.278812",
+            "lng": "128.169449"
+          }
+        },
+        {
+          "index": 100,
+          "distance": 140,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.267860",
+            "lng": "128.158966"
+          },
+          "toPoint": {
+            "lat": "38.266628",
+            "lng": "128.158630"
+          }
+        },
+        {
+          "index": 103,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.265194",
+            "lng": "128.159073"
+          },
+          "toPoint": {
+            "lat": "38.264210",
+            "lng": "128.159195"
+          }
+        },
+        {
+          "index": 105,
+          "distance": 143,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.263535",
+            "lng": "128.159088"
+          },
+          "toPoint": {
+            "lat": "38.262627",
+            "lng": "128.160248"
+          }
+        },
+        {
+          "index": 112,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.260029",
+            "lng": "128.157745"
+          },
+          "toPoint": {
+            "lat": "38.259193",
+            "lng": "128.157013"
+          }
+        },
+        {
+          "index": 113,
+          "distance": 115,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.259193",
+            "lng": "128.157013"
+          },
+          "toPoint": {
+            "lat": "38.258953",
+            "lng": "128.155731"
+          }
+        },
+        {
+          "index": 114,
+          "distance": 100,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.258953",
+            "lng": "128.155731"
+          },
+          "toPoint": {
+            "lat": "38.258221",
+            "lng": "128.155060"
+          }
+        },
+        {
+          "index": 118,
+          "distance": 100,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.257053",
+            "lng": "128.153549"
+          },
+          "toPoint": {
+            "lat": "38.256981",
+            "lng": "128.152405"
+          }
+        },
+        {
+          "index": 119,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256981",
+            "lng": "128.152405"
+          },
+          "toPoint": {
+            "lat": "38.256714",
+            "lng": "128.150970"
+          }
+        },
+        {
+          "index": 120,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256714",
+            "lng": "128.150970"
+          },
+          "toPoint": {
+            "lat": "38.256248",
+            "lng": "128.149963"
+          }
+        },
+        {
+          "index": 154,
+          "distance": 121,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.246712",
+            "lng": "128.150116"
+          },
+          "toPoint": {
+            "lat": "38.245857",
+            "lng": "128.149261"
+          }
+        },
+        {
+          "index": 239,
+          "distance": 146,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.239227",
+            "lng": "128.147430"
+          },
+          "toPoint": {
+            "lat": "38.239552",
+            "lng": "128.149048"
+          }
+        },
+        {
+          "index": 246,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.239227",
+            "lng": "128.150864"
+          },
+          "toPoint": {
+            "lat": "38.238407",
+            "lng": "128.150284"
+          }
+        },
+        {
+          "index": 247,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.238407",
+            "lng": "128.150284"
+          },
+          "toPoint": {
+            "lat": "38.237488",
+            "lng": "128.150406"
+          }
+        },
+        {
+          "index": 248,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.237488",
+            "lng": "128.150406"
+          },
+          "toPoint": {
+            "lat": "38.236622",
+            "lng": "128.150848"
+          }
+        },
+        {
+          "index": 256,
+          "distance": 135,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.232513",
+            "lng": "128.152313"
+          },
+          "toPoint": {
+            "lat": "38.231297",
+            "lng": "128.152328"
+          }
+        },
+        {
+          "index": 274,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.226200",
+            "lng": "128.156021"
+          },
+          "toPoint": {
+            "lat": "38.226620",
+            "lng": "128.157059"
+          }
+        },
+        {
+          "index": 279,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.226196",
+            "lng": "128.160431"
+          },
+          "toPoint": {
+            "lat": "38.225494",
+            "lng": "128.161194"
+          }
+        },
+        {
+          "index": 476,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.198574",
+            "lng": "128.206329"
+          },
+          "toPoint": {
+            "lat": "38.199486",
+            "lng": "128.206528"
+          }
+        },
+        {
+          "index": 664,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183296",
+            "lng": "128.254349"
+          },
+          "toPoint": {
+            "lat": "38.183472",
+            "lng": "128.255539"
+          }
+        },
+        {
+          "index": 666,
+          "distance": 133,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183529",
+            "lng": "128.255951"
+          },
+          "toPoint": {
+            "lat": "38.183220",
+            "lng": "128.257416"
+          }
+        },
+        {
+          "index": 667,
+          "distance": 127,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183220",
+            "lng": "128.257416"
+          },
+          "toPoint": {
+            "lat": "38.182934",
+            "lng": "128.258820"
+          }
+        },
+        {
+          "index": 670,
+          "distance": 120,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183155",
+            "lng": "128.259964"
+          },
+          "toPoint": {
+            "lat": "38.183697",
+            "lng": "128.261154"
+          }
+        },
+        {
+          "index": 671,
+          "distance": 125,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183697",
+            "lng": "128.261154"
+          },
+          "toPoint": {
+            "lat": "38.184258",
+            "lng": "128.262390"
+          }
+        },
+        {
+          "index": 742,
+          "distance": 160,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.174480",
+            "lng": "128.265442"
+          },
+          "toPoint": {
+            "lat": "38.173054",
+            "lng": "128.265701"
+          }
+        },
+        {
+          "index": 748,
+          "distance": 149,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171959",
+            "lng": "128.268341"
+          },
+          "toPoint": {
+            "lat": "38.171917",
+            "lng": "128.270050"
+          }
+        },
+        {
+          "index": 752,
+          "distance": 149,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171917",
+            "lng": "128.270050"
+          },
+          "toPoint": {
+            "lat": "38.171959",
+            "lng": "128.268341"
+          }
+        },
+        {
+          "index": 755,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171207",
+            "lng": "128.267654"
+          },
+          "toPoint": {
+            "lat": "38.170574",
+            "lng": "128.266769"
+          }
+        },
+        {
+          "index": 785,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.162865",
+            "lng": "128.263794"
+          },
+          "toPoint": {
+            "lat": "38.161930",
+            "lng": "128.264114"
+          }
+        },
+        {
+          "index": 786,
+          "distance": 157,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.161930",
+            "lng": "128.264114"
+          },
+          "toPoint": {
+            "lat": "38.160534",
+            "lng": "128.263870"
+          }
+        },
+        {
+          "index": 791,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.158283",
+            "lng": "128.262970"
+          },
+          "toPoint": {
+            "lat": "38.157234",
+            "lng": "128.262329"
+          }
+        },
+        {
+          "index": 795,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.155952",
+            "lng": "128.262009"
+          },
+          "toPoint": {
+            "lat": "38.155388",
+            "lng": "128.261078"
+          }
+        },
+        {
+          "index": 798,
+          "distance": 143,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.155346",
+            "lng": "128.259811"
+          },
+          "toPoint": {
+            "lat": "38.155319",
+            "lng": "128.258179"
+          }
+        },
+        {
+          "index": 804,
+          "distance": 117,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.153477",
+            "lng": "128.256424"
+          },
+          "toPoint": {
+            "lat": "38.152451",
+            "lng": "128.256729"
+          }
+        },
+        {
+          "index": 846,
+          "distance": 114,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.143757",
+            "lng": "128.256042"
+          },
+          "toPoint": {
+            "lat": "38.142803",
+            "lng": "128.256531"
+          }
+        },
+        {
+          "index": 894,
+          "distance": 141,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.136181",
+            "lng": "128.257614"
+          },
+          "toPoint": {
+            "lat": "38.136173",
+            "lng": "128.255997"
+          }
+        },
+        {
+          "index": 953,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.127029",
+            "lng": "128.255386"
+          },
+          "toPoint": {
+            "lat": "38.126179",
+            "lng": "128.256027"
+          }
+        },
+        {
+          "index": 963,
+          "distance": 119,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.124477",
+            "lng": "128.259399"
+          },
+          "toPoint": {
+            "lat": "38.123428",
+            "lng": "128.259674"
+          }
+        },
+        {
+          "index": 975,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.122040",
+            "lng": "128.264252"
+          },
+          "toPoint": {
+            "lat": "38.121124",
+            "lng": "128.264603"
+          }
+        },
+        {
+          "index": 1061,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.100250",
+            "lng": "128.264435"
+          },
+          "toPoint": {
+            "lat": "38.099552",
+            "lng": "128.263535"
+          }
+        },
+        {
+          "index": 1062,
+          "distance": 223,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "38.099552",
+            "lng": "128.263535"
+          },
+          "toPoint": {
+            "lat": "38.098740",
+            "lng": "128.261200"
+          }
+        },
+        {
+          "index": 1064,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.098526",
+            "lng": "128.260178"
+          },
+          "toPoint": {
+            "lat": "38.098034",
+            "lng": "128.258987"
+          }
+        },
+        {
+          "index": 1726,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.035645",
+            "lng": "128.336395"
+          },
+          "toPoint": {
+            "lat": "38.035732",
+            "lng": "128.337570"
+          }
+        },
+        {
+          "index": 2819,
+          "distance": 130,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.956116",
+            "lng": "128.362595"
+          },
+          "toPoint": {
+            "lat": "37.955109",
+            "lng": "128.361832"
+          }
+        },
+        {
+          "index": 2830,
+          "distance": 169,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.954613",
+            "lng": "128.364120"
+          },
+          "toPoint": {
+            "lat": "37.955257",
+            "lng": "128.365860"
+          }
+        },
+        {
+          "index": 2886,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.948837",
+            "lng": "128.385513"
+          },
+          "toPoint": {
+            "lat": "37.948154",
+            "lng": "128.386322"
+          }
+        },
+        {
+          "index": 2893,
+          "distance": 121,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.945351",
+            "lng": "128.390091"
+          },
+          "toPoint": {
+            "lat": "37.944527",
+            "lng": "128.390991"
+          }
+        },
+        {
+          "index": 2894,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944527",
+            "lng": "128.390991"
+          },
+          "toPoint": {
+            "lat": "37.943714",
+            "lng": "128.391571"
+          }
+        },
+        {
+          "index": 2902,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.943714",
+            "lng": "128.391571"
+          },
+          "toPoint": {
+            "lat": "37.944527",
+            "lng": "128.390991"
+          }
+        },
+        {
+          "index": 2907,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944965",
+            "lng": "128.393417"
+          },
+          "toPoint": {
+            "lat": "37.944427",
+            "lng": "128.394440"
+          }
+        },
+        {
+          "index": 2910,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.943939",
+            "lng": "128.395020"
+          },
+          "toPoint": {
+            "lat": "37.943253",
+            "lng": "128.396042"
+          }
+        },
+        {
+          "index": 2916,
+          "distance": 141,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.942135",
+            "lng": "128.397812"
+          },
+          "toPoint": {
+            "lat": "37.941334",
+            "lng": "128.399063"
+          }
+        },
+        {
+          "index": 2919,
+          "distance": 177,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.940655",
+            "lng": "128.399353"
+          },
+          "toPoint": {
+            "lat": "37.939438",
+            "lng": "128.400650"
+          }
+        },
+        {
+          "index": 2921,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.938770",
+            "lng": "128.401199"
+          },
+          "toPoint": {
+            "lat": "37.938366",
+            "lng": "128.402267"
+          }
+        },
+        {
+          "index": 3038,
+          "distance": 107,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.934143",
+            "lng": "128.431152"
+          },
+          "toPoint": {
+            "lat": "37.934418",
+            "lng": "128.432327"
+          }
+        },
+        {
+          "index": 3055,
+          "distance": 107,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.934418",
+            "lng": "128.432327"
+          },
+          "toPoint": {
+            "lat": "37.934143",
+            "lng": "128.431152"
+          }
+        },
+        {
+          "index": 3172,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.938366",
+            "lng": "128.402267"
+          },
+          "toPoint": {
+            "lat": "37.938770",
+            "lng": "128.401199"
+          }
+        },
+        {
+          "index": 3174,
+          "distance": 177,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.939438",
+            "lng": "128.400650"
+          },
+          "toPoint": {
+            "lat": "37.940655",
+            "lng": "128.399353"
+          }
+        },
+        {
+          "index": 3177,
+          "distance": 141,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.941334",
+            "lng": "128.399063"
+          },
+          "toPoint": {
+            "lat": "37.942135",
+            "lng": "128.397812"
+          }
+        },
+        {
+          "index": 3183,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.943253",
+            "lng": "128.396042"
+          },
+          "toPoint": {
+            "lat": "37.943939",
+            "lng": "128.395020"
+          }
+        },
+        {
+          "index": 3186,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944427",
+            "lng": "128.394440"
+          },
+          "toPoint": {
+            "lat": "37.944965",
+            "lng": "128.393417"
+          }
+        },
+        {
+          "index": 3190,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944935",
+            "lng": "128.391968"
+          },
+          "toPoint": {
+            "lat": "37.944069",
+            "lng": "128.392410"
+          }
+        },
+        {
+          "index": 3198,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944069",
+            "lng": "128.392410"
+          },
+          "toPoint": {
+            "lat": "37.944935",
+            "lng": "128.391968"
+          }
+        },
+        {
+          "index": 3200,
+          "distance": 121,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.944527",
+            "lng": "128.390991"
+          },
+          "toPoint": {
+            "lat": "37.945351",
+            "lng": "128.390091"
+          }
+        },
+        {
+          "index": 3207,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.948154",
+            "lng": "128.386322"
+          },
+          "toPoint": {
+            "lat": "37.948837",
+            "lng": "128.385513"
+          }
+        },
+        {
+          "index": 3263,
+          "distance": 169,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.955257",
+            "lng": "128.365860"
+          },
+          "toPoint": {
+            "lat": "37.954613",
+            "lng": "128.364120"
+          }
+        },
+        {
+          "index": 3274,
+          "distance": 130,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.955109",
+            "lng": "128.361832"
+          },
+          "toPoint": {
+            "lat": "37.956116",
+            "lng": "128.362595"
+          }
+        },
+        {
+          "index": 4367,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.035732",
+            "lng": "128.337570"
+          },
+          "toPoint": {
+            "lat": "38.035645",
+            "lng": "128.336395"
+          }
+        },
+        {
+          "index": 5029,
+          "distance": 118,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.098034",
+            "lng": "128.258987"
+          },
+          "toPoint": {
+            "lat": "38.098526",
+            "lng": "128.260178"
+          }
+        },
+        {
+          "index": 5031,
+          "distance": 223,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "38.098740",
+            "lng": "128.261200"
+          },
+          "toPoint": {
+            "lat": "38.099552",
+            "lng": "128.263535"
+          }
+        },
+        {
+          "index": 5032,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.099552",
+            "lng": "128.263535"
+          },
+          "toPoint": {
+            "lat": "38.100250",
+            "lng": "128.264435"
+          }
+        },
+        {
+          "index": 5118,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.121124",
+            "lng": "128.264603"
+          },
+          "toPoint": {
+            "lat": "38.122040",
+            "lng": "128.264252"
+          }
+        },
+        {
+          "index": 5130,
+          "distance": 119,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.123428",
+            "lng": "128.259674"
+          },
+          "toPoint": {
+            "lat": "38.124477",
+            "lng": "128.259399"
+          }
+        },
+        {
+          "index": 5140,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.126179",
+            "lng": "128.256027"
+          },
+          "toPoint": {
+            "lat": "38.127029",
+            "lng": "128.255386"
+          }
+        },
+        {
+          "index": 5199,
+          "distance": 141,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.136173",
+            "lng": "128.255997"
+          },
+          "toPoint": {
+            "lat": "38.136181",
+            "lng": "128.257614"
+          }
+        },
+        {
+          "index": 5247,
+          "distance": 114,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.142803",
+            "lng": "128.256531"
+          },
+          "toPoint": {
+            "lat": "38.143757",
+            "lng": "128.256042"
+          }
+        },
+        {
+          "index": 5289,
+          "distance": 117,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.152451",
+            "lng": "128.256729"
+          },
+          "toPoint": {
+            "lat": "38.153477",
+            "lng": "128.256424"
+          }
+        },
+        {
+          "index": 5295,
+          "distance": 143,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.155319",
+            "lng": "128.258179"
+          },
+          "toPoint": {
+            "lat": "38.155346",
+            "lng": "128.259811"
+          }
+        },
+        {
+          "index": 5298,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.155388",
+            "lng": "128.261078"
+          },
+          "toPoint": {
+            "lat": "38.155952",
+            "lng": "128.262009"
+          }
+        },
+        {
+          "index": 5302,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.157234",
+            "lng": "128.262329"
+          },
+          "toPoint": {
+            "lat": "38.158283",
+            "lng": "128.262970"
+          }
+        },
+        {
+          "index": 5307,
+          "distance": 157,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.160534",
+            "lng": "128.263870"
+          },
+          "toPoint": {
+            "lat": "38.161930",
+            "lng": "128.264114"
+          }
+        },
+        {
+          "index": 5308,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.161930",
+            "lng": "128.264114"
+          },
+          "toPoint": {
+            "lat": "38.162865",
+            "lng": "128.263794"
+          }
+        },
+        {
+          "index": 5338,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.170574",
+            "lng": "128.266769"
+          },
+          "toPoint": {
+            "lat": "38.171207",
+            "lng": "128.267654"
+          }
+        },
+        {
+          "index": 5340,
+          "distance": 116,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171448",
+            "lng": "128.268555"
+          },
+          "toPoint": {
+            "lat": "38.171822",
+            "lng": "128.269791"
+          }
+        },
+        {
+          "index": 5344,
+          "distance": 116,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.171822",
+            "lng": "128.269791"
+          },
+          "toPoint": {
+            "lat": "38.171448",
+            "lng": "128.268555"
+          }
+        },
+        {
+          "index": 5351,
+          "distance": 160,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.173054",
+            "lng": "128.265701"
+          },
+          "toPoint": {
+            "lat": "38.174480",
+            "lng": "128.265442"
+          }
+        },
+        {
+          "index": 5422,
+          "distance": 125,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.184258",
+            "lng": "128.262390"
+          },
+          "toPoint": {
+            "lat": "38.183697",
+            "lng": "128.261154"
+          }
+        },
+        {
+          "index": 5423,
+          "distance": 120,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183697",
+            "lng": "128.261154"
+          },
+          "toPoint": {
+            "lat": "38.183155",
+            "lng": "128.259964"
+          }
+        },
+        {
+          "index": 5426,
+          "distance": 127,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.182934",
+            "lng": "128.258820"
+          },
+          "toPoint": {
+            "lat": "38.183220",
+            "lng": "128.257416"
+          }
+        },
+        {
+          "index": 5427,
+          "distance": 133,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183220",
+            "lng": "128.257416"
+          },
+          "toPoint": {
+            "lat": "38.183529",
+            "lng": "128.255951"
+          }
+        },
+        {
+          "index": 5429,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.183472",
+            "lng": "128.255539"
+          },
+          "toPoint": {
+            "lat": "38.183296",
+            "lng": "128.254349"
+          }
+        },
+        {
+          "index": 5619,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.199398",
+            "lng": "128.206818"
+          },
+          "toPoint": {
+            "lat": "38.198574",
+            "lng": "128.206329"
+          }
+        },
+        {
+          "index": 5816,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.225494",
+            "lng": "128.161194"
+          },
+          "toPoint": {
+            "lat": "38.226196",
+            "lng": "128.160431"
+          }
+        },
+        {
+          "index": 5821,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.226620",
+            "lng": "128.157059"
+          },
+          "toPoint": {
+            "lat": "38.226200",
+            "lng": "128.156021"
+          }
+        },
+        {
+          "index": 5839,
+          "distance": 135,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.231297",
+            "lng": "128.152328"
+          },
+          "toPoint": {
+            "lat": "38.232513",
+            "lng": "128.152313"
+          }
+        },
+        {
+          "index": 5847,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.236622",
+            "lng": "128.150848"
+          },
+          "toPoint": {
+            "lat": "38.237488",
+            "lng": "128.150406"
+          }
+        },
+        {
+          "index": 5848,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.237488",
+            "lng": "128.150406"
+          },
+          "toPoint": {
+            "lat": "38.238407",
+            "lng": "128.150284"
+          }
+        },
+        {
+          "index": 5849,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.238407",
+            "lng": "128.150284"
+          },
+          "toPoint": {
+            "lat": "38.239227",
+            "lng": "128.150864"
+          }
+        },
+        {
+          "index": 5856,
+          "distance": 146,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.239552",
+            "lng": "128.149048"
+          },
+          "toPoint": {
+            "lat": "38.239227",
+            "lng": "128.147430"
+          }
+        },
+        {
+          "index": 5941,
+          "distance": 121,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.245857",
+            "lng": "128.149261"
+          },
+          "toPoint": {
+            "lat": "38.246712",
+            "lng": "128.150116"
+          }
+        },
+        {
+          "index": 5975,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256248",
+            "lng": "128.149963"
+          },
+          "toPoint": {
+            "lat": "38.256714",
+            "lng": "128.150970"
+          }
+        },
+        {
+          "index": 5976,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256714",
+            "lng": "128.150970"
+          },
+          "toPoint": {
+            "lat": "38.256981",
+            "lng": "128.152405"
+          }
+        },
+        {
+          "index": 5977,
+          "distance": 100,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.256981",
+            "lng": "128.152405"
+          },
+          "toPoint": {
+            "lat": "38.257053",
+            "lng": "128.153549"
+          }
+        },
+        {
+          "index": 5981,
+          "distance": 100,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.258221",
+            "lng": "128.155060"
+          },
+          "toPoint": {
+            "lat": "38.258953",
+            "lng": "128.155731"
+          }
+        },
+        {
+          "index": 5982,
+          "distance": 115,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.258953",
+            "lng": "128.155731"
+          },
+          "toPoint": {
+            "lat": "38.259193",
+            "lng": "128.157013"
+          }
+        },
+        {
+          "index": 5983,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.259193",
+            "lng": "128.157013"
+          },
+          "toPoint": {
+            "lat": "38.260029",
+            "lng": "128.157745"
+          }
+        },
+        {
+          "index": 5990,
+          "distance": 143,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.262627",
+            "lng": "128.160248"
+          },
+          "toPoint": {
+            "lat": "38.263535",
+            "lng": "128.159088"
+          }
+        },
+        {
+          "index": 5992,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.264210",
+            "lng": "128.159195"
+          },
+          "toPoint": {
+            "lat": "38.265194",
+            "lng": "128.159073"
+          }
+        },
+        {
+          "index": 5995,
+          "distance": 140,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.266628",
+            "lng": "128.158630"
+          },
+          "toPoint": {
+            "lat": "38.267860",
+            "lng": "128.158966"
+          }
+        },
+        {
+          "index": 6033,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.278812",
+            "lng": "128.169449"
+          },
+          "toPoint": {
+            "lat": "38.279480",
+            "lng": "128.168518"
+          }
+        },
+        {
+          "index": 6046,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279682",
+            "lng": "128.165131"
+          },
+          "toPoint": {
+            "lat": "38.279476",
+            "lng": "128.163895"
+          }
+        },
+        {
+          "index": 6048,
+          "distance": 225,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "38.279972",
+            "lng": "128.164032"
+          },
+          "toPoint": {
+            "lat": "38.281960",
+            "lng": "128.164536"
+          }
+        },
+        {
+          "index": 6067,
+          "distance": 140,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279602",
+            "lng": "128.160019"
+          },
+          "toPoint": {
+            "lat": "38.279167",
+            "lng": "128.158508"
+          }
+        },
+        {
+          "index": 6070,
+          "distance": 131,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.279510",
+            "lng": "128.157883"
+          },
+          "toPoint": {
+            "lat": "38.279552",
+            "lng": "128.156387"
+          }
+        },
+        {
+          "index": 6075,
+          "distance": 164,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.280212",
+            "lng": "128.155106"
+          },
+          "toPoint": {
+            "lat": "38.281151",
+            "lng": "128.156555"
+          }
+        },
+        {
+          "index": 6080,
+          "distance": 150,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.282639",
+            "lng": "128.156601"
+          },
+          "toPoint": {
+            "lat": "38.283661",
+            "lng": "128.155487"
+          }
+        },
+        {
+          "index": 6083,
+          "distance": 176,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283482",
+            "lng": "128.153885"
+          },
+          "toPoint": {
+            "lat": "38.283051",
+            "lng": "128.151947"
+          }
+        },
+        {
+          "index": 6084,
+          "distance": 184,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283051",
+            "lng": "128.151947"
+          },
+          "toPoint": {
+            "lat": "38.283268",
+            "lng": "128.149857"
+          }
+        },
+        {
+          "index": 6085,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283268",
+            "lng": "128.149857"
+          },
+          "toPoint": {
+            "lat": "38.283504",
+            "lng": "128.148712"
+          }
+        },
+        {
+          "index": 6088,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.283882",
+            "lng": "128.147232"
+          },
+          "toPoint": {
+            "lat": "38.284840",
+            "lng": "128.146790"
+          }
+        },
+        {
+          "index": 6092,
+          "distance": 113,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.285675",
+            "lng": "128.147034"
+          },
+          "toPoint": {
+            "lat": "38.286583",
+            "lng": "128.146454"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d2db1052-e805-4457-9fe0-b625a5931624",
+      "name": "무등산 8번 코스 (역방향)",
+      "mountain": "무등산",
+      "region": "광주",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 705,
+      "gapCount": 1,
+      "maxGap": 216.0828012285365,
+      "gaps": [
+        {
+          "index": 473,
+          "distance": 216,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.153714",
+            "lng": "126.951865"
+          },
+          "toPoint": {
+            "lat": "35.154345",
+            "lng": "126.949617"
+          }
+        }
+      ]
+    },
+    {
+      "id": "8c6480d2-fb34-44a1-ad06-c2aae10fd128",
+      "name": "무등산 8번 코스 (정방향)",
+      "mountain": "무등산",
+      "region": "광주",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 705,
+      "gapCount": 1,
+      "maxGap": 216.0828012285365,
+      "gaps": [
+        {
+          "index": 473,
+          "distance": 216,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "35.153714",
+            "lng": "126.951865"
+          },
+          "toPoint": {
+            "lat": "35.154345",
+            "lng": "126.949617"
+          }
+        }
+      ]
+    },
+    {
+      "id": "b9693e83-8b84-415e-a4e1-35c280fa2a59",
+      "name": "북한산 45번 코스 (역방향)",
+      "mountain": "북한산",
+      "region": "서울",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 344,
+      "gapCount": 1,
+      "maxGap": 211.3710582829848,
+      "gaps": [
+        {
+          "index": 252,
+          "distance": 211,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "37.615026",
+            "lng": "126.943544"
+          },
+          "toPoint": {
+            "lat": "37.616897",
+            "lng": "126.943120"
+          }
+        }
+      ]
+    },
+    {
+      "id": "3af3a2d7-f31c-411c-9b3f-40e77b5e680d",
+      "name": "북한산 45번 코스 (정방향)",
+      "mountain": "북한산",
+      "region": "서울",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 344,
+      "gapCount": 1,
+      "maxGap": 211.3710582829848,
+      "gaps": [
+        {
+          "index": 252,
+          "distance": 211,
+          "severity": "major",
+          "fromPoint": {
+            "lat": "37.615026",
+            "lng": "126.943544"
+          },
+          "toPoint": {
+            "lat": "37.616897",
+            "lng": "126.943120"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a860c569-b9e5-470a-a1f0-3daa7929efb7",
+      "name": "관악산 3번 코스 (역방향)",
+      "mountain": "관악산",
+      "region": "서울",
+      "distance": 11,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 763,
+      "gapCount": 4,
+      "maxGap": 185.92083911985176,
+      "gaps": [
+        {
+          "index": 318,
+          "distance": 186,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.451553",
+            "lng": "126.967942"
+          },
+          "toPoint": {
+            "lat": "37.450142",
+            "lng": "126.969072"
+          }
+        },
+        {
+          "index": 380,
+          "distance": 142,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.442632",
+            "lng": "126.962588"
+          },
+          "toPoint": {
+            "lat": "37.442877",
+            "lng": "126.961014"
+          }
+        },
+        {
+          "index": 382,
+          "distance": 142,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.442877",
+            "lng": "126.961014"
+          },
+          "toPoint": {
+            "lat": "37.442632",
+            "lng": "126.962588"
+          }
+        },
+        {
+          "index": 445,
+          "distance": 186,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.450142",
+            "lng": "126.969072"
+          },
+          "toPoint": {
+            "lat": "37.451553",
+            "lng": "126.967942"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d296ad28-0219-4f7d-9574-e2d623c92b80",
+      "name": "관악산 3번 코스 (정방향)",
+      "mountain": "관악산",
+      "region": "서울",
+      "distance": 11,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 763,
+      "gapCount": 4,
+      "maxGap": 185.92083911985176,
+      "gaps": [
+        {
+          "index": 318,
+          "distance": 186,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.451553",
+            "lng": "126.967942"
+          },
+          "toPoint": {
+            "lat": "37.450142",
+            "lng": "126.969072"
+          }
+        },
+        {
+          "index": 380,
+          "distance": 142,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.442632",
+            "lng": "126.962588"
+          },
+          "toPoint": {
+            "lat": "37.442877",
+            "lng": "126.961014"
+          }
+        },
+        {
+          "index": 382,
+          "distance": 142,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.442877",
+            "lng": "126.961014"
+          },
+          "toPoint": {
+            "lat": "37.442632",
+            "lng": "126.962588"
+          }
+        },
+        {
+          "index": 445,
+          "distance": 186,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.450142",
+            "lng": "126.969072"
+          },
+          "toPoint": {
+            "lat": "37.451553",
+            "lng": "126.967942"
+          }
+        }
+      ]
+    },
+    {
+      "id": "60c2382a-a6cc-4378-a9a8-be10839e1f13",
+      "name": "속리산 1번 코스 (역방향)",
+      "mountain": "속리산",
+      "region": "충북",
+      "distance": 13,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 1585,
+      "gapCount": 1,
+      "maxGap": 183.52341186077894,
+      "gaps": [
+        {
+          "index": 1221,
+          "distance": 184,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.566217",
+            "lng": "127.862740"
+          },
+          "toPoint": {
+            "lat": "36.567805",
+            "lng": "127.862180"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d5657a44-a56a-450b-ab1e-0b5ca52df813",
+      "name": "속리산 1번 코스 (정방향)",
+      "mountain": "속리산",
+      "region": "충북",
+      "distance": 13,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 1585,
+      "gapCount": 1,
+      "maxGap": 183.52341186077894,
+      "gaps": [
+        {
+          "index": 1221,
+          "distance": 184,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.566217",
+            "lng": "127.862740"
+          },
+          "toPoint": {
+            "lat": "36.567805",
+            "lng": "127.862180"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2b04b436-1301-424c-b990-8d62b70bec0b",
+      "name": "태화산 3번 코스 (역방향)",
+      "mountain": "태화산",
+      "region": "강원",
+      "distance": 9,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 856,
+      "gapCount": 1,
+      "maxGap": 178.84957365126255,
+      "gaps": [
+        {
+          "index": 629,
+          "distance": 179,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.131673",
+            "lng": "128.503571"
+          },
+          "toPoint": {
+            "lat": "37.133144",
+            "lng": "128.502755"
+          }
+        }
+      ]
+    },
+    {
+      "id": "b3de77fd-4e95-4322-bbbe-a8ffee4d1ca8",
+      "name": "태화산 3번 코스 (정방향)",
+      "mountain": "태화산",
+      "region": "강원",
+      "distance": 9,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 856,
+      "gapCount": 1,
+      "maxGap": 178.84957365126255,
+      "gaps": [
+        {
+          "index": 629,
+          "distance": 179,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.131673",
+            "lng": "128.503571"
+          },
+          "toPoint": {
+            "lat": "37.133144",
+            "lng": "128.502755"
+          }
+        }
+      ]
+    },
+    {
+      "id": "809988dd-78c4-4db0-b4dd-c5df9592ab01",
+      "name": "도봉산 41번 코스 (역방향)",
+      "mountain": "도봉산",
+      "region": "서울",
+      "distance": 6,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 737,
+      "gapCount": 2,
+      "maxGap": 175.31392639751596,
+      "gaps": [
+        {
+          "index": 269,
+          "distance": 175,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.700185",
+            "lng": "127.028033"
+          },
+          "toPoint": {
+            "lat": "37.698832",
+            "lng": "127.029056"
+          }
+        },
+        {
+          "index": 468,
+          "distance": 175,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.698832",
+            "lng": "127.029056"
+          },
+          "toPoint": {
+            "lat": "37.700185",
+            "lng": "127.028033"
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2074469-4680-49d4-b5ad-96c1780294dd",
+      "name": "도봉산 41번 코스 (정방향)",
+      "mountain": "도봉산",
+      "region": "서울",
+      "distance": 6,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 737,
+      "gapCount": 2,
+      "maxGap": 175.31392639751596,
+      "gaps": [
+        {
+          "index": 269,
+          "distance": 175,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.700185",
+            "lng": "127.028033"
+          },
+          "toPoint": {
+            "lat": "37.698832",
+            "lng": "127.029056"
+          }
+        },
+        {
+          "index": 468,
+          "distance": 175,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.698832",
+            "lng": "127.029056"
+          },
+          "toPoint": {
+            "lat": "37.700185",
+            "lng": "127.028033"
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2725de8-9ec9-49d6-8e8d-f51738646623",
+      "name": "천마산 5번 코스 (역방향)",
+      "mountain": "천마산",
+      "region": "경기",
+      "distance": 11,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 633,
+      "gapCount": 2,
+      "maxGap": 153.92946557218505,
+      "gaps": [
+        {
+          "index": 135,
+          "distance": 154,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.678690",
+            "lng": "127.271273"
+          },
+          "toPoint": {
+            "lat": "37.679675",
+            "lng": "127.272502"
+          }
+        },
+        {
+          "index": 498,
+          "distance": 154,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.679675",
+            "lng": "127.272502"
+          },
+          "toPoint": {
+            "lat": "37.678690",
+            "lng": "127.271273"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6b86e107-4fea-4f42-92e0-9b82283d45a0",
+      "name": "천마산 5번 코스 (정방향)",
+      "mountain": "천마산",
+      "region": "경기",
+      "distance": 11,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 633,
+      "gapCount": 2,
+      "maxGap": 153.92946557218505,
+      "gaps": [
+        {
+          "index": 135,
+          "distance": 154,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.678690",
+            "lng": "127.271273"
+          },
+          "toPoint": {
+            "lat": "37.679675",
+            "lng": "127.272502"
+          }
+        },
+        {
+          "index": 498,
+          "distance": 154,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.679675",
+            "lng": "127.272502"
+          },
+          "toPoint": {
+            "lat": "37.678690",
+            "lng": "127.271273"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ba2dc57d-2ec7-4d01-bdbf-62c451627e84",
+      "name": "재약산 11번 코스 (역방향)",
+      "mountain": "재약산",
+      "region": "울산",
+      "distance": 5,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 576,
+      "gapCount": 1,
+      "maxGap": 147.10561350535212,
+      "gaps": [
+        {
+          "index": 322,
+          "distance": 147,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.559242",
+            "lng": "128.971776"
+          },
+          "toPoint": {
+            "lat": "35.557979",
+            "lng": "128.972260"
+          }
+        }
+      ]
+    },
+    {
+      "id": "143c9f6b-3651-4216-a2ba-5f833274d2f9",
+      "name": "재약산 11번 코스 (정방향)",
+      "mountain": "재약산",
+      "region": "울산",
+      "distance": 5,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 576,
+      "gapCount": 1,
+      "maxGap": 147.10561350535212,
+      "gaps": [
+        {
+          "index": 322,
+          "distance": 147,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.559242",
+            "lng": "128.971776"
+          },
+          "toPoint": {
+            "lat": "35.557979",
+            "lng": "128.972260"
+          }
+        }
+      ]
+    },
+    {
+      "id": "64af4722-e32f-4858-916c-4d30e32e1c1e",
+      "name": "미륵산 2번 코스 (역방향)",
+      "mountain": "미륵산",
+      "region": "경남",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 539,
+      "gapCount": 2,
+      "maxGap": 144.76294415951875,
+      "gaps": [
+        {
+          "index": 260,
+          "distance": 145,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.816743",
+            "lng": "128.399472"
+          },
+          "toPoint": {
+            "lat": "34.816953",
+            "lng": "128.401037"
+          }
+        },
+        {
+          "index": 278,
+          "distance": 145,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.816953",
+            "lng": "128.401037"
+          },
+          "toPoint": {
+            "lat": "34.816743",
+            "lng": "128.399472"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6ea4acc1-1649-4aea-9fb2-067d96e01f28",
+      "name": "미륵산 2번 코스 (정방향)",
+      "mountain": "미륵산",
+      "region": "경남",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 539,
+      "gapCount": 2,
+      "maxGap": 144.76294415951875,
+      "gaps": [
+        {
+          "index": 260,
+          "distance": 145,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.816743",
+            "lng": "128.399472"
+          },
+          "toPoint": {
+            "lat": "34.816953",
+            "lng": "128.401037"
+          }
+        },
+        {
+          "index": 278,
+          "distance": 145,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.816953",
+            "lng": "128.401037"
+          },
+          "toPoint": {
+            "lat": "34.816743",
+            "lng": "128.399472"
+          }
+        }
+      ]
+    },
+    {
+      "id": "d5d525d6-60d6-4d66-88df-43957f413218",
+      "name": "미륵산 6번 코스 (역방향)",
+      "mountain": "미륵산",
+      "region": "경남",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 244,
+      "gapCount": 1,
+      "maxGap": 137.2333363210074,
+      "gaps": [
+        {
+          "index": 199,
+          "distance": 137,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.822764",
+            "lng": "128.417616"
+          },
+          "toPoint": {
+            "lat": "34.823410",
+            "lng": "128.416335"
+          }
+        }
+      ]
+    },
+    {
+      "id": "24e4d241-f180-4e5a-9c88-c8b9e2b4d7c3",
+      "name": "미륵산 6번 코스 (정방향)",
+      "mountain": "미륵산",
+      "region": "경남",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 244,
+      "gapCount": 1,
+      "maxGap": 137.2333363210074,
+      "gaps": [
+        {
+          "index": 199,
+          "distance": 137,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.822764",
+            "lng": "128.417616"
+          },
+          "toPoint": {
+            "lat": "34.823410",
+            "lng": "128.416335"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2555105b-9106-4ca1-9efd-b7c8b8cfe6ba",
+      "name": "계룡산 3번 코스 (역방향)",
+      "mountain": "계룡산",
+      "region": "충남",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 211,
+      "gapCount": 4,
+      "maxGap": 129.2022784339894,
+      "gaps": [
+        {
+          "index": 7,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.367413",
+            "lng": "127.183050"
+          },
+          "toPoint": {
+            "lat": "36.366962",
+            "lng": "127.184070"
+          }
+        },
+        {
+          "index": 102,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.350419",
+            "lng": "127.193339"
+          },
+          "toPoint": {
+            "lat": "36.350105",
+            "lng": "127.191950"
+          }
+        },
+        {
+          "index": 108,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.350105",
+            "lng": "127.191950"
+          },
+          "toPoint": {
+            "lat": "36.350419",
+            "lng": "127.193339"
+          }
+        },
+        {
+          "index": 204,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366962",
+            "lng": "127.184070"
+          },
+          "toPoint": {
+            "lat": "36.367413",
+            "lng": "127.183050"
+          }
+        }
+      ]
+    },
+    {
+      "id": "e897ceaa-bef0-49b1-a059-4d40ad6f06c9",
+      "name": "계룡산 3번 코스 (정방향)",
+      "mountain": "계룡산",
+      "region": "충남",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 211,
+      "gapCount": 4,
+      "maxGap": 129.2022784339894,
+      "gaps": [
+        {
+          "index": 7,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.367413",
+            "lng": "127.183050"
+          },
+          "toPoint": {
+            "lat": "36.366962",
+            "lng": "127.184070"
+          }
+        },
+        {
+          "index": 102,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.350419",
+            "lng": "127.193339"
+          },
+          "toPoint": {
+            "lat": "36.350105",
+            "lng": "127.191950"
+          }
+        },
+        {
+          "index": 108,
+          "distance": 129,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.350105",
+            "lng": "127.191950"
+          },
+          "toPoint": {
+            "lat": "36.350419",
+            "lng": "127.193339"
+          }
+        },
+        {
+          "index": 204,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366962",
+            "lng": "127.184070"
+          },
+          "toPoint": {
+            "lat": "36.367413",
+            "lng": "127.183050"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6f431332-82da-4130-bbfe-8a7f6da5faeb",
+      "name": "서대산 2번 코스 (역방향)",
+      "mountain": "서대산",
+      "region": "대전",
+      "distance": 2,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 33,
+      "gapCount": 2,
+      "maxGap": 124.42843876053432,
+      "gaps": [
+        {
+          "index": 15,
+          "distance": 124,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.226245",
+            "lng": "127.533929"
+          },
+          "toPoint": {
+            "lat": "36.227285",
+            "lng": "127.533417"
+          }
+        },
+        {
+          "index": 17,
+          "distance": 124,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.227285",
+            "lng": "127.533417"
+          },
+          "toPoint": {
+            "lat": "36.226245",
+            "lng": "127.533929"
+          }
+        }
+      ]
+    },
+    {
+      "id": "49924a9f-be77-4960-873d-08b4686f251c",
+      "name": "서대산 2번 코스 (정방향)",
+      "mountain": "서대산",
+      "region": "대전",
+      "distance": 2,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 33,
+      "gapCount": 2,
+      "maxGap": 124.42843876053432,
+      "gaps": [
+        {
+          "index": 15,
+          "distance": 124,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.226245",
+            "lng": "127.533929"
+          },
+          "toPoint": {
+            "lat": "36.227285",
+            "lng": "127.533417"
+          }
+        },
+        {
+          "index": 17,
+          "distance": 124,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.227285",
+            "lng": "127.533417"
+          },
+          "toPoint": {
+            "lat": "36.226245",
+            "lng": "127.533929"
+          }
+        }
+      ]
+    },
+    {
+      "id": "44199247-c413-404e-b292-ab5bb72bba61",
+      "name": "DMZ펀치볼둘레길 3번 코스 (역방향)",
+      "mountain": "DMZ펀치볼둘레길",
+      "region": "강원",
+      "distance": 14,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 98,
+      "gapCount": 7,
+      "maxGap": 123.90257586485762,
+      "gaps": [
+        {
+          "index": 31,
+          "distance": 117,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.268856",
+            "lng": "128.145432"
+          },
+          "toPoint": {
+            "lat": "38.269192",
+            "lng": "128.144165"
+          }
+        },
+        {
+          "index": 42,
+          "distance": 124,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.269402",
+            "lng": "128.138596"
+          },
+          "toPoint": {
+            "lat": "38.270027",
+            "lng": "128.137421"
+          }
+        },
+        {
+          "index": 50,
+          "distance": 109,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.270741",
+            "lng": "128.132889"
+          },
+          "toPoint": {
+            "lat": "38.270874",
+            "lng": "128.131653"
+          }
+        },
+        {
+          "index": 52,
+          "distance": 109,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.270874",
+            "lng": "128.131653"
+          },
+          "toPoint": {
+            "lat": "38.270741",
+            "lng": "128.132889"
+          }
+        },
+        {
+          "index": 61,
+          "distance": 124,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.270027",
+            "lng": "128.137421"
+          },
+          "toPoint": {
+            "lat": "38.269402",
+            "lng": "128.138596"
+          }
+        },
+        {
+          "index": 72,
+          "distance": 117,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.269192",
+            "lng": "128.144165"
+          },
+          "toPoint": {
+            "lat": "38.268856",
+            "lng": "128.145432"
+          }
+        },
+        {
+          "index": 75,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.268677",
+            "lng": "128.146423"
+          },
+          "toPoint": {
+            "lat": "38.268322",
+            "lng": "128.147507"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fb086313-54e5-44e7-a9e2-785be7d6d635",
+      "name": "DMZ펀치볼둘레길 3번 코스 (정방향)",
+      "mountain": "DMZ펀치볼둘레길",
+      "region": "강원",
+      "distance": 14,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 98,
+      "gapCount": 7,
+      "maxGap": 123.90257586485762,
+      "gaps": [
+        {
+          "index": 31,
+          "distance": 117,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.268856",
+            "lng": "128.145432"
+          },
+          "toPoint": {
+            "lat": "38.269192",
+            "lng": "128.144165"
+          }
+        },
+        {
+          "index": 42,
+          "distance": 124,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.269402",
+            "lng": "128.138596"
+          },
+          "toPoint": {
+            "lat": "38.270027",
+            "lng": "128.137421"
+          }
+        },
+        {
+          "index": 50,
+          "distance": 109,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.270741",
+            "lng": "128.132889"
+          },
+          "toPoint": {
+            "lat": "38.270874",
+            "lng": "128.131653"
+          }
+        },
+        {
+          "index": 52,
+          "distance": 109,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.270874",
+            "lng": "128.131653"
+          },
+          "toPoint": {
+            "lat": "38.270741",
+            "lng": "128.132889"
+          }
+        },
+        {
+          "index": 61,
+          "distance": 124,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.270027",
+            "lng": "128.137421"
+          },
+          "toPoint": {
+            "lat": "38.269402",
+            "lng": "128.138596"
+          }
+        },
+        {
+          "index": 72,
+          "distance": 117,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.269192",
+            "lng": "128.144165"
+          },
+          "toPoint": {
+            "lat": "38.268856",
+            "lng": "128.145432"
+          }
+        },
+        {
+          "index": 75,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "38.268677",
+            "lng": "128.146423"
+          },
+          "toPoint": {
+            "lat": "38.268322",
+            "lng": "128.147507"
+          }
+        }
+      ]
+    },
+    {
+      "id": "919ee5c8-4a3c-4b5d-a18a-f813875cef2c",
+      "name": "미륵산 4번 코스 (역방향)",
+      "mountain": "미륵산",
+      "region": "경남",
+      "distance": 6,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 459,
+      "gapCount": 1,
+      "maxGap": 120.47133011135591,
+      "gaps": [
+        {
+          "index": 416,
+          "distance": 120,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.825203",
+            "lng": "128.403652"
+          },
+          "toPoint": {
+            "lat": "34.825975",
+            "lng": "128.404578"
+          }
+        }
+      ]
+    },
+    {
+      "id": "8eac8f26-a9d8-426a-935f-98860126cd2d",
+      "name": "미륵산 4번 코스 (정방향)",
+      "mountain": "미륵산",
+      "region": "경남",
+      "distance": 6,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 459,
+      "gapCount": 1,
+      "maxGap": 120.47133011135591,
+      "gaps": [
+        {
+          "index": 416,
+          "distance": 120,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "34.825203",
+            "lng": "128.403652"
+          },
+          "toPoint": {
+            "lat": "34.825975",
+            "lng": "128.404578"
+          }
+        }
+      ]
+    },
+    {
+      "id": "5de249ee-cc73-4148-8498-1310f47e2c18",
+      "name": "계룡산 2번 코스 (역방향)",
+      "mountain": "계룡산",
+      "region": "충남",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 229,
+      "gapCount": 28,
+      "maxGap": 111.03025051233774,
+      "gaps": [
+        {
+          "index": 3,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.358018",
+            "lng": "127.236687"
+          },
+          "toPoint": {
+            "lat": "36.358734",
+            "lng": "127.235933"
+          }
+        },
+        {
+          "index": 7,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.358527",
+            "lng": "127.234983"
+          },
+          "toPoint": {
+            "lat": "36.358665",
+            "lng": "127.233789"
+          }
+        },
+        {
+          "index": 10,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.359169",
+            "lng": "127.232885"
+          },
+          "toPoint": {
+            "lat": "36.359947",
+            "lng": "127.232116"
+          }
+        },
+        {
+          "index": 13,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.361677",
+            "lng": "127.231927"
+          },
+          "toPoint": {
+            "lat": "36.362609",
+            "lng": "127.231482"
+          }
+        },
+        {
+          "index": 17,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.364937",
+            "lng": "127.230146"
+          },
+          "toPoint": {
+            "lat": "36.365663",
+            "lng": "127.229394"
+          }
+        },
+        {
+          "index": 19,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366067",
+            "lng": "127.228436"
+          },
+          "toPoint": {
+            "lat": "36.366339",
+            "lng": "127.227338"
+          }
+        },
+        {
+          "index": 24,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366198",
+            "lng": "127.224772"
+          },
+          "toPoint": {
+            "lat": "36.366149",
+            "lng": "127.223620"
+          }
+        },
+        {
+          "index": 26,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366127",
+            "lng": "127.222585"
+          },
+          "toPoint": {
+            "lat": "36.366138",
+            "lng": "127.221377"
+          }
+        },
+        {
+          "index": 27,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366138",
+            "lng": "127.221377"
+          },
+          "toPoint": {
+            "lat": "36.366254",
+            "lng": "127.220202"
+          }
+        },
+        {
+          "index": 36,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.363287",
+            "lng": "127.215096"
+          },
+          "toPoint": {
+            "lat": "36.362928",
+            "lng": "127.214055"
+          }
+        },
+        {
+          "index": 66,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.356838",
+            "lng": "127.204793"
+          },
+          "toPoint": {
+            "lat": "36.356162",
+            "lng": "127.204034"
+          }
+        },
+        {
+          "index": 84,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.352659",
+            "lng": "127.205339"
+          },
+          "toPoint": {
+            "lat": "36.353020",
+            "lng": "127.206371"
+          }
+        },
+        {
+          "index": 96,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.351857",
+            "lng": "127.213208"
+          },
+          "toPoint": {
+            "lat": "36.352113",
+            "lng": "127.214398"
+          }
+        },
+        {
+          "index": 113,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.354163",
+            "lng": "127.223605"
+          },
+          "toPoint": {
+            "lat": "36.354440",
+            "lng": "127.224742"
+          }
+        },
+        {
+          "index": 115,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.354440",
+            "lng": "127.224742"
+          },
+          "toPoint": {
+            "lat": "36.354163",
+            "lng": "127.223605"
+          }
+        },
+        {
+          "index": 133,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.352113",
+            "lng": "127.214398"
+          },
+          "toPoint": {
+            "lat": "36.351857",
+            "lng": "127.213208"
+          }
+        },
+        {
+          "index": 145,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.353020",
+            "lng": "127.206371"
+          },
+          "toPoint": {
+            "lat": "36.352659",
+            "lng": "127.205339"
+          }
+        },
+        {
+          "index": 163,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.356162",
+            "lng": "127.204034"
+          },
+          "toPoint": {
+            "lat": "36.356838",
+            "lng": "127.204793"
+          }
+        },
+        {
+          "index": 193,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.362928",
+            "lng": "127.214055"
+          },
+          "toPoint": {
+            "lat": "36.363287",
+            "lng": "127.215096"
+          }
+        },
+        {
+          "index": 202,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366254",
+            "lng": "127.220202"
+          },
+          "toPoint": {
+            "lat": "36.366138",
+            "lng": "127.221377"
+          }
+        },
+        {
+          "index": 203,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366138",
+            "lng": "127.221377"
+          },
+          "toPoint": {
+            "lat": "36.366127",
+            "lng": "127.222585"
+          }
+        },
+        {
+          "index": 205,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366149",
+            "lng": "127.223620"
+          },
+          "toPoint": {
+            "lat": "36.366198",
+            "lng": "127.224772"
+          }
+        },
+        {
+          "index": 210,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366339",
+            "lng": "127.227338"
+          },
+          "toPoint": {
+            "lat": "36.366067",
+            "lng": "127.228436"
+          }
+        },
+        {
+          "index": 212,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.365663",
+            "lng": "127.229394"
+          },
+          "toPoint": {
+            "lat": "36.364937",
+            "lng": "127.230146"
+          }
+        },
+        {
+          "index": 216,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.362609",
+            "lng": "127.231482"
+          },
+          "toPoint": {
+            "lat": "36.361677",
+            "lng": "127.231927"
+          }
+        },
+        {
+          "index": 219,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.359947",
+            "lng": "127.232116"
+          },
+          "toPoint": {
+            "lat": "36.359169",
+            "lng": "127.232885"
+          }
+        },
+        {
+          "index": 222,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.358665",
+            "lng": "127.233789"
+          },
+          "toPoint": {
+            "lat": "36.358527",
+            "lng": "127.234983"
+          }
+        },
+        {
+          "index": 226,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.358734",
+            "lng": "127.235933"
+          },
+          "toPoint": {
+            "lat": "36.358018",
+            "lng": "127.236687"
+          }
+        }
+      ]
+    },
+    {
+      "id": "03ef3978-fd55-40c3-a5c4-33c7c8334155",
+      "name": "계룡산 2번 코스 (정방향)",
+      "mountain": "계룡산",
+      "region": "충남",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 229,
+      "gapCount": 28,
+      "maxGap": 111.03025051233774,
+      "gaps": [
+        {
+          "index": 3,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.358018",
+            "lng": "127.236687"
+          },
+          "toPoint": {
+            "lat": "36.358734",
+            "lng": "127.235933"
+          }
+        },
+        {
+          "index": 7,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.358527",
+            "lng": "127.234983"
+          },
+          "toPoint": {
+            "lat": "36.358665",
+            "lng": "127.233789"
+          }
+        },
+        {
+          "index": 10,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.359169",
+            "lng": "127.232885"
+          },
+          "toPoint": {
+            "lat": "36.359947",
+            "lng": "127.232116"
+          }
+        },
+        {
+          "index": 13,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.361677",
+            "lng": "127.231927"
+          },
+          "toPoint": {
+            "lat": "36.362609",
+            "lng": "127.231482"
+          }
+        },
+        {
+          "index": 17,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.364937",
+            "lng": "127.230146"
+          },
+          "toPoint": {
+            "lat": "36.365663",
+            "lng": "127.229394"
+          }
+        },
+        {
+          "index": 19,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366067",
+            "lng": "127.228436"
+          },
+          "toPoint": {
+            "lat": "36.366339",
+            "lng": "127.227338"
+          }
+        },
+        {
+          "index": 24,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366198",
+            "lng": "127.224772"
+          },
+          "toPoint": {
+            "lat": "36.366149",
+            "lng": "127.223620"
+          }
+        },
+        {
+          "index": 26,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366127",
+            "lng": "127.222585"
+          },
+          "toPoint": {
+            "lat": "36.366138",
+            "lng": "127.221377"
+          }
+        },
+        {
+          "index": 27,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366138",
+            "lng": "127.221377"
+          },
+          "toPoint": {
+            "lat": "36.366254",
+            "lng": "127.220202"
+          }
+        },
+        {
+          "index": 36,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.363287",
+            "lng": "127.215096"
+          },
+          "toPoint": {
+            "lat": "36.362928",
+            "lng": "127.214055"
+          }
+        },
+        {
+          "index": 66,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.356838",
+            "lng": "127.204793"
+          },
+          "toPoint": {
+            "lat": "36.356162",
+            "lng": "127.204034"
+          }
+        },
+        {
+          "index": 84,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.352659",
+            "lng": "127.205339"
+          },
+          "toPoint": {
+            "lat": "36.353020",
+            "lng": "127.206371"
+          }
+        },
+        {
+          "index": 96,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.351857",
+            "lng": "127.213208"
+          },
+          "toPoint": {
+            "lat": "36.352113",
+            "lng": "127.214398"
+          }
+        },
+        {
+          "index": 113,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.354163",
+            "lng": "127.223605"
+          },
+          "toPoint": {
+            "lat": "36.354440",
+            "lng": "127.224742"
+          }
+        },
+        {
+          "index": 115,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.354440",
+            "lng": "127.224742"
+          },
+          "toPoint": {
+            "lat": "36.354163",
+            "lng": "127.223605"
+          }
+        },
+        {
+          "index": 133,
+          "distance": 110,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.352113",
+            "lng": "127.214398"
+          },
+          "toPoint": {
+            "lat": "36.351857",
+            "lng": "127.213208"
+          }
+        },
+        {
+          "index": 145,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.353020",
+            "lng": "127.206371"
+          },
+          "toPoint": {
+            "lat": "36.352659",
+            "lng": "127.205339"
+          }
+        },
+        {
+          "index": 163,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.356162",
+            "lng": "127.204034"
+          },
+          "toPoint": {
+            "lat": "36.356838",
+            "lng": "127.204793"
+          }
+        },
+        {
+          "index": 193,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.362928",
+            "lng": "127.214055"
+          },
+          "toPoint": {
+            "lat": "36.363287",
+            "lng": "127.215096"
+          }
+        },
+        {
+          "index": 202,
+          "distance": 106,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366254",
+            "lng": "127.220202"
+          },
+          "toPoint": {
+            "lat": "36.366138",
+            "lng": "127.221377"
+          }
+        },
+        {
+          "index": 203,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366138",
+            "lng": "127.221377"
+          },
+          "toPoint": {
+            "lat": "36.366127",
+            "lng": "127.222585"
+          }
+        },
+        {
+          "index": 205,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366149",
+            "lng": "127.223620"
+          },
+          "toPoint": {
+            "lat": "36.366198",
+            "lng": "127.224772"
+          }
+        },
+        {
+          "index": 210,
+          "distance": 103,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.366339",
+            "lng": "127.227338"
+          },
+          "toPoint": {
+            "lat": "36.366067",
+            "lng": "127.228436"
+          }
+        },
+        {
+          "index": 212,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.365663",
+            "lng": "127.229394"
+          },
+          "toPoint": {
+            "lat": "36.364937",
+            "lng": "127.230146"
+          }
+        },
+        {
+          "index": 216,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.362609",
+            "lng": "127.231482"
+          },
+          "toPoint": {
+            "lat": "36.361677",
+            "lng": "127.231927"
+          }
+        },
+        {
+          "index": 219,
+          "distance": 111,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.359947",
+            "lng": "127.232116"
+          },
+          "toPoint": {
+            "lat": "36.359169",
+            "lng": "127.232885"
+          }
+        },
+        {
+          "index": 222,
+          "distance": 108,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.358665",
+            "lng": "127.233789"
+          },
+          "toPoint": {
+            "lat": "36.358527",
+            "lng": "127.234983"
+          }
+        },
+        {
+          "index": 226,
+          "distance": 104,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.358734",
+            "lng": "127.235933"
+          },
+          "toPoint": {
+            "lat": "36.358018",
+            "lng": "127.236687"
+          }
+        }
+      ]
+    },
+    {
+      "id": "9ad4fe7e-6dc8-4557-a2fb-e0139c109055",
+      "name": "무등산 24번 코스 (역방향)",
+      "mountain": "무등산",
+      "region": "광주",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 431,
+      "gapCount": 1,
+      "maxGap": 109.34141564487263,
+      "gaps": [
+        {
+          "index": 319,
+          "distance": 109,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.085321",
+            "lng": "126.988795"
+          },
+          "toPoint": {
+            "lat": "35.085432",
+            "lng": "126.987601"
+          }
+        }
+      ]
+    },
+    {
+      "id": "1b952fd4-4318-4cb4-a5b0-be8410aaa37c",
+      "name": "무등산 24번 코스 (정방향)",
+      "mountain": "무등산",
+      "region": "전남",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 431,
+      "gapCount": 1,
+      "maxGap": 109.34141564487263,
+      "gaps": [
+        {
+          "index": 319,
+          "distance": 109,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.085321",
+            "lng": "126.988795"
+          },
+          "toPoint": {
+            "lat": "35.085432",
+            "lng": "126.987601"
+          }
+        }
+      ]
+    },
+    {
+      "id": "7ab8bcc4-6bcf-45ce-bd14-5fac440ff219",
+      "name": "황매산 1번 코스 (역방향)",
+      "mountain": "황매산",
+      "region": "경남",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 661,
+      "gapCount": 2,
+      "maxGap": 107.13088167505322,
+      "gaps": [
+        {
+          "index": 145,
+          "distance": 107,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.480415",
+            "lng": "127.980505"
+          },
+          "toPoint": {
+            "lat": "35.479648",
+            "lng": "127.981221"
+          }
+        },
+        {
+          "index": 516,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.479624",
+            "lng": "127.981064"
+          },
+          "toPoint": {
+            "lat": "35.480415",
+            "lng": "127.980505"
+          }
+        }
+      ]
+    },
+    {
+      "id": "872519a7-8278-4f5b-96ed-0b9c05458900",
+      "name": "황매산 1번 코스 (정방향)",
+      "mountain": "황매산",
+      "region": "경남",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 661,
+      "gapCount": 2,
+      "maxGap": 107.13088167505322,
+      "gaps": [
+        {
+          "index": 145,
+          "distance": 107,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.480415",
+            "lng": "127.980505"
+          },
+          "toPoint": {
+            "lat": "35.479648",
+            "lng": "127.981221"
+          }
+        },
+        {
+          "index": 516,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.479624",
+            "lng": "127.981064"
+          },
+          "toPoint": {
+            "lat": "35.480415",
+            "lng": "127.980505"
+          }
+        }
+      ]
+    },
+    {
+      "id": "53960d95-be5b-49d3-8da5-642daa8527b5",
+      "name": "도봉산 42번 코스 (역방향)",
+      "mountain": "도봉산",
+      "region": "서울",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 846,
+      "gapCount": 1,
+      "maxGap": 105.08541802863311,
+      "gaps": [
+        {
+          "index": 515,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.695010",
+            "lng": "127.010002"
+          },
+          "toPoint": {
+            "lat": "37.694704",
+            "lng": "127.008872"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ee8a019c-5480-481b-9a45-e121a028747a",
+      "name": "도봉산 42번 코스 (정방향)",
+      "mountain": "도봉산",
+      "region": "서울",
+      "distance": 7,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 846,
+      "gapCount": 1,
+      "maxGap": 105.08541802863311,
+      "gaps": [
+        {
+          "index": 515,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.695010",
+            "lng": "127.010002"
+          },
+          "toPoint": {
+            "lat": "37.694704",
+            "lng": "127.008872"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6d16e6b6-ab4a-47a5-8bf4-b876a7b9a32b",
+      "name": "금정산 7번 코스 (역방향)",
+      "mountain": "금정산",
+      "region": "부산",
+      "distance": 13,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 1073,
+      "gapCount": 2,
+      "maxGap": 105.02703996422565,
+      "gaps": [
+        {
+          "index": 512,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.259411",
+            "lng": "129.050215"
+          },
+          "toPoint": {
+            "lat": "35.258964",
+            "lng": "129.051234"
+          }
+        },
+        {
+          "index": 561,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.258964",
+            "lng": "129.051234"
+          },
+          "toPoint": {
+            "lat": "35.259411",
+            "lng": "129.050215"
+          }
+        }
+      ]
+    },
+    {
+      "id": "b74ac6e6-de44-4a13-baae-c66b3d278a5b",
+      "name": "금정산 7번 코스 (정방향)",
+      "mountain": "금정산",
+      "region": "부산",
+      "distance": 13,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 1073,
+      "gapCount": 2,
+      "maxGap": 105.02703996422565,
+      "gaps": [
+        {
+          "index": 512,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.259411",
+            "lng": "129.050215"
+          },
+          "toPoint": {
+            "lat": "35.258964",
+            "lng": "129.051234"
+          }
+        },
+        {
+          "index": 561,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.258964",
+            "lng": "129.051234"
+          },
+          "toPoint": {
+            "lat": "35.259411",
+            "lng": "129.050215"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6c9726e9-31e3-48e7-9806-14206d28bea4",
+      "name": "서대산 1번 코스 (역방향)",
+      "mountain": "서대산",
+      "region": "대전",
+      "distance": 5,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 515,
+      "gapCount": 2,
+      "maxGap": 104.92450380196533,
+      "gaps": [
+        {
+          "index": 236,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.224848",
+            "lng": "127.536101"
+          },
+          "toPoint": {
+            "lat": "36.225307",
+            "lng": "127.535079"
+          }
+        },
+        {
+          "index": 279,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.225307",
+            "lng": "127.535079"
+          },
+          "toPoint": {
+            "lat": "36.224848",
+            "lng": "127.536101"
+          }
+        }
+      ]
+    },
+    {
+      "id": "13cda1ba-3259-4357-822c-3ef1e51a4cf9",
+      "name": "서대산 1번 코스 (정방향)",
+      "mountain": "서대산",
+      "region": "대전",
+      "distance": 5,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 515,
+      "gapCount": 2,
+      "maxGap": 104.92450380196533,
+      "gaps": [
+        {
+          "index": 236,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.224848",
+            "lng": "127.536101"
+          },
+          "toPoint": {
+            "lat": "36.225307",
+            "lng": "127.535079"
+          }
+        },
+        {
+          "index": 279,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.225307",
+            "lng": "127.535079"
+          },
+          "toPoint": {
+            "lat": "36.224848",
+            "lng": "127.536101"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6f42ce66-9d66-4246-b9ca-4482e17ae6ff",
+      "name": "신불산 16번 코스 (역방향)",
+      "mountain": "신불산",
+      "region": "울산",
+      "distance": 14,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 751,
+      "gapCount": 2,
+      "maxGap": 104.7702359399585,
+      "gaps": [
+        {
+          "index": 238,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.510642",
+            "lng": "129.048621"
+          },
+          "toPoint": {
+            "lat": "35.511530",
+            "lng": "129.049008"
+          }
+        },
+        {
+          "index": 513,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.511530",
+            "lng": "129.049008"
+          },
+          "toPoint": {
+            "lat": "35.510642",
+            "lng": "129.048621"
+          }
+        }
+      ]
+    },
+    {
+      "id": "9255ece9-4c51-4113-86ca-87545edefe43",
+      "name": "신불산 16번 코스 (정방향)",
+      "mountain": "신불산",
+      "region": "울산",
+      "distance": 14,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 751,
+      "gapCount": 2,
+      "maxGap": 104.7702359399585,
+      "gaps": [
+        {
+          "index": 238,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.510642",
+            "lng": "129.048621"
+          },
+          "toPoint": {
+            "lat": "35.511530",
+            "lng": "129.049008"
+          }
+        },
+        {
+          "index": 513,
+          "distance": 105,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "35.511530",
+            "lng": "129.049008"
+          },
+          "toPoint": {
+            "lat": "35.510642",
+            "lng": "129.048621"
+          }
+        }
+      ]
+    },
+    {
+      "id": "3610254a-653f-4f9e-ab16-44a4b9ff5297",
+      "name": "북한산 31번 코스 (역방향)",
+      "mountain": "북한산",
+      "region": "서울",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 635,
+      "gapCount": 2,
+      "maxGap": 101.50328132854037,
+      "gaps": [
+        {
+          "index": 2,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.618032",
+            "lng": "126.998507"
+          },
+          "toPoint": {
+            "lat": "37.618237",
+            "lng": "126.997384"
+          }
+        },
+        {
+          "index": 633,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.618237",
+            "lng": "126.997384"
+          },
+          "toPoint": {
+            "lat": "37.618032",
+            "lng": "126.998507"
+          }
+        }
+      ]
+    },
+    {
+      "id": "10dd8800-8d1e-4ff5-b6b9-8fa64e2ab019",
+      "name": "북한산 31번 코스 (정방향)",
+      "mountain": "북한산",
+      "region": "서울",
+      "distance": 8,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 635,
+      "gapCount": 2,
+      "maxGap": 101.50328132854037,
+      "gaps": [
+        {
+          "index": 2,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.618032",
+            "lng": "126.998507"
+          },
+          "toPoint": {
+            "lat": "37.618237",
+            "lng": "126.997384"
+          }
+        },
+        {
+          "index": 633,
+          "distance": 102,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "37.618237",
+            "lng": "126.997384"
+          },
+          "toPoint": {
+            "lat": "37.618032",
+            "lng": "126.998507"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a76799aa-423f-4b10-a98c-fb16a6f32e4e",
+      "name": "금오산 10번 코스 (역방향)",
+      "mountain": "금오산",
+      "region": "경북",
+      "distance": 10,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 523,
+      "gapCount": 1,
+      "maxGap": 101.48458654634585,
+      "gaps": [
+        {
+          "index": 433,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.080419",
+            "lng": "128.281156"
+          },
+          "toPoint": {
+            "lat": "36.080014",
+            "lng": "128.280144"
+          }
+        }
+      ]
+    },
+    {
+      "id": "adee3c59-d880-4d1a-951e-6b1f2ea2730f",
+      "name": "금오산 10번 코스 (정방향)",
+      "mountain": "금오산",
+      "region": "경북",
+      "distance": 10,
+      "trail_type": "CIRCULAR_PARTIAL",
+      "totalPoints": 523,
+      "gapCount": 1,
+      "maxGap": 101.48458654634585,
+      "gaps": [
+        {
+          "index": 433,
+          "distance": 101,
+          "severity": "minor",
+          "fromPoint": {
+            "lat": "36.080419",
+            "lng": "128.281156"
+          },
+          "toPoint": {
+            "lat": "36.080014",
+            "lng": "128.280144"
+          }
+        }
+      ]
+    }
+  ]
+}
