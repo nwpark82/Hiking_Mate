@@ -22,7 +22,9 @@ export interface Trail {
   distance: number;
   duration: number;
   elevation_gain: number | null;
+  min_altitude: number | null;
   max_altitude: number | null;
+  avg_altitude: number | null;
   start_latitude: number;
   start_longitude: number;
   path_coordinates: any;

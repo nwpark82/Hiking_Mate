@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { KakaoMap } from '@/components/map/KakaoMap';
 import { useGeolocation } from '@/lib/hooks/useGeolocation';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { getTrailById } from '@/lib/services/trails';
 import {
   calculateTotalDistance,
   calculateElevationChange,
@@ -12,9 +14,13 @@ import {
   calculateCalories,
   formatDuration,
   formatPace,
+  calculateDistance,
+  calculateBearing,
+  bearingToDirection,
 } from '@/lib/utils/gps';
 import { formatDistance } from '@/lib/utils/helpers';
 import type { GPSPoint } from '@/lib/utils/gps';
+import type { Trail } from '@/types';
 import {
   Play,
   Pause,
@@ -25,13 +31,15 @@ import {
   Activity,
   Zap,
   Mountain,
-  AlertCircle
+  AlertCircle,
+  Navigation
 } from 'lucide-react';
 
 function ActiveRecordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const trailId = searchParams.get('trailId');
+  const { user, loading: authLoading } = useAuth();
 
   const { position, error: gpsError, isTracking, startTracking, stopTracking } = useGeolocation();
 
@@ -43,8 +51,29 @@ function ActiveRecordContent() {
   const [pauseStartTime, setPauseStartTime] = useState<number | null>(null);
   const [gpsPoints, setGpsPoints] = useState<GPSPoint[]>([]);
   const [photos, setPhotos] = useState<string[]>([]);
+  const [trail, setTrail] = useState<Trail | null>(null);
+  const [locationAlert, setLocationAlert] = useState<string | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 로그인 확인
+  useEffect(() => {
+    if (!authLoading && !user) {
+      alert('로그인이 필요한 기능입니다.');
+      router.push('/auth/login');
+    }
+  }, [user, authLoading, router]);
+
+  // 트레일 정보 가져오기
+  useEffect(() => {
+    async function fetchTrail() {
+      if (trailId) {
+        const trailData = await getTrailById(trailId);
+        setTrail(trailData);
+      }
+    }
+    fetchTrail();
+  }, [trailId]);
 
   // 통계 계산
   const distance = calculateTotalDistance(gpsPoints);
@@ -87,6 +116,51 @@ function ActiveRecordContent() {
   }, [position, isRecording, isPaused]);
 
   const handleStart = () => {
+    // 로그인 확인
+    if (!user) {
+      alert('로그인이 필요한 기능입니다.');
+      router.push('/auth/login');
+      return;
+    }
+
+    // 현재 위치 확인
+    if (!position) {
+      alert('GPS 위치를 확인할 수 없습니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
+
+    // 트레일 출발지점 확인
+    if (trail && trail.start_latitude && trail.start_longitude) {
+      const distanceToStart = calculateDistance(
+        position.latitude,
+        position.longitude,
+        trail.start_latitude,
+        trail.start_longitude
+      );
+
+      const PROXIMITY_THRESHOLD = 25; // 25미터
+
+      if (distanceToStart > PROXIMITY_THRESHOLD) {
+        // 거리와 방향 계산
+        const bearing = calculateBearing(
+          position.latitude,
+          position.longitude,
+          trail.start_latitude,
+          trail.start_longitude
+        );
+        const direction = bearingToDirection(bearing);
+        const distanceInMeters = Math.round(distanceToStart);
+
+        // 알림 메시지 설정
+        setLocationAlert(
+          `출발지점에서 ${distanceInMeters}m 떨어져 있습니다.\n${direction} 방향으로 이동하여 출발지점 근처(25m 이내)에서 다시 산행 시작 버튼을 눌러주세요.`
+        );
+        return;
+      }
+    }
+
+    // 알림 초기화 및 기록 시작
+    setLocationAlert(null);
     setIsRecording(true);
     setIsPaused(false);
     setStartTime(Date.now());
@@ -261,6 +335,21 @@ function ActiveRecordContent() {
         {/* Control Buttons */}
         <section className="fixed bottom-16 left-0 right-0 p-4 bg-white border-t border-gray-200">
           <div className="max-w-screen-lg mx-auto">
+            {/* 출발지점 알림 */}
+            {locationAlert && !isRecording && (
+              <div className="mb-4 bg-orange-50 border-2 border-orange-200 rounded-xl p-4">
+                <div className="flex items-start gap-3">
+                  <Navigation className="w-6 h-6 text-orange-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <h4 className="font-bold text-orange-900 mb-2">출발지점으로 이동하세요</h4>
+                    <p className="text-sm text-orange-800 whitespace-pre-line leading-relaxed">
+                      {locationAlert}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {!isRecording ? (
               <button
                 onClick={handleStart}

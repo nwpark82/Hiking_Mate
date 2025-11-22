@@ -31,6 +31,11 @@ CREATE TABLE trails (
   elevation_gain INTEGER NOT NULL,
   gpx_data JSONB NOT NULL,
   coordinates JSONB NOT NULL,
+  path_coordinates JSONB,
+  trail_type TEXT,
+  overlap_rate FLOAT,
+  start_latitude FLOAT,
+  start_longitude FLOAT,
   description TEXT,
   images TEXT[] DEFAULT '{}',
   features TEXT[] DEFAULT '{}',
@@ -43,6 +48,8 @@ CREATE INDEX IF NOT EXISTS idx_trails_mountain ON trails(mountain);
 CREATE INDEX IF NOT EXISTS idx_trails_difficulty ON trails(difficulty);
 CREATE INDEX IF NOT EXISTS idx_trails_category ON trails(category);
 CREATE INDEX IF NOT EXISTS idx_trails_region ON trails(region);
+CREATE INDEX IF NOT EXISTS idx_trails_trail_type ON trails(trail_type);
+CREATE INDEX IF NOT EXISTS idx_trails_overlap_rate ON trails(overlap_rate);
 
 -- ============================================
 -- 2. Users Table (사용자 정보)

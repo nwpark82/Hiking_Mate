@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { KakaoMap } from '@/components/map/KakaoMap';
 import { getTrailById } from '@/lib/services/trails';
+import { isFavorite as checkIsFavorite, toggleFavorite } from '@/lib/services/favorites';
 import type { Trail } from '@/types';
 import {
   MapPin,
@@ -39,12 +40,50 @@ export default function TrailDetailPage() {
       if (!params.id) return;
 
       const data = await getTrailById(params.id as string);
+      console.log('🗺️ Trail data received:', {
+        id: data?.id,
+        name: data?.name,
+        start_latitude: data?.start_latitude,
+        start_longitude: data?.start_longitude,
+        path_coordinates_length: data?.path_coordinates ? (data.path_coordinates as any).length : 0,
+        has_gps: !!(data?.start_latitude && data?.start_longitude)
+      });
       setTrail(data);
+
+      // Check if this trail is favorited
+      const favorited = await checkIsFavorite(params.id as string);
+      setIsFavorite(favorited);
+
       setLoading(false);
     }
 
     fetchTrail();
   }, [params.id]);
+
+  // Auto-redirect when trail is not found
+  useEffect(() => {
+    if (!loading && !trail) {
+      const timer = setTimeout(() => {
+        router.push('/explore');
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, trail, router]);
+
+  const handleToggleFavorite = async () => {
+    if (!trail) return;
+
+    // Optimistic update
+    setIsFavorite(!isFavorite);
+
+    // Call backend service
+    const success = await toggleFavorite(trail.id);
+
+    // If failed, revert
+    if (!success) {
+      setIsFavorite(isFavorite);
+    }
+  };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -82,6 +121,7 @@ export default function TrailDetailPage() {
         <div className="flex flex-col items-center justify-center min-h-screen p-4">
           <Mountain className="w-16 h-16 text-gray-300 mb-4" />
           <p className="text-gray-500 mb-4">등산로를 찾을 수 없습니다</p>
+          <p className="text-sm text-gray-400 mb-4">잠시 후 목록 페이지로 이동합니다...</p>
           <button
             onClick={() => router.push('/explore')}
             className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
@@ -101,19 +141,12 @@ export default function TrailDetailPage() {
 
       <main className="max-w-screen-lg mx-auto pb-20">
         {/* Hero Image / Map */}
-        <section className="h-64 bg-gray-200">
+        <section className="h-80 bg-gray-200 overflow-hidden">
           {trail.start_latitude && trail.start_longitude ? (
             <KakaoMap
               latitude={trail.start_latitude}
               longitude={trail.start_longitude}
-              level={5}
-              markers={[
-                {
-                  lat: trail.start_latitude,
-                  lng: trail.start_longitude,
-                  title: '등산로 시작점'
-                }
-              ]}
+              level={6}
               pathCoordinates={trail.path_coordinates as any || []}
             />
           ) : (
@@ -143,18 +176,20 @@ export default function TrailDetailPage() {
 
             <div className="flex gap-2">
               <button
-                onClick={() => setIsFavorite(!isFavorite)}
+                onClick={handleToggleFavorite}
                 className={`p-3 rounded-full transition ${
                   isFavorite
                     ? 'bg-red-100 text-red-600'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
+                title={isFavorite ? '즐겨찾기 제거' : '즐겨찾기 추가'}
               >
                 <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
               </button>
               <button
                 onClick={handleShare}
                 className="p-3 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition"
+                title="공유하기"
               >
                 <Share2 className="w-5 h-5" />
               </button>
@@ -178,9 +213,23 @@ export default function TrailDetailPage() {
             <div className="bg-white rounded-xl p-4 shadow-sm text-center">
               <Mountain className="w-6 h-6 text-orange-600 mx-auto mb-2" />
               <p className="text-sm text-gray-600 mb-1">고도</p>
-              <p className="text-lg font-bold text-gray-900">
-                {trail.max_altitude ? `${trail.max_altitude}m` : '-'}
-              </p>
+              {trail.avg_altitude ? (
+                <div>
+                  <p className="text-lg font-bold text-gray-900">{trail.avg_altitude}m</p>
+                  <div className="mt-1 text-xs text-gray-500 space-y-0.5">
+                    {trail.min_altitude && trail.max_altitude && (
+                      <p>{trail.min_altitude}m ~ {trail.max_altitude}m</p>
+                    )}
+                    {trail.elevation_gain && (
+                      <p className="text-orange-600">↑{trail.elevation_gain}m</p>
+                    )}
+                  </div>
+                </div>
+              ) : trail.max_altitude ? (
+                <p className="text-lg font-bold text-gray-900">{trail.max_altitude}m</p>
+              ) : (
+                <p className="text-lg font-bold text-gray-900">-</p>
+              )}
             </div>
           </div>
 
