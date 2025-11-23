@@ -507,8 +507,8 @@ export default function TrailDetailPage() {
                 <ul className="space-y-2">
                   {(trail.health_benefits as string[]).map((benefit, index) => (
                     <li key={index} className="flex items-start gap-3 text-gray-700">
-                      <span className="text-green-600 mt-1 text-lg">✓</span>
-                      <span>{benefit}</span>
+                      <span className="text-green-600 flex-shrink-0 w-5 flex items-center justify-center text-lg leading-none">✓</span>
+                      <span className="flex-1">{benefit}</span>
                     </li>
                   ))}
                 </ul>
@@ -527,8 +527,8 @@ export default function TrailDetailPage() {
                 <ul className="space-y-2">
                   {(trail.attractions as string[]).map((attraction, index) => (
                     <li key={index} className="flex items-start gap-3 text-gray-700">
-                      <span className="text-blue-600 mt-1 text-lg">🏔️</span>
-                      <span>{attraction}</span>
+                      <span className="flex-shrink-0 w-5 flex items-center justify-center text-base leading-none">🏔️</span>
+                      <span className="flex-1">{attraction}</span>
                     </li>
                   ))}
                 </ul>
@@ -547,8 +547,8 @@ export default function TrailDetailPage() {
                 <ul className="space-y-2">
                   {(trail.warnings as string[]).map((warning, index) => (
                     <li key={index} className="flex items-start gap-2 text-orange-800">
-                      <span className="text-orange-600 mt-1">•</span>
-                      <span>{warning}</span>
+                      <span className="text-orange-600 flex-shrink-0 w-4 flex items-center justify-center leading-none">•</span>
+                      <span className="flex-1">{warning}</span>
                     </li>
                   ))}
                 </ul>
