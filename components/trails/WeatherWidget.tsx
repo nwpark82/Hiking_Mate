@@ -16,6 +16,7 @@ interface WeatherData {
   windSpeed: number;
   visibility: number;
   icon: 'sun' | 'cloud' | 'rain';
+  demo?: boolean;
 }
 
 export function WeatherWidget({ latitude, longitude, mountainName }: WeatherWidgetProps) {
@@ -24,24 +25,35 @@ export function WeatherWidget({ latitude, longitude, mountainName }: WeatherWidg
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    // TODO: OpenWeather API 통합
-    // 현재는 더미 데이터를 사용
-    // 추후 실제 API 호출로 교체 예정:
-    // const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
-    // fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric&lang=kr`)
+    async function fetchWeather() {
+      try {
+        const response = await fetch(
+          `/api/weather?lat=${latitude}&lon=${longitude}`
+        );
 
-    setTimeout(() => {
-      // 더미 데이터
-      setWeather({
-        temp: 15,
-        condition: '맑음',
-        humidity: 65,
-        windSpeed: 2.5,
-        visibility: 10,
-        icon: 'sun'
-      });
-      setLoading(false);
-    }, 500);
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather');
+        }
+
+        const data = await response.json();
+        setWeather({
+          temp: data.temp,
+          condition: data.condition,
+          humidity: data.humidity,
+          windSpeed: parseFloat(data.windSpeed),
+          visibility: parseFloat(data.visibility),
+          icon: data.icon,
+          demo: data.demo
+        });
+        setLoading(false);
+      } catch (err) {
+        console.error('Weather fetch error:', err);
+        setError(true);
+        setLoading(false);
+      }
+    }
+
+    fetchWeather();
   }, [latitude, longitude]);
 
   if (loading) {
@@ -124,7 +136,11 @@ export function WeatherWidget({ latitude, longitude, mountainName }: WeatherWidg
         </div>
 
         <p className="text-xs text-gray-500 text-center mt-3">
-          * 실시간 날씨 정보 (곧 제공 예정)
+          {weather.demo ? (
+            <>* Demo 모드 (실제 API 키 설정 시 실시간 날씨 제공)</>
+          ) : (
+            <>* 실시간 날씨 정보 (30분마다 업데이트)</>
+          )}
         </p>
       </div>
     </div>

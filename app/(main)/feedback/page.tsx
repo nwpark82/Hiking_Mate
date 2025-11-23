@@ -90,11 +90,14 @@ export default function FeedbackPage() {
         )}
 
         {/* Intro */}
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">
-            하이킹메이트를 더 좋게 만들어주세요
-          </h2>
-          <p className="text-gray-600">
+        <div className="mb-6 bg-gradient-to-br from-forest-50 via-forest-100/50 to-mountain-50 rounded-2xl p-6 border border-forest-200/50 shadow-soft">
+          <div className="flex items-center gap-2 mb-3">
+            <MessageSquare className="w-6 h-6 text-forest-600" />
+            <h2 className="text-xl font-bold text-gray-900">
+              하이킹메이트를 더 좋게 만들어주세요
+            </h2>
+          </div>
+          <p className="text-gray-700 leading-relaxed">
             버그 제보, 기능 제안, 문의사항 등 어떤 의견이든 환영합니다.
             {user ? ' 로그인된 계정으로 전송됩니다.' : ' 이메일을 입력해주시면 답변을 보내드립니다.'}
           </p>
@@ -117,19 +120,21 @@ export default function FeedbackPage() {
                     key={category.value}
                     type="button"
                     onClick={() => setSelectedCategory(category.value)}
-                    className={`p-4 rounded-xl border-2 transition-all text-left ${
+                    className={`p-4 rounded-2xl border-2 transition-all duration-300 text-left shadow-sm hover:shadow-md ${
                       isSelected
-                        ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                        ? 'border-forest-500 bg-gradient-to-br from-forest-50 to-forest-100/50 scale-[1.02]'
+                        : 'border-gray-200 hover:border-forest-200 bg-white'
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <Icon className={`w-5 h-5 mt-0.5 ${isSelected ? 'text-primary-600' : 'text-gray-400'}`} />
+                      <div className={`p-2 rounded-xl ${isSelected ? 'bg-forest-100' : 'bg-gray-100'}`}>
+                        <Icon className={`w-5 h-5 ${isSelected ? 'text-forest-600' : 'text-gray-500'}`} />
+                      </div>
                       <div>
-                        <p className={`font-semibold ${isSelected ? 'text-primary-700' : 'text-gray-900'}`}>
+                        <p className={`font-bold ${isSelected ? 'text-forest-700' : 'text-gray-900'}`}>
                           {category.label}
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-xs text-gray-600 mt-0.5">
                           {category.description}
                         </p>
                       </div>
@@ -195,17 +200,20 @@ export default function FeedbackPage() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex-1 py-3 px-6 border border-gray-300 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 transition"
+              className="flex-1 py-4 px-6 border-2 border-gray-200 rounded-xl font-bold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300"
             >
               취소
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 py-3 px-6 bg-primary-600 text-white rounded-xl font-semibold hover:bg-primary-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 py-4 px-6 bg-gradient-to-r from-forest-600 to-forest-500 text-white rounded-xl font-bold hover:from-forest-700 hover:to-forest-600 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
-                <>처리 중...</>
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  처리 중...
+                </>
               ) : (
                 <>
                   <Send className="w-4 h-4" />
