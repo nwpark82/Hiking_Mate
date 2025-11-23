@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { KakaoMap } from '@/components/map/KakaoMap';
+import { ElevationChart } from '@/components/trails/ElevationChart';
+import { WeatherWidget } from '@/components/trails/WeatherWidget';
 import { getTrailById } from '@/lib/services/trails';
 import { isFavorite as checkIsFavorite, toggleFavorite } from '@/lib/services/favorites';
 import type { Trail } from '@/types';
@@ -231,38 +233,44 @@ export default function TrailDetailPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-              <TrendingUp className="w-6 h-6 text-primary-600 mx-auto mb-2" />
-              <p className="text-sm text-gray-600 mb-1">거리</p>
-              <p className="text-lg font-bold text-gray-900">{formatDistance(trail.distance)}</p>
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            <div className="bg-gradient-to-br from-white to-forest-50/30 rounded-2xl p-4 shadow-soft border border-forest-100/50 text-center">
+              <div className="p-2 bg-forest-100 rounded-xl w-fit mx-auto mb-2">
+                <TrendingUp className="w-6 h-6 text-forest-600" />
+              </div>
+              <p className="text-xs text-gray-600 mb-1 font-medium">거리</p>
+              <p className="text-xl font-bold text-forest-700">{formatDistance(trail.distance)}</p>
             </div>
-            <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-              <Clock className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-              <p className="text-sm text-gray-600 mb-1">소요시간</p>
-              <p className="text-lg font-bold text-gray-900">
+            <div className="bg-gradient-to-br from-white to-sky-50/30 rounded-2xl p-4 shadow-soft border border-sky-100/50 text-center">
+              <div className="p-2 bg-sky-100 rounded-xl w-fit mx-auto mb-2">
+                <Clock className="w-6 h-6 text-sky-600" />
+              </div>
+              <p className="text-xs text-gray-600 mb-1 font-medium">소요시간</p>
+              <p className="text-xl font-bold text-sky-700">
                 {Math.floor(trail.duration / 60)}시간 {trail.duration % 60}분
               </p>
             </div>
-            <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-              <Mountain className="w-6 h-6 text-orange-600 mx-auto mb-2" />
-              <p className="text-sm text-gray-600 mb-1">고도</p>
+            <div className="bg-gradient-to-br from-white to-sunset-50/30 rounded-2xl p-4 shadow-soft border border-sunset-100/50 text-center">
+              <div className="p-2 bg-sunset-100 rounded-xl w-fit mx-auto mb-2">
+                <Mountain className="w-6 h-6 text-sunset-600" />
+              </div>
+              <p className="text-xs text-gray-600 mb-1 font-medium">고도</p>
               {trail.avg_altitude ? (
                 <div>
-                  <p className="text-lg font-bold text-gray-900">{trail.avg_altitude}m</p>
+                  <p className="text-xl font-bold text-sunset-700">{trail.avg_altitude}m</p>
                   <div className="mt-1 text-xs text-gray-500 space-y-0.5">
                     {trail.min_altitude && trail.max_altitude && (
                       <p>{trail.min_altitude}m ~ {trail.max_altitude}m</p>
                     )}
                     {trail.elevation_gain && (
-                      <p className="text-orange-600">↑{trail.elevation_gain}m</p>
+                      <p className="text-sunset-600 font-medium">↑{trail.elevation_gain}m</p>
                     )}
                   </div>
                 </div>
               ) : trail.max_altitude ? (
-                <p className="text-lg font-bold text-gray-900">{trail.max_altitude}m</p>
+                <p className="text-xl font-bold text-sunset-700">{trail.max_altitude}m</p>
               ) : (
-                <p className="text-lg font-bold text-gray-900">-</p>
+                <p className="text-xl font-bold text-gray-400">-</p>
               )}
             </div>
           </div>
@@ -291,25 +299,52 @@ export default function TrailDetailPage() {
             </div>
           )}
 
+          {/* Elevation Chart */}
+          {trail.path_coordinates && (trail.path_coordinates as any).length > 0 && (
+            <ElevationChart
+              pathCoordinates={trail.path_coordinates as any}
+              minAltitude={trail.min_altitude}
+              maxAltitude={trail.max_altitude}
+              elevationGain={trail.elevation_gain}
+            />
+          )}
+
+          {/* Weather Widget */}
+          {trail.start_latitude && trail.start_longitude && (
+            <WeatherWidget
+              latitude={trail.start_latitude}
+              longitude={trail.start_longitude}
+              mountainName={trail.mountain}
+            />
+          )}
+
           {/* Description */}
           {trail.description && (
             <div className="mb-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">코스 소개</h2>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                {trail.description}
-              </p>
+              <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <span className="w-1 h-5 bg-forest-600 rounded-full"></span>
+                코스 소개
+              </h2>
+              <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                  {trail.description}
+                </p>
+              </div>
             </div>
           )}
 
           {/* Features */}
           {trail.features && (trail.features as string[]).length > 0 && (
             <div className="mb-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">코스 특징</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <span className="w-1 h-5 bg-forest-600 rounded-full"></span>
+                코스 특징
+              </h2>
               <div className="flex flex-wrap gap-2">
                 {(trail.features as string[]).map((feature, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1.5 bg-primary-50 text-primary-700 text-sm rounded-lg"
+                    className="px-4 py-2 bg-gradient-to-r from-forest-50 to-forest-100/50 text-forest-700 text-sm font-medium rounded-xl border border-forest-200/50 shadow-sm"
                   >
                     {feature}
                   </span>
@@ -321,30 +356,40 @@ export default function TrailDetailPage() {
           {/* Health Benefits */}
           {trail.health_benefits && (trail.health_benefits as string[]).length > 0 && (
             <div className="mb-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">건강 효과</h2>
-              <ul className="space-y-2">
-                {(trail.health_benefits as string[]).map((benefit, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-700">
-                    <span className="text-primary-600 mt-1">•</span>
-                    <span>{benefit}</span>
-                  </li>
-                ))}
-              </ul>
+              <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <span className="w-1 h-5 bg-forest-600 rounded-full"></span>
+                건강 효과
+              </h2>
+              <div className="bg-gradient-to-br from-white to-green-50/30 rounded-2xl p-4 border border-green-100">
+                <ul className="space-y-2">
+                  {(trail.health_benefits as string[]).map((benefit, index) => (
+                    <li key={index} className="flex items-start gap-3 text-gray-700">
+                      <span className="text-green-600 mt-1 text-lg">✓</span>
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
 
           {/* Attractions */}
           {trail.attractions && (trail.attractions as string[]).length > 0 && (
             <div className="mb-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">주요 볼거리</h2>
-              <ul className="space-y-2">
-                {(trail.attractions as string[]).map((attraction, index) => (
-                  <li key={index} className="flex items-start gap-2 text-gray-700">
-                    <span className="text-blue-600 mt-1">•</span>
-                    <span>{attraction}</span>
-                  </li>
-                ))}
-              </ul>
+              <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <span className="w-1 h-5 bg-forest-600 rounded-full"></span>
+                주요 볼거리
+              </h2>
+              <div className="bg-gradient-to-br from-white to-blue-50/30 rounded-2xl p-4 border border-blue-100">
+                <ul className="space-y-2">
+                  {(trail.attractions as string[]).map((attraction, index) => (
+                    <li key={index} className="flex items-start gap-3 text-gray-700">
+                      <span className="text-blue-600 mt-1 text-lg">🏔️</span>
+                      <span>{attraction}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
 
@@ -371,8 +416,11 @@ export default function TrailDetailPage() {
           {/* Access Info */}
           {trail.access_info && (
             <div className="mb-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">교통 정보</h2>
-              <div className="bg-gray-50 rounded-xl p-4">
+              <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <span className="w-1 h-5 bg-forest-600 rounded-full"></span>
+                교통 정보
+              </h2>
+              <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-4 border border-gray-200">
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">
                   {trail.access_info}
                 </p>
@@ -382,19 +430,19 @@ export default function TrailDetailPage() {
         </section>
 
         {/* Action Buttons */}
-        <section className="fixed bottom-16 left-0 right-0 p-4 bg-white border-t border-gray-200">
+        <section className="fixed bottom-16 left-0 right-0 p-4 bg-white border-t border-gray-200 shadow-lg">
           <div className="max-w-screen-lg mx-auto flex gap-3">
             <button
               onClick={() => router.push(`/record?trailId=${trail.id}`)}
-              className="flex-1 bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition"
+              className="flex-1 bg-gradient-to-r from-forest-600 to-forest-500 text-white py-4 px-6 rounded-xl font-bold hover:from-forest-700 hover:to-forest-600 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
             >
-              이 코스로 산행 시작
+              🚀 이 코스로 산행 시작
             </button>
             <button
               onClick={() => router.push('/community?createPost=true')}
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition"
+              className="px-6 py-4 border-2 border-forest-200 text-forest-700 rounded-xl font-bold hover:bg-forest-50 transition-all duration-300 hover:border-forest-300"
             >
-              후기 작성
+              ✍️ 후기 작성
             </button>
           </div>
         </section>
