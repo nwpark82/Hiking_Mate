@@ -40,7 +40,11 @@
       "Bash(gh repo view:*)",
       "Bash(git reset:*)",
       "Bash(vercel domains:*)",
-      "Bash(nslookup:*)"
+      "Bash(nslookup:*)",
+      "Bash(npx lighthouse:*)",
+      "Bash(node -e:*)",
+      "Bash(wc:*)",
+      "Bash(del \"C:\\Users\\NWPark-LenovoLaptop\\OneDrive\\product\\Hiking_Mate\\components\\trails\\TrailActions.tsx\" \"C:\\Users\\NWPark-LenovoLaptop\\OneDrive\\product\\Hiking_Mate\\components\\trails\\TrailBottomActions.tsx\")"
     ],
     "deny": [],
     "ask": []
