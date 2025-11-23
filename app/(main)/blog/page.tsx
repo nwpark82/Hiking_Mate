@@ -3,6 +3,10 @@ import { Header } from '@/components/layout/Header';
 import { getAllBlogPosts, getAllCategories } from '@/lib/blog';
 import { Clock, Calendar, Tag, ArrowRight } from 'lucide-react';
 
+// Force static generation
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every hour
+
 export const metadata = {
   title: '등산 블로그 | 하이킹메이트',
   description: '등산 가이드, 장비 리뷰, 안전 수칙 등 유용한 등산 정보를 확인하세요.',
