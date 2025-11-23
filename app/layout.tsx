@@ -1,7 +1,17 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Analytics } from '@vercel/analytics/react';
+import { Noto_Sans_KR } from 'next/font/google';
 import "./globals.css";
+
+// Font optimization
+const notoSansKR = Noto_Sans_KR({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap', // FOUT/FOIT 방지
+  preload: true,
+  variable: '--font-noto-sans-kr',
+});
 
 export const metadata: Metadata = {
   title: {
@@ -71,7 +81,7 @@ export default function RootLayout({
   const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
 
   return (
-    <html lang="ko">
+    <html lang="ko" className={`${notoSansKR.variable} font-sans`}>
       <head>
         {/* Search Engine Verification */}
         <meta name="google-site-verification" content="QR3VcEuli9CbCjVQM6nxOchfxmKjwaARZRUD838ohvI" />

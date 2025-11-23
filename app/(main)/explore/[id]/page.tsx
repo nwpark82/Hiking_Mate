@@ -2,13 +2,51 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { Header } from '@/components/layout/Header';
-import { KakaoMap } from '@/components/map/KakaoMap';
-import { ElevationChart } from '@/components/trails/ElevationChart';
-import { WeatherWidget } from '@/components/trails/WeatherWidget';
 import { getTrailById } from '@/lib/services/trails';
 import { isFavorite as checkIsFavorite, toggleFavorite } from '@/lib/services/favorites';
 import type { Trail } from '@/types';
+
+// Lazy load heavy components
+const KakaoMap = dynamic(() => import('@/components/map/KakaoMap').then(mod => ({ default: mod.KakaoMap })), {
+  loading: () => (
+    <div className="h-full flex items-center justify-center bg-gray-100">
+      <div className="text-center">
+        <div className="w-12 h-12 border-4 border-forest-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+        <p className="text-sm text-gray-500">지도 로딩 중...</p>
+      </div>
+    </div>
+  ),
+  ssr: false
+});
+
+const ElevationChart = dynamic(() => import('@/components/trails/ElevationChart').then(mod => ({ default: mod.ElevationChart })), {
+  loading: () => (
+    <div className="mb-6">
+      <div className="h-2 w-32 bg-gray-200 rounded mb-3 animate-pulse"></div>
+      <div className="bg-gradient-to-br from-white to-sunset-50/30 rounded-2xl p-6 border border-sunset-100 h-64 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-sunset-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+          <p className="text-sm text-gray-500">차트 로딩 중...</p>
+        </div>
+      </div>
+    </div>
+  ),
+  ssr: false // Recharts는 클라이언트 전용
+});
+
+const WeatherWidget = dynamic(() => import('@/components/trails/WeatherWidget').then(mod => ({ default: mod.WeatherWidget })), {
+  loading: () => (
+    <div className="mb-6">
+      <div className="h-2 w-32 bg-gray-200 rounded mb-3 animate-pulse"></div>
+      <div className="bg-gradient-to-br from-sky-50 to-blue-50 rounded-2xl p-6 border border-sky-200 h-48 flex items-center justify-center animate-pulse">
+        <p className="text-sm text-gray-500">날씨 정보 로딩 중...</p>
+      </div>
+    </div>
+  ),
+  ssr: false
+});
 import {
   MapPin,
   Clock,

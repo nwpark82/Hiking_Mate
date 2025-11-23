@@ -81,7 +81,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-pretendard)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-noto-sans-kr)', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         '2xs': ['0.625rem', { lineHeight: '0.875rem' }],
