@@ -63,13 +63,13 @@ function generateUniqueFileName(originalName: string): string {
 /**
  * 이미지를 Supabase Storage에 업로드합니다
  * @param file - 업로드할 파일
- * @param bucket - 저장할 버킷 이름 ('post-images', 'user-avatars', 'hike-photos')
+ * @param bucket - 저장할 버킷 이름 ('community-images', 'user-avatars', 'hike-photos')
  * @param folder - 버킷 내 폴더 경로 (선택사항)
  * @param compress - 이미지 압축 여부 (기본값: true)
  */
 export async function uploadImage(
   file: File,
-  bucket: 'post-images' | 'user-avatars' | 'hike-photos',
+  bucket: 'community-images' | 'user-avatars' | 'hike-photos',
   folder?: string,
   compress = true
 ): Promise<{ url: string | null; error: string | null }> {
@@ -121,18 +121,28 @@ export async function uploadImage(
 
 /**
  * 여러 이미지를 한번에 업로드합니다
+ * @param files - 업로드할 파일 배열
+ * @param bucket - 저장할 버킷 이름
+ * @param folder - 사용자 ID (폴더 경로로 사용)
+ * @param category - 커뮤니티 카테고리 (community-images 사용 시 필수)
+ * @param compress - 이미지 압축 여부
  */
 export async function uploadMultipleImages(
   files: File[],
-  bucket: 'post-images' | 'user-avatars' | 'hike-photos',
+  bucket: 'community-images' | 'user-avatars' | 'hike-photos',
   folder?: string,
+  category?: string,
   compress = true
 ): Promise<{ urls: string[]; errors: string[] }> {
+  // community-images 버킷의 경우 category/folder 경로로 업로드
+  const actualFolder = bucket === 'community-images' && category
+    ? `${category}/${folder}`
+    : folder;
   const urls: string[] = [];
   const errors: string[] = [];
 
   for (const file of files) {
-    const { url, error } = await uploadImage(file, bucket, folder, compress);
+    const { url, error } = await uploadImage(file, bucket, actualFolder, compress);
     if (url) {
       urls.push(url);
     }
@@ -148,7 +158,7 @@ export async function uploadMultipleImages(
  * Storage에서 이미지를 삭제합니다
  */
 export async function deleteImage(
-  bucket: 'post-images' | 'user-avatars' | 'hike-photos',
+  bucket: 'community-images' | 'user-avatars' | 'hike-photos',
   filePath: string
 ): Promise<{ error: string | null }> {
   try {
@@ -171,7 +181,7 @@ export async function deleteImage(
  * 여러 이미지를 한번에 삭제합니다
  */
 export async function deleteMultipleImages(
-  bucket: 'post-images' | 'user-avatars' | 'hike-photos',
+  bucket: 'community-images' | 'user-avatars' | 'hike-photos',
   filePaths: string[]
 ): Promise<{ errors: string[] }> {
   const errors: string[] = [];
@@ -190,7 +200,7 @@ export async function deleteMultipleImages(
  * 이미지 URL을 가져옵니다
  */
 export function getImageUrl(
-  bucket: 'post-images' | 'user-avatars' | 'hike-photos',
+  bucket: 'community-images' | 'user-avatars' | 'hike-photos',
   filePath: string
 ): string {
   const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);

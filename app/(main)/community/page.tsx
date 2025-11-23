@@ -13,7 +13,6 @@ const CATEGORIES = [
   { id: 'all', label: '전체' },
   { id: 'review', label: '후기' },
   { id: 'question', label: '질문' },
-  { id: 'gear', label: '장비' },
   { id: 'info', label: '정보' },
   { id: 'companion', label: '동행찾기' },
 ];

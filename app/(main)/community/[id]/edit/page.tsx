@@ -9,11 +9,10 @@ import { uploadMultipleImages } from '@/lib/services/storage';
 import { Loader2, Image as ImageIcon, X } from 'lucide-react';
 
 const CATEGORIES = [
-  { id: 'review', label: '후기' },
-  { id: 'question', label: '질문' },
-  { id: 'gear', label: '장비' },
-  { id: 'info', label: '정보' },
-  { id: 'companion', label: '동행찾기' },
+  { id: 'review', label: '후기', imageLimit: 5 },
+  { id: 'question', label: '질문', imageLimit: 3 },
+  { id: 'info', label: '정보', imageLimit: 3 },
+  { id: 'companion', label: '동행찾기', imageLimit: 3 },
 ];
 
 export default function EditPostPage() {
@@ -77,15 +76,19 @@ export default function EditPostPage() {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    if (images.length + files.length > 5) {
-      alert('이미지는 최대 5장까지 업로드할 수 있습니다.');
+    // 카테고리별 이미지 제한 확인
+    const selectedCat = CATEGORIES.find(cat => cat.id === category);
+    const maxImages = selectedCat?.imageLimit || 3;
+
+    if (images.length + files.length > maxImages) {
+      alert(`${selectedCat?.label} 카테고리는 최대 ${maxImages}장까지 업로드할 수 있습니다.`);
       return;
     }
 
     setUploadingImages(true);
     try {
       const fileArray = Array.from(files);
-      const { urls, errors } = await uploadMultipleImages(fileArray, 'post-images', user?.id);
+      const { urls, errors } = await uploadMultipleImages(fileArray, 'community-images', user?.id, category);
 
       if (errors.length > 0) {
         alert(`일부 이미지 업로드 실패: ${errors.join(', ')}`);
