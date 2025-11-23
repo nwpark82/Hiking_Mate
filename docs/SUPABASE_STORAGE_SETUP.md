@@ -88,7 +88,7 @@ hike-photos/
 
 #### 1. SELECT (읽기) - 모든 사용자 허용
 ```sql
-CREATE POLICY "Public Access"
+CREATE POLICY "community-images: Public Access"
 ON storage.objects FOR SELECT
 TO public
 USING (bucket_id = 'community-images');
@@ -96,7 +96,7 @@ USING (bucket_id = 'community-images');
 
 #### 2. INSERT (업로드) - 인증된 사용자만 허용
 ```sql
-CREATE POLICY "Authenticated users can upload"
+CREATE POLICY "community-images: Authenticated users can upload"
 ON storage.objects FOR INSERT
 TO authenticated
 WITH CHECK (bucket_id = 'community-images');
@@ -104,7 +104,7 @@ WITH CHECK (bucket_id = 'community-images');
 
 #### 3. DELETE (삭제) - 본인이 업로드한 이미지만 삭제
 ```sql
-CREATE POLICY "Users can delete own images"
+CREATE POLICY "community-images: Users can delete own images"
 ON storage.objects FOR DELETE
 TO authenticated
 USING (bucket_id = 'community-images' AND auth.uid()::text = (storage.foldername(name))[2]);
@@ -115,7 +115,7 @@ USING (bucket_id = 'community-images' AND auth.uid()::text = (storage.foldername
 
 #### 1. SELECT (읽기) - 모든 사용자 허용
 ```sql
-CREATE POLICY "Public Access"
+CREATE POLICY "user-avatars: Public Access"
 ON storage.objects FOR SELECT
 TO public
 USING (bucket_id = 'user-avatars');
@@ -123,7 +123,7 @@ USING (bucket_id = 'user-avatars');
 
 #### 2. INSERT (업로드) - 인증된 사용자만 허용
 ```sql
-CREATE POLICY "Authenticated users can upload avatars"
+CREATE POLICY "user-avatars: Authenticated users can upload"
 ON storage.objects FOR INSERT
 TO authenticated
 WITH CHECK (bucket_id = 'user-avatars');
@@ -131,7 +131,7 @@ WITH CHECK (bucket_id = 'user-avatars');
 
 #### 3. UPDATE (수정) - 본인 아바타만 수정
 ```sql
-CREATE POLICY "Users can update own avatar"
+CREATE POLICY "user-avatars: Users can update own avatar"
 ON storage.objects FOR UPDATE
 TO authenticated
 USING (bucket_id = 'user-avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
@@ -139,7 +139,7 @@ USING (bucket_id = 'user-avatars' AND auth.uid()::text = (storage.foldername(nam
 
 #### 4. DELETE (삭제) - 본인 아바타만 삭제
 ```sql
-CREATE POLICY "Users can delete own avatar"
+CREATE POLICY "user-avatars: Users can delete own avatar"
 ON storage.objects FOR DELETE
 TO authenticated
 USING (bucket_id = 'user-avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
@@ -149,7 +149,7 @@ USING (bucket_id = 'user-avatars' AND auth.uid()::text = (storage.foldername(nam
 
 #### 1. SELECT (읽기) - 모든 사용자 허용
 ```sql
-CREATE POLICY "Public Access"
+CREATE POLICY "hike-photos: Public Access"
 ON storage.objects FOR SELECT
 TO public
 USING (bucket_id = 'hike-photos');
@@ -157,7 +157,7 @@ USING (bucket_id = 'hike-photos');
 
 #### 2. INSERT (업로드) - 인증된 사용자만 허용
 ```sql
-CREATE POLICY "Authenticated users can upload hike photos"
+CREATE POLICY "hike-photos: Authenticated users can upload"
 ON storage.objects FOR INSERT
 TO authenticated
 WITH CHECK (bucket_id = 'hike-photos');
@@ -165,7 +165,7 @@ WITH CHECK (bucket_id = 'hike-photos');
 
 #### 3. DELETE (삭제) - 본인이 업로드한 사진만 삭제
 ```sql
-CREATE POLICY "Users can delete own hike photos"
+CREATE POLICY "hike-photos: Users can delete own hike photos"
 ON storage.objects FOR DELETE
 TO authenticated
 USING (bucket_id = 'hike-photos' AND auth.uid()::text = (storage.foldername(name))[1]);
