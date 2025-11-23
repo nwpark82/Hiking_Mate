@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { getPosts, Post } from '@/lib/services/posts';
-import { Plus, MessageCircle, Heart, Eye, TrendingUp, Loader2 } from 'lucide-react';
+import { Plus, MessageCircle, Heart, Eye, TrendingUp, Loader2, ArrowRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
@@ -83,19 +83,92 @@ export default function CommunityPage() {
               <p className="mt-4 text-sm font-medium text-gray-600">게시글을 불러오는 중...</p>
             </div>
           ) : posts.length === 0 ? (
-            <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-12 shadow-soft text-center border border-gray-100">
-              <div className="bg-mountain-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-10 h-10 text-mountain-400" />
+            <div className="space-y-6">
+              {/* Empty State CTA */}
+              <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-soft text-center border border-gray-100">
+                <div className="bg-mountain-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="w-10 h-10 text-mountain-400" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">아직 게시글이 없습니다</h3>
+                <p className="text-sm text-gray-600 mb-6">등산 정보를 공유하고 동료들과 소통해보세요</p>
+                <Link
+                  href="/community/new"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-mountain-500 to-mountain-600 text-white rounded-xl font-semibold hover:scale-105 transition-transform duration-300 shadow-md"
+                >
+                  <Plus className="w-5 h-5" />
+                  첫 게시글 작성하기
+                </Link>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">아직 게시글이 없습니다</h3>
-              <p className="text-sm text-gray-600 mb-6">등산 정보를 공유하고 동료들과 소통해보세요</p>
-              <Link
-                href="/community/new"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-mountain-500 to-mountain-600 text-white rounded-xl font-semibold hover:scale-105 transition-transform duration-300 shadow-md"
-              >
-                <Plus className="w-5 h-5" />
-                첫 게시글 작성하기
-              </Link>
+
+              {/* Community Guide */}
+              <div className="bg-white rounded-2xl p-6 shadow-soft border border-gray-100">
+                <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <span className="text-2xl">📝</span>
+                  커뮤니티 이용 가이드
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-mountain-100 rounded-full flex items-center justify-center text-mountain-600 font-bold">1</div>
+                    <div>
+                      <h5 className="font-semibold text-gray-900 mb-1">후기 공유</h5>
+                      <p className="text-sm text-gray-600">다녀온 등산로의 솔직한 후기와 팁을 공유해주세요</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-mountain-100 rounded-full flex items-center justify-center text-mountain-600 font-bold">2</div>
+                    <div>
+                      <h5 className="font-semibold text-gray-900 mb-1">동행 찾기</h5>
+                      <p className="text-sm text-gray-600">함께 산행할 동료를 찾거나 모임을 만들어보세요</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-mountain-100 rounded-full flex items-center justify-center text-mountain-600 font-bold">3</div>
+                    <div>
+                      <h5 className="font-semibold text-gray-900 mb-1">정보 교환</h5>
+                      <p className="text-sm text-gray-600">등산 장비, 코스 정보, 날씨 등 유용한 정보를 나눠요</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Popular Topics */}
+              <div className="bg-gradient-to-br from-forest-50 to-mountain-50 rounded-2xl p-6 border border-forest-200">
+                <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-mountain-600" />
+                  인기 주제
+                </h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-white rounded-xl p-3 border border-gray-200">
+                    <p className="font-semibold text-gray-900 text-sm mb-1">🏔️ 계절별 추천 코스</p>
+                    <p className="text-xs text-gray-600">봄꽃, 단풍, 설산 명소</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-3 border border-gray-200">
+                    <p className="font-semibold text-gray-900 text-sm mb-1">👥 주말 등산 모임</p>
+                    <p className="text-xs text-gray-600">함께 오를 동료 찾기</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-3 border border-gray-200">
+                    <p className="font-semibold text-gray-900 text-sm mb-1">🎒 장비 추천</p>
+                    <p className="text-xs text-gray-600">등산화, 배낭, 스틱 등</p>
+                  </div>
+                  <div className="bg-white rounded-xl p-3 border border-gray-200">
+                    <p className="font-semibold text-gray-900 text-sm mb-1">📸 등산 사진</p>
+                    <p className="text-xs text-gray-600">멋진 풍경 공유</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Explore Trails CTA */}
+              <div className="bg-gradient-to-r from-forest-500 to-mountain-500 rounded-2xl p-6 text-white">
+                <h4 className="text-lg font-bold mb-2">등산로 먼저 둘러보기</h4>
+                <p className="text-forest-50 text-sm mb-4">전국 663개 등산로 정보를 확인해보세요</p>
+                <Link
+                  href="/explore"
+                  className="inline-flex items-center gap-2 bg-white text-forest-600 px-4 py-2 rounded-lg font-semibold hover:bg-forest-50 transition-colors"
+                >
+                  등산로 탐색하기
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="space-y-4 animate-fade-in">

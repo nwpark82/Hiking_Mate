@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { Header } from '@/components/layout/Header';
 import { getTrailById } from '@/lib/services/trails';
@@ -148,9 +149,40 @@ export default function TrailDetailPage() {
     return (
       <>
         <Header title="등산로 상세" />
-        <div className="flex items-center justify-center min-h-screen">
-          <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
-        </div>
+        <main className="max-w-screen-lg mx-auto pb-20">
+          {/* Map Skeleton */}
+          <div className="h-80 bg-gray-200 animate-pulse" />
+
+          {/* Content Skeleton */}
+          <section className="p-4">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <div className="flex gap-2 mb-3">
+                  <div className="h-6 w-16 bg-gray-200 rounded-full animate-pulse" />
+                  <div className="h-6 w-20 bg-gray-200 rounded-full animate-pulse" />
+                </div>
+                <div className="h-8 w-64 bg-gray-300 rounded animate-pulse mb-2" />
+                <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white rounded-2xl p-4 shadow-soft border border-gray-100 animate-pulse">
+                  <div className="h-10 w-10 bg-gray-200 rounded-xl mx-auto mb-2" />
+                  <div className="h-3 w-16 bg-gray-200 rounded mx-auto mb-2" />
+                  <div className="h-6 w-20 bg-gray-300 rounded mx-auto" />
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-4">
+              <div className="h-4 bg-gray-200 rounded animate-pulse" />
+              <div className="h-4 bg-gray-200 rounded animate-pulse w-11/12" />
+              <div className="h-4 bg-gray-200 rounded animate-pulse w-10/12" />
+            </div>
+          </section>
+        </main>
       </>
     );
   }
@@ -158,18 +190,91 @@ export default function TrailDetailPage() {
   if (!trail) {
     return (
       <>
-        <Header title="등산로 상세" />
-        <div className="flex flex-col items-center justify-center min-h-screen p-4">
-          <Mountain className="w-16 h-16 text-gray-300 mb-4" />
-          <p className="text-gray-500 mb-4">등산로를 찾을 수 없습니다</p>
-          <p className="text-sm text-gray-400 mb-4">잠시 후 목록 페이지로 이동합니다...</p>
-          <button
-            onClick={() => router.push('/explore')}
-            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-          >
-            등산로 목록으로
-          </button>
-        </div>
+        <Header title="등산로를 찾을 수 없습니다" />
+        <main className="max-w-screen-lg mx-auto p-4 pb-24">
+          {/* Error Message */}
+          <div className="flex flex-col items-center justify-center py-12 mb-8">
+            <Mountain className="w-20 h-20 text-gray-300 mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">등산로를 찾을 수 없습니다</h2>
+            <p className="text-sm text-gray-500 mb-6">요청하신 등산로 정보가 존재하지 않거나 삭제되었습니다</p>
+            <button
+              onClick={() => router.push('/explore')}
+              className="px-6 py-3 bg-gradient-to-r from-forest-600 to-forest-500 text-white rounded-xl font-bold hover:from-forest-700 hover:to-forest-600 transition-all duration-300 hover:scale-105 shadow-md"
+            >
+              등산로 목록 보기
+            </button>
+          </div>
+
+          {/* Helpful Links */}
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            <Link
+              href="/explore"
+              className="group bg-gradient-to-br from-white to-forest-50/20 rounded-2xl p-6 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-1 border border-forest-100/30"
+            >
+              <div className="flex items-center gap-4">
+                <div className="bg-gradient-to-br from-forest-400 to-forest-600 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                  <Mountain className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-gray-900 mb-1 text-lg group-hover:text-forest-600 transition-colors">등산로 탐색</h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">전국 663개 등산로 정보 확인</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/blog"
+              className="group bg-gradient-to-br from-white to-sky-50/20 rounded-2xl p-6 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-1 border border-sky-100/30"
+            >
+              <div className="flex items-center gap-4">
+                <div className="bg-gradient-to-br from-sky-400 to-sky-600 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                  <span className="text-2xl">📚</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold text-gray-900 mb-1 text-lg group-hover:text-sky-600 transition-colors">등산 가이드</h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">등산 정보와 팁 확인하기</p>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Popular Trails Suggestion */}
+          <div className="bg-gradient-to-br from-forest-50 to-mountain-50 rounded-2xl p-6 border border-forest-200">
+            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-forest-600" />
+              이런 등산로는 어떠세요?
+            </h3>
+            <div className="grid gap-3">
+              <Link href="/explore" className="bg-white rounded-xl p-4 hover:bg-forest-50 transition-colors border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">난이도별로 찾기</h4>
+                    <p className="text-sm text-gray-600">초급 | 중급 | 고급 등산로 검색</p>
+                  </div>
+                  <span className="text-2xl">🏔️</span>
+                </div>
+              </Link>
+              <Link href="/explore" className="bg-white rounded-xl p-4 hover:bg-forest-50 transition-colors border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">지역별로 찾기</h4>
+                    <p className="text-sm text-gray-600">가까운 지역의 등산로 탐색</p>
+                  </div>
+                  <span className="text-2xl">📍</span>
+                </div>
+              </Link>
+              <Link href="/blog" className="bg-white rounded-xl p-4 hover:bg-forest-50 transition-colors border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">계절별 추천 코스</h4>
+                    <p className="text-sm text-gray-600">봄꽃, 단풍, 설산 명소 확인</p>
+                  </div>
+                  <span className="text-2xl">🌸</span>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </main>
       </>
     );
   }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
-import { Play, History, TrendingUp, Award, Loader2, MapPin, Clock } from 'lucide-react';
+import { Play, History, TrendingUp, Award, Loader2, MapPin, Clock, CheckCircle, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
@@ -171,19 +171,124 @@ export default function RecordPage() {
               <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
             </div>
           ) : recentSessions.length === 0 ? (
-            <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-12 shadow-soft text-center border border-gray-100">
-              <div className="bg-sunset-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <History className="w-10 h-10 text-sunset-400" />
+            <div className="space-y-6">
+              {/* Empty State CTA */}
+              <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-soft text-center border border-gray-100">
+                <div className="bg-sunset-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <History className="w-10 h-10 text-sunset-400" />
+                </div>
+                <h4 className="text-lg font-bold text-gray-900 mb-2">아직 기록이 없습니다</h4>
+                <p className="text-sm text-gray-600 mb-4">첫 산행을 시작해보세요!</p>
+                <button
+                  onClick={() => router.push('/record/active')}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sunset-500 to-sunset-600 text-white rounded-xl font-semibold hover:scale-105 transition-transform duration-300 shadow-md"
+                >
+                  <Play className="w-4 h-4 fill-white" />
+                  산행 시작하기
+                </button>
               </div>
-              <h4 className="text-lg font-bold text-gray-900 mb-2">아직 기록이 없습니다</h4>
-              <p className="text-sm text-gray-600 mb-4">첫 산행을 시작해보세요!</p>
-              <button
-                onClick={() => router.push('/record/active')}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sunset-500 to-sunset-600 text-white rounded-xl font-semibold hover:scale-105 transition-transform duration-300 shadow-md"
-              >
-                <Play className="w-4 h-4 fill-white" />
-                산행 시작하기
-              </button>
+
+              {/* GPS Recording Guide */}
+              <div className="bg-white rounded-2xl p-6 shadow-soft border border-gray-100">
+                <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <span className="text-2xl">📱</span>
+                  GPS 기록 사용법
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-sunset-100 rounded-full flex items-center justify-center text-sunset-600 font-bold">1</div>
+                    <div>
+                      <h5 className="font-semibold text-gray-900 mb-1">산행 시작 버튼 클릭</h5>
+                      <p className="text-sm text-gray-600">GPS 위치 권한을 허용하고 기록을 시작하세요</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-sunset-100 rounded-full flex items-center justify-center text-sunset-600 font-bold">2</div>
+                    <div>
+                      <h5 className="font-semibold text-gray-900 mb-1">실시간 경로 추적</h5>
+                      <p className="text-sm text-gray-600">이동 거리, 시간, 속도가 자동으로 기록됩니다</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 bg-sunset-100 rounded-full flex items-center justify-center text-sunset-600 font-bold">3</div>
+                    <div>
+                      <h5 className="font-semibold text-gray-900 mb-1">산행 완료 및 저장</h5>
+                      <p className="text-sm text-gray-600">종료 버튼을 눌러 기록을 저장하고 확인하세요</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Hiking Checklist */}
+              <div className="bg-gradient-to-br from-forest-50 to-sky-50 rounded-2xl p-6 border border-forest-200">
+                <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-forest-600" />
+                  산행 준비물 체크리스트
+                </h4>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-5 h-5 bg-forest-100 rounded flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-forest-600" />
+                    </div>
+                    등산화
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-5 h-5 bg-forest-100 rounded flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-forest-600" />
+                    </div>
+                    배낭
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-5 h-5 bg-forest-100 rounded flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-forest-600" />
+                    </div>
+                    물 (1L 이상)
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-5 h-5 bg-forest-100 rounded flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-forest-600" />
+                    </div>
+                    간식/행동식
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-5 h-5 bg-forest-100 rounded flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-forest-600" />
+                    </div>
+                    모자/선크림
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-5 h-5 bg-forest-100 rounded flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-forest-600" />
+                    </div>
+                    스마트폰
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-5 h-5 bg-forest-100 rounded flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-forest-600" />
+                    </div>
+                    보조배터리
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700">
+                    <div className="w-5 h-5 bg-forest-100 rounded flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-forest-600" />
+                    </div>
+                    구급약
+                  </div>
+                </div>
+              </div>
+
+              {/* Explore Trails CTA */}
+              <div className="bg-gradient-to-r from-sunset-500 to-forest-500 rounded-2xl p-6 text-white">
+                <h4 className="text-lg font-bold mb-2">등산로 둘러보기</h4>
+                <p className="text-sunset-50 text-sm mb-4">초보자부터 전문가까지, 나에게 맞는 코스를 찾아보세요</p>
+                <Link
+                  href="/explore"
+                  className="inline-flex items-center gap-2 bg-white text-sunset-600 px-4 py-2 rounded-lg font-semibold hover:bg-sunset-50 transition-colors"
+                >
+                  등산로 탐색하기
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="space-y-3">

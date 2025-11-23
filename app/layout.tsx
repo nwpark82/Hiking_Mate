@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Analytics } from '@vercel/analytics/react';
+import { AdSenseScript } from '@/components/analytics/AdSenseScript';
 import { Noto_Sans_KR } from 'next/font/google';
 import "./globals.css";
 
@@ -92,19 +93,12 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="하이킹메이트" />
         <meta name="mobile-web-app-capable" content="yes" />
-
-        {/* Google AdSense */}
-        {ADSENSE_CLIENT_ID && (
-          <Script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
-        )}
       </head>
       <body>
         {children}
+
+        {/* Google AdSense - 조건부 로딩 */}
+        <AdSenseScript clientId={ADSENSE_CLIENT_ID} />
 
         {/* Vercel Analytics */}
         <Analytics />
