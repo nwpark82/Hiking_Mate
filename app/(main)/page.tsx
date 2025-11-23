@@ -199,17 +199,17 @@ export default function HomePage() {
                     <Mountain className="w-16 h-16 text-forest-200 group-hover:scale-110 transition-transform duration-300" />
                   </div>
                   <h4 className="font-bold text-gray-900 mb-1 group-hover:text-forest-600 transition-colors">
-                    {trail.mntn_nm}
+                    {trail.name}
                   </h4>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      trail.mntn_dffl === '상' ? 'bg-red-100 text-red-700' :
-                      trail.mntn_dffl === '중' ? 'bg-yellow-100 text-yellow-700' :
+                      trail.difficulty === '고급' || trail.difficulty === '전문가' ? 'bg-red-100 text-red-700' :
+                      trail.difficulty === '중급' ? 'bg-yellow-100 text-yellow-700' :
                       'bg-green-100 text-green-700'
                     }`}>
-                      {trail.mntn_dffl}
+                      {trail.difficulty}
                     </span>
-                    <span>• {trail.mntn_uppl} 시간</span>
+                    <span>• {Math.floor(trail.duration / 60)}h {trail.duration % 60}m</span>
                   </div>
                 </Link>
               ))}

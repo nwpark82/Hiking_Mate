@@ -9,9 +9,9 @@ interface ElevationChartProps {
     lng: number;
     altitude?: number;
   }>;
-  minAltitude?: number;
-  maxAltitude?: number;
-  elevationGain?: number;
+  minAltitude?: number | null;
+  maxAltitude?: number | null;
+  elevationGain?: number | null;
 }
 
 export function ElevationChart({
