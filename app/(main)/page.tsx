@@ -2,24 +2,36 @@
 
 import { Header } from '@/components/layout/Header';
 import Link from 'next/link';
-import { Mountain, TrendingUp, Users, Activity, Sparkles, ArrowRight, MapPin } from 'lucide-react';
+import { Mountain, TrendingUp, Users, Activity, Sparkles, ArrowRight, MapPin, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { getPopularTrails } from '@/lib/services/trails';
 import { TrailCard } from '@/components/trails/TrailCard';
 import type { Trail } from '@/types';
 
 export default function HomePage() {
   const [popularTrails, setPopularTrails] = useState<Trail[]>([]);
+  const [weekendTrails, setWeekendTrails] = useState<Trail[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchPopularTrails() {
-      const trails = await getPopularTrails(3);
-      setPopularTrails(trails);
+      const trails = await getPopularTrails(6);
+      setPopularTrails(trails.slice(0, 3));
+      setWeekendTrails(trails.slice(3, 6));
       setLoading(false);
     }
     fetchPopularTrails();
   }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/explore?search=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   return (
     <>
@@ -47,6 +59,21 @@ export default function HomePage() {
               전국 663개 등산로 정보와 GPS 기록,<br />
               그리고 등산 커뮤니티까지 한 곳에서
             </p>
+
+            {/* Search Bar */}
+            <form onSubmit={handleSearch} className="mb-4">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-forest-400" />
+                <input
+                  type="text"
+                  placeholder="등산로, 산 이름 검색..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-white/30 bg-white/90 backdrop-blur-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:border-white focus:bg-white transition-all duration-300 font-medium shadow-lg"
+                />
+              </div>
+            </form>
+
             <Link
               href="/explore"
               className="inline-flex items-center gap-2 bg-white text-forest-600 px-6 py-3 rounded-xl font-bold hover:bg-forest-50 transition-all duration-300 hover:scale-105 hover:shadow-lg"
@@ -59,25 +86,29 @@ export default function HomePage() {
         </section>
 
         {/* Quick Stats */}
-        <section className="grid grid-cols-2 gap-4 mb-8">
-          <div className="bg-gradient-to-br from-white to-forest-50/30 rounded-2xl p-5 shadow-soft border border-forest-100/50">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-2 bg-forest-100 rounded-xl">
-                <Mountain className="w-5 h-5 text-forest-600" />
-              </div>
-              <span className="text-sm text-gray-600 font-medium">등록된 등산로</span>
+        <section className="grid grid-cols-3 gap-3 mb-6">
+          <div className="bg-gradient-to-br from-white to-forest-50/30 rounded-2xl p-4 shadow-soft border border-forest-100/50">
+            <div className="p-2 bg-forest-100 rounded-xl w-fit mb-2">
+              <Mountain className="w-8 h-8 text-forest-600" />
             </div>
-            <p className="text-3xl font-bold text-forest-700">663<span className="text-xl text-gray-500 ml-1">개</span></p>
+            <p className="text-2xl font-bold text-forest-700 mb-1">663</p>
+            <span className="text-xs text-gray-600 font-medium">등산로</span>
           </div>
 
-          <div className="bg-gradient-to-br from-white to-sky-50/30 rounded-2xl p-5 shadow-soft border border-sky-100/50">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-2 bg-sky-100 rounded-xl">
-                <Users className="w-5 h-5 text-sky-600" />
-              </div>
-              <span className="text-sm text-gray-600 font-medium">활성 사용자</span>
+          <div className="bg-gradient-to-br from-white to-sky-50/30 rounded-2xl p-4 shadow-soft border border-sky-100/50">
+            <div className="p-2 bg-sky-100 rounded-xl w-fit mb-2">
+              <Users className="w-8 h-8 text-sky-600" />
             </div>
-            <p className="text-3xl font-bold text-sky-700">5.6<span className="text-xl text-gray-500 ml-1">K+</span></p>
+            <p className="text-2xl font-bold text-sky-700 mb-1">5.6K+</p>
+            <span className="text-xs text-gray-600 font-medium">사용자</span>
+          </div>
+
+          <div className="bg-gradient-to-br from-white to-sunset-50/30 rounded-2xl p-4 shadow-soft border border-sunset-100/50">
+            <div className="p-2 bg-sunset-100 rounded-xl w-fit mb-2">
+              <Activity className="w-8 h-8 text-sunset-600" />
+            </div>
+            <p className="text-2xl font-bold text-sunset-700 mb-1">12K+</p>
+            <span className="text-xs text-gray-600 font-medium">기록</span>
           </div>
         </section>
 
@@ -139,12 +170,64 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Popular Trails Preview */}
+        {/* Weekend Recommendations */}
+        <section className="mb-8">
+          <div className="flex items-center gap-2 mb-5">
+            <Sparkles className="w-5 h-5 text-sunset-500" />
+            <h3 className="text-xl font-bold text-gray-900">이번 주말 추천</h3>
+          </div>
+
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white rounded-2xl p-4 shadow-soft animate-pulse">
+                  <div className="h-32 bg-gray-200 rounded-xl mb-3" />
+                  <div className="h-4 bg-gray-200 rounded mb-2" />
+                  <div className="h-3 bg-gray-200 rounded w-2/3" />
+                </div>
+              ))}
+            </div>
+          ) : weekendTrails.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {weekendTrails.map((trail) => (
+                <Link
+                  key={trail.id}
+                  href={`/explore/${trail.id}`}
+                  className="group bg-white rounded-2xl p-4 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100"
+                >
+                  <div className="aspect-[4/3] bg-gradient-to-br from-forest-50 to-mountain-50 rounded-xl mb-3 flex items-center justify-center overflow-hidden">
+                    <Mountain className="w-16 h-16 text-forest-200 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <h4 className="font-bold text-gray-900 mb-1 group-hover:text-forest-600 transition-colors">
+                    {trail.mntn_nm}
+                  </h4>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                      trail.mntn_dffl === '상' ? 'bg-red-100 text-red-700' :
+                      trail.mntn_dffl === '중' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-green-100 text-green-700'
+                    }`}>
+                      {trail.mntn_dffl}
+                    </span>
+                    <span>• {trail.mntn_uppl} 시간</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white rounded-2xl p-8 shadow-soft text-center">
+              <Sparkles className="w-16 h-16 mx-auto mb-3 text-gray-200" />
+              <p className="text-sm text-gray-500 font-medium">추천 등산로를 준비 중입니다</p>
+            </div>
+          )}
+        </section>
+
+        {/* Real-time Popular Trails */}
         <section>
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-forest-600" />
-              <h3 className="text-xl font-bold text-gray-900">인기 등산로</h3>
+              <h3 className="text-xl font-bold text-gray-900">실시간 인기 등산로</h3>
             </div>
             <Link href="/explore" className="text-sm text-forest-600 font-semibold hover:text-forest-700 transition-colors flex items-center gap-1">
               전체보기
