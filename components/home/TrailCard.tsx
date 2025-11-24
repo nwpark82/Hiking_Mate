@@ -3,15 +3,7 @@
 import Link from 'next/link';
 import { Mountain, Clock, MapPin, TrendingUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-
-interface Trail {
-  id: number;
-  name: string;
-  difficulty: string;
-  duration: number;
-  region: string;
-  distance?: number;
-}
+import type { Trail } from '@/types';
 
 interface TrailCardProps {
   trail: Trail;

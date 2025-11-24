@@ -34,7 +34,7 @@ export function middleware(request: NextRequest) {
   const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value;
   const acceptLanguage = request.headers.get('accept-language');
 
-  let locale = i18n.defaultLocale;
+  let locale: string = i18n.defaultLocale;
 
   if (cookieLocale && i18n.locales.includes(cookieLocale as any)) {
     locale = cookieLocale;

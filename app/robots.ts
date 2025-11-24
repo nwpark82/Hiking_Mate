@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://hiking-mate.vercel.app';
+  const baseUrl = 'https://www.hikingmate.co.kr';
 
   return {
     rules: [

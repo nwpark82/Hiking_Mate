@@ -281,8 +281,58 @@ export default function TrailDetailPage() {
 
   const difficultyColor = difficultyColors[trail.difficulty] || difficultyColors['초급'];
 
+  // JSON-LD Structured Data for SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Place',
+    name: trail.name,
+    description: trail.description || `${trail.mountain} ${trail.name} 등산로`,
+    address: {
+      '@type': 'PostalAddress',
+      addressRegion: trail.region,
+      addressCountry: 'KR',
+    },
+    ...(trail.start_latitude && trail.start_longitude && {
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: trail.start_latitude,
+        longitude: trail.start_longitude,
+      },
+    }),
+    ...(trail.max_altitude && {
+      maximumElevation: trail.max_altitude,
+    }),
+    ...(trail.min_altitude && {
+      minimumElevation: trail.min_altitude,
+    }),
+    touristType: trail.difficulty,
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: '거리',
+        value: `${trail.distance}km`,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: '소요시간',
+        value: `${Math.floor(trail.duration / 60)}시간 ${trail.duration % 60}분`,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: '난이도',
+        value: trail.difficulty,
+      },
+    ],
+    url: `https://www.hikingmate.co.kr/explore/${trail.id}`,
+  };
+
   return (
     <>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header title={trail.name} />
 
       <main className="max-w-screen-lg mx-auto pb-20">

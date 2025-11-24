@@ -4,15 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { TrailCard } from './TrailCard';
 import { Button } from '@/components/ui/button';
-
-interface Trail {
-  id: number;
-  name: string;
-  difficulty: string;
-  duration: number;
-  region: string;
-  distance?: number;
-}
+import type { Trail } from '@/types';
 
 interface TrailCarouselProps {
   trails: Trail[];
