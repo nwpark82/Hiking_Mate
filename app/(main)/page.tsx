@@ -64,7 +64,7 @@ export default async function HomePage() {
             <h3 className="text-xl font-bold text-foreground">주요 기능</h3>
           </div>
 
-          <div className="space-y-3">
+          <div className="grid md:grid-cols-2 gap-3">
             <Link href="/explore">
               <Card className="group border-forest-100/30 bg-gradient-to-br from-background to-forest-50/20 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <CardContent className="p-5">
@@ -77,6 +77,23 @@ export default async function HomePage() {
                       <p className="text-sm text-muted-foreground leading-relaxed">난이도별, 지역별로 다양한 등산로를 검색하고 탐색해보세요</p>
                     </div>
                     <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-forest-600 group-hover:translate-x-1 transition-all" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            <Link href="/guides">
+              <Card className="group border-sky-100/30 bg-gradient-to-br from-background to-sky-50/20 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <CardContent className="p-5">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-gradient-to-br from-sky-400 to-sky-600 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                      <span className="text-2xl">📚</span>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-foreground mb-1 text-lg group-hover:text-sky-600 transition-colors">등산 가이드</h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">초보자를 위한 완벽한 등산 가이드와 안전수칙</p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-sky-600 group-hover:translate-x-1 transition-all" />
                   </div>
                 </CardContent>
               </Card>
