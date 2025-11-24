@@ -29,11 +29,14 @@ export default function BlogPage() {
   const posts = getAllBlogPosts();
   const categories = getAllCategories();
 
+  // Debug: Log posts count
+  console.log(`[Blog Page] Loaded ${posts.length} blog posts`);
+
   return (
     <>
       <Header title="등산 블로그" />
 
-      <main className="max-w-screen-lg mx-auto p-6 pb-24">
+      <main className="max-w-screen-lg mx-auto p-6 pb-24 bg-gray-50 min-h-screen">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-forest-500 to-forest-700 rounded-2xl p-8 mb-8 text-white">
           <h1 className="text-3xl font-bold mb-3">등산 가이드 & 팁</h1>
