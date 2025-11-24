@@ -1,0 +1,83 @@
+{
+  "common": {
+    "appName": "하이킹메이트",
+    "search": "검색",
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "loadMore": "더 보기"
+  },
+  "nav": {
+    "home": "홈",
+    "explore": "탐색",
+    "record": "기록",
+    "community": "커뮤니티",
+    "blog": "블로그",
+    "guides": "가이드"
+  },
+  "home": {
+    "title": "하이킹메이트 - 등산로 정보 & 커뮤니티",
+    "description": "전국 등산로 정보, GPS 산행 기록, 등산 커뮤니티",
+    "searchPlaceholder": "등산로, 산 이름 검색...",
+    "stats": {
+      "trails": "등산로",
+      "users": "사용자",
+      "records": "기록"
+    },
+    "features": {
+      "title": "주요 기능",
+      "explore": {
+        "title": "등산로 탐색",
+        "description": "난이도별, 지역별로 다양한 등산로를 검색하고 탐색해보세요"
+      },
+      "guide": {
+        "title": "등산 가이드",
+        "description": "초보자를 위한 완벽한 등산 가이드와 안전수칙"
+      },
+      "record": {
+        "title": "산행 기록",
+        "description": "GPS로 나만의 등산 기록을 남기고 추억을 간직하세요"
+      },
+      "community": {
+        "title": "커뮤니티",
+        "description": "등산 정보를 공유하고 동행을 찾아보세요"
+      }
+    },
+    "weekendRecommendations": "이번 주말 추천",
+    "popularTrails": "실시간 인기 등산로",
+    "viewAll": "전체보기"
+  },
+  "explore": {
+    "title": "탐색",
+    "searchPlaceholder": "등산로, 산 이름 검색...",
+    "filters": "필터",
+    "activeFilters": "활성 필터:",
+    "reset": "초기화",
+    "difficulty": {
+      "all": "전체",
+      "easy": "초급",
+      "moderate": "중급",
+      "hard": "고급"
+    },
+    "sortBy": {
+      "popular": "인기순",
+      "distance": "거리순",
+      "difficulty": "난이도순"
+    }
+  },
+  "guides": {
+    "title": "등산 가이드",
+    "description": "초보자를 위한 완벽한 가이드",
+    "beginner": "초보자 가이드",
+    "equipment": "준비물",
+    "safety": "안전수칙",
+    "seasonal": "계절별 팁"
+  },
+  "blog": {
+    "title": "등산 블로그",
+    "description": "등산 가이드, 장비 리뷰, 안전 수칙 등 유용한 등산 정보",
+    "readingTime": "분 읽기",
+    "by": "by",
+    "categories": "카테고리",
+    "tags": "태그"
+  }
+}

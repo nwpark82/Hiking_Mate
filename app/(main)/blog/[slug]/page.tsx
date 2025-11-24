@@ -31,6 +31,23 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${post.title} | 하이킹메이트`,
     description: post.description,
+    keywords: post.tags,
+    authors: [{ name: post.author }],
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      url: `https://www.hikingmate.co.kr/blog/${params.slug}`,
+      type: 'article',
+      publishedTime: post.date,
+      authors: [post.author],
+      tags: post.tags,
+      siteName: '하이킹메이트',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+    },
   };
 }
 
@@ -41,8 +58,41 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     notFound();
   }
 
+  // JSON-LD structured data for blog post
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    author: {
+      '@type': 'Person',
+      name: post.author,
+    },
+    datePublished: post.date,
+    dateModified: post.date,
+    publisher: {
+      '@type': 'Organization',
+      name: '하이킹메이트',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.hikingmate.co.kr/icon-512.svg',
+      },
+    },
+    keywords: post.tags.join(', '),
+    articleSection: post.category,
+    inLanguage: 'ko-KR',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://www.hikingmate.co.kr/blog/${params.slug}`,
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header title="블로그" />
 
       <main className="max-w-screen-lg mx-auto p-6 pb-24">

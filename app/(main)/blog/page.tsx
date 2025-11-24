@@ -9,7 +9,20 @@ export const revalidate = 3600; // Revalidate every hour
 
 export const metadata = {
   title: '등산 블로그 | 하이킹메이트',
-  description: '등산 가이드, 장비 리뷰, 안전 수칙 등 유용한 등산 정보를 확인하세요.',
+  description: '등산 가이드, 장비 리뷰, 계절별 팁, 안전 수칙 등 유용한 등산 정보를 확인하세요. 초보자부터 전문가까지 모두를 위한 등산 콘텐츠.',
+  keywords: ['등산블로그', '등산가이드', '등산팁', '등산장비', '등산안전', '등산정보'],
+  openGraph: {
+    title: '등산 블로그 | 하이킹메이트',
+    description: '등산 가이드, 장비 리뷰, 계절별 팁 등 유용한 등산 정보를 확인하세요.',
+    url: 'https://www.hikingmate.co.kr/blog',
+    type: 'website',
+    siteName: '하이킹메이트',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '등산 블로그 | 하이킹메이트',
+    description: '등산 가이드, 장비 리뷰, 계절별 팁 등 유용한 등산 정보를 확인하세요.',
+  },
 };
 
 export default function BlogPage() {

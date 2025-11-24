@@ -1,0 +1,83 @@
+{
+  "common": {
+    "appName": "HikingMate",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "loadMore": "Load More"
+  },
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "record": "Record",
+    "community": "Community",
+    "blog": "Blog",
+    "guides": "Guides"
+  },
+  "home": {
+    "title": "HikingMate - Trail Information & Community",
+    "description": "Nationwide trail information, GPS hiking records, hiking community",
+    "searchPlaceholder": "Search trails, mountain names...",
+    "stats": {
+      "trails": "Trails",
+      "users": "Users",
+      "records": "Records"
+    },
+    "features": {
+      "title": "Key Features",
+      "explore": {
+        "title": "Explore Trails",
+        "description": "Search and explore various trails by difficulty and region"
+      },
+      "guide": {
+        "title": "Hiking Guides",
+        "description": "Complete hiking guides and safety tips for beginners"
+      },
+      "record": {
+        "title": "Track Your Hike",
+        "description": "Record your hiking journey with GPS and keep your memories"
+      },
+      "community": {
+        "title": "Community",
+        "description": "Share hiking information and find hiking companions"
+      }
+    },
+    "weekendRecommendations": "Weekend Recommendations",
+    "popularTrails": "Popular Trails",
+    "viewAll": "View All"
+  },
+  "explore": {
+    "title": "Explore",
+    "searchPlaceholder": "Search trails, mountain names...",
+    "filters": "Filters",
+    "activeFilters": "Active Filters:",
+    "reset": "Reset",
+    "difficulty": {
+      "all": "All",
+      "easy": "Easy",
+      "moderate": "Moderate",
+      "hard": "Hard"
+    },
+    "sortBy": {
+      "popular": "Popular",
+      "distance": "Distance",
+      "difficulty": "Difficulty"
+    }
+  },
+  "guides": {
+    "title": "Hiking Guides",
+    "description": "Complete guide for beginners",
+    "beginner": "Beginner's Guide",
+    "equipment": "Equipment",
+    "safety": "Safety Rules",
+    "seasonal": "Seasonal Tips"
+  },
+  "blog": {
+    "title": "Hiking Blog",
+    "description": "Useful hiking information including guides, equipment reviews, and safety tips",
+    "readingTime": "min read",
+    "by": "by",
+    "categories": "Categories",
+    "tags": "Tags"
+  }
+}
