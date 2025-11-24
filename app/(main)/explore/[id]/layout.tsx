@@ -7,10 +7,11 @@ export const revalidate = 3600; // Revalidate every hour
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   try {
-    const trail = await getTrailById(params.id);
+    const { id } = await params;
+    const trail = await getTrailById(id);
 
     if (!trail) {
       return {

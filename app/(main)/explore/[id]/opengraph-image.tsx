@@ -8,8 +8,9 @@ export const size = {
 };
 export const contentType = 'image/png';
 
-export default async function Image({ params }: { params: { id: string } }) {
-  const trail = await getTrailById(params.id);
+export default async function Image({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const trail = await getTrailById(id);
 
   if (!trail) {
     // Fallback image if trail not found

@@ -19,8 +19,9 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = getBlogPostBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = getBlogPostBySlug(slug);
 
   if (!post) {
     return {
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     openGraph: {
       title: post.title,
       description: post.description,
-      url: `https://www.hikingmate.co.kr/blog/${params.slug}`,
+      url: `https://www.hikingmate.co.kr/blog/${slug}`,
       type: 'article',
       publishedTime: post.date,
       authors: [post.author],
@@ -51,8 +52,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = getBlogPostBySlug(params.slug);
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = getBlogPostBySlug(slug);
 
   if (!post) {
     notFound();
@@ -83,7 +85,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     inLanguage: 'ko-KR',
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://www.hikingmate.co.kr/blog/${params.slug}`,
+      '@id': `https://www.hikingmate.co.kr/blog/${slug}`,
     },
   };
 
