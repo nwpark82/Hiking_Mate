@@ -312,48 +312,10 @@ export function KakaoMap({
     };
   }, [latitude, longitude, level, markers, pathCoordinates]);
 
-  // 에러 상태 - 지도 대신 경로 정보 표시
-  if (error) {
-    return (
-      <div
-        className="w-full h-full rounded-lg flex flex-col items-center justify-center bg-gradient-to-br from-forest-50 to-sky-50"
-        style={{ minHeight: '300px' }}
-      >
-        <div className="text-center px-4">
-          <div className="w-16 h-16 mx-auto mb-3 bg-white rounded-2xl shadow-soft flex items-center justify-center">
-            <span className="text-3xl">🗺️</span>
-          </div>
-          <p className="text-gray-700 font-medium mb-1">지도를 불러올 수 없습니다</p>
-          <p className="text-sm text-gray-500 mb-3">경로 정보는 아래에서 확인하세요</p>
-          {pathCoordinates.length > 0 && (
-            <div className="bg-white/80 rounded-xl px-4 py-2 text-sm text-forest-700 inline-flex items-center gap-2">
-              <span>📍</span>
-              <span>경로 포인트: {pathCoordinates.length}개</span>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // 로딩 상태
-  if (isLoading) {
-    return (
-      <div
-        className="w-full h-full rounded-lg flex items-center justify-center bg-gray-100"
-        style={{ minHeight: '300px' }}
-      >
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-forest-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-          <p className="text-sm text-gray-500">지도 로딩 중...</p>
-        </div>
-      </div>
-    );
-  }
-
+  // 항상 지도 컨테이너를 렌더링하고, 로딩/에러는 오버레이로 표시
+  // 이렇게 해야 mapRef가 항상 DOM에 연결되어 initializeMap()이 정상 작동함
   return (
     <div
-      ref={mapRef}
       className="w-full h-full rounded-lg"
       style={{
         minHeight: '300px',
@@ -362,6 +324,52 @@ export function KakaoMap({
         position: 'relative',
         overflow: 'hidden'
       }}
-    />
+    >
+      {/* 지도 컨테이너 - 항상 렌더링 */}
+      <div
+        ref={mapRef}
+        className="w-full h-full"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0
+        }}
+      />
+
+      {/* 에러 오버레이 */}
+      {error && (
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-forest-50 to-sky-50 rounded-lg z-10"
+        >
+          <div className="text-center px-4">
+            <div className="w-16 h-16 mx-auto mb-3 bg-white rounded-2xl shadow-soft flex items-center justify-center">
+              <span className="text-3xl">🗺️</span>
+            </div>
+            <p className="text-gray-700 font-medium mb-1">지도를 불러올 수 없습니다</p>
+            <p className="text-sm text-gray-500 mb-3">경로 정보는 아래에서 확인하세요</p>
+            {pathCoordinates.length > 0 && (
+              <div className="bg-white/80 rounded-xl px-4 py-2 text-sm text-forest-700 inline-flex items-center gap-2">
+                <span>📍</span>
+                <span>경로 포인트: {pathCoordinates.length}개</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* 로딩 오버레이 */}
+      {isLoading && !error && (
+        <div
+          className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg z-10"
+        >
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-forest-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+            <p className="text-sm text-gray-500">지도 로딩 중...</p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
