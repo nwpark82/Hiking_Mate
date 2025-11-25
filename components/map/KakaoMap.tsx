@@ -91,11 +91,18 @@ export function KakaoMap({
         clearTimeout(timeoutId);
         window.kakaoMapScriptLoaded = true;
         console.log('✅ Kakao Maps SDK script loaded');
+        console.log('🔍 [v2] window.kakao:', !!window.kakao);
+        console.log('🔍 [v2] window.kakao.maps:', !!(window.kakao && window.kakao.maps));
+        console.log('🔍 [v2] mapRef.current:', !!mapRef.current);
+
         if (window.kakao && window.kakao.maps) {
+          console.log('🔍 [v2] Calling initializeMap...');
           initializeMap();
         } else {
+          console.log('⏳ [v2] SDK loaded but maps not ready, waiting 100ms...');
           // SDK는 로드되었지만 maps가 없는 경우 약간 대기
           setTimeout(() => {
+            console.log('🔍 [v2] Retry - window.kakao.maps:', !!(window.kakao && window.kakao.maps));
             if (window.kakao && window.kakao.maps) {
               initializeMap();
             } else {
