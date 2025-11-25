@@ -128,12 +128,43 @@ export function KakaoMap({
 
     const initializeMap = () => {
       if (!mapRef.current) {
+        console.error('❌ Map container ref is null');
         setIsLoading(false);
         return;
       }
 
+      // 컨테이너 크기 확인
+      const containerWidth = mapRef.current.offsetWidth;
+      const containerHeight = mapRef.current.offsetHeight;
+      console.log('📐 Map container dimensions:', { width: containerWidth, height: containerHeight });
+
+      if (containerWidth === 0 || containerHeight === 0) {
+        console.error('❌ Map container has zero dimensions, retrying...');
+        // 크기가 0이면 약간 대기 후 재시도
+        setTimeout(() => {
+          if (mapRef.current) {
+            const retryWidth = mapRef.current.offsetWidth;
+            const retryHeight = mapRef.current.offsetHeight;
+            console.log('📐 Retry dimensions:', { width: retryWidth, height: retryHeight });
+            if (retryWidth > 0 && retryHeight > 0) {
+              initializeMap();
+            } else {
+              setError('지도 컨테이너 크기를 확인할 수 없습니다.');
+              setIsLoading(false);
+            }
+          }
+        }, 200);
+        return;
+      }
+
       try {
-        window.kakao.maps.load(() => {
+        console.log('📍 Initializing map with:', { latitude, longitude, level, pathLength: pathCoordinates.length });
+
+        // SDK가 완전히 로드되었는지 확인 (LatLng 클래스가 사용 가능한지)
+        const isFullyLoaded = window.kakao.maps.LatLng !== undefined;
+        console.log('🔍 SDK fully loaded:', isFullyLoaded);
+
+        const createMap = () => {
           if (!mapRef.current) return;
 
           const options = {
@@ -146,7 +177,9 @@ export function KakaoMap({
             disableDoubleClickZoom: false,
           };
 
+          console.log('🗺️ Creating Kakao Map instance...');
           const map = new window.kakao.maps.Map(mapRef.current, options);
+          console.log('✅ Map instance created:', !!map);
           mapInstanceRef.current = map;
 
           // 모바일 디바이스 감지 및 터치 최적화
@@ -205,6 +238,10 @@ export function KakaoMap({
 
           // 경로 그리기
           if (pathCoordinates.length > 0) {
+            console.log('🛤️ Drawing path with', pathCoordinates.length, 'points');
+            console.log('🛤️ First point:', pathCoordinates[0]);
+            console.log('🛤️ Last point:', pathCoordinates[pathCoordinates.length - 1]);
+
             const path = pathCoordinates.map(
               coord => new window.kakao.maps.LatLng(coord.lat, coord.lng)
             );
@@ -218,16 +255,42 @@ export function KakaoMap({
             });
 
             polyline.setMap(map);
+            console.log('✅ Polyline added to map');
 
             // 경로에 맞게 지도 범위 조정
             const bounds = new window.kakao.maps.LatLngBounds();
             path.forEach((point: any) => bounds.extend(point));
+            console.log('📏 Setting map bounds...');
             map.setBounds(bounds);
+            console.log('✅ Map bounds set');
+          } else {
+            console.log('⚠️ No path coordinates provided');
           }
 
           setIsLoading(false);
           console.log('✅ Kakao Map initialized successfully');
-        });
+
+          // 지도 상태 확인
+          setTimeout(() => {
+            if (mapInstanceRef.current) {
+              const center = mapInstanceRef.current.getCenter();
+              const currentLevel = mapInstanceRef.current.getLevel();
+              console.log('🗺️ Map state after init:', {
+                center: { lat: center.getLat(), lng: center.getLng() },
+                level: currentLevel
+              });
+            }
+          }, 500);
+        };
+
+        // SDK가 이미 완전히 로드되었으면 바로 지도 생성, 아니면 load() 콜백 사용
+        if (isFullyLoaded) {
+          console.log('📌 SDK already fully loaded, creating map directly');
+          createMap();
+        } else {
+          console.log('📌 Loading SDK via kakao.maps.load()');
+          window.kakao.maps.load(createMap);
+        }
       } catch (err) {
         console.error('❌ Error initializing map:', err);
         setError('지도 초기화 중 오류가 발생했습니다.');
@@ -292,7 +355,13 @@ export function KakaoMap({
     <div
       ref={mapRef}
       className="w-full h-full rounded-lg"
-      style={{ minHeight: '300px', height: '100%' }}
+      style={{
+        minHeight: '300px',
+        height: '100%',
+        width: '100%',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
     />
   );
 }
