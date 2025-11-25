@@ -91,11 +91,18 @@ export function KakaoMap({
         clearTimeout(timeoutId);
         window.kakaoMapScriptLoaded = true;
         console.log('✅ Kakao Maps SDK script loaded');
+        console.log('🔍 [v2] window.kakao:', !!window.kakao);
+        console.log('🔍 [v2] window.kakao.maps:', !!(window.kakao && window.kakao.maps));
+        console.log('🔍 [v2] mapRef.current:', !!mapRef.current);
+
         if (window.kakao && window.kakao.maps) {
+          console.log('🔍 [v2] Calling initializeMap...');
           initializeMap();
         } else {
+          console.log('⏳ [v2] SDK loaded but maps not ready, waiting 100ms...');
           // SDK는 로드되었지만 maps가 없는 경우 약간 대기
           setTimeout(() => {
+            console.log('🔍 [v2] Retry - window.kakao.maps:', !!(window.kakao && window.kakao.maps));
             if (window.kakao && window.kakao.maps) {
               initializeMap();
             } else {
@@ -106,9 +113,12 @@ export function KakaoMap({
         }
       };
 
-      script.onerror = () => {
+      script.onerror = (e) => {
         clearTimeout(timeoutId);
-        console.error('❌ Kakao Maps script failed to load');
+        console.error('❌ Kakao Maps script failed to load', e);
+        console.error('ℹ️ API Key present:', !!process.env.NEXT_PUBLIC_KAKAO_MAP_KEY);
+        console.error('ℹ️ Current domain:', typeof window !== 'undefined' ? window.location.hostname : 'unknown');
+        console.error('ℹ️ 해결방법: Kakao Developers 콘솔에서 현재 도메인을 등록하세요');
         setError('지도를 불러오는데 실패했습니다.');
         setIsLoading(false);
       };
@@ -125,12 +135,43 @@ export function KakaoMap({
 
     const initializeMap = () => {
       if (!mapRef.current) {
+        console.error('❌ Map container ref is null');
         setIsLoading(false);
         return;
       }
 
+      // 컨테이너 크기 확인
+      const containerWidth = mapRef.current.offsetWidth;
+      const containerHeight = mapRef.current.offsetHeight;
+      console.log('📐 Map container dimensions:', { width: containerWidth, height: containerHeight });
+
+      if (containerWidth === 0 || containerHeight === 0) {
+        console.error('❌ Map container has zero dimensions, retrying...');
+        // 크기가 0이면 약간 대기 후 재시도
+        setTimeout(() => {
+          if (mapRef.current) {
+            const retryWidth = mapRef.current.offsetWidth;
+            const retryHeight = mapRef.current.offsetHeight;
+            console.log('📐 Retry dimensions:', { width: retryWidth, height: retryHeight });
+            if (retryWidth > 0 && retryHeight > 0) {
+              initializeMap();
+            } else {
+              setError('지도 컨테이너 크기를 확인할 수 없습니다.');
+              setIsLoading(false);
+            }
+          }
+        }, 200);
+        return;
+      }
+
       try {
-        window.kakao.maps.load(() => {
+        console.log('📍 Initializing map with:', { latitude, longitude, level, pathLength: pathCoordinates.length });
+
+        // SDK가 완전히 로드되었는지 확인 (LatLng 클래스가 사용 가능한지)
+        const isFullyLoaded = window.kakao.maps.LatLng !== undefined;
+        console.log('🔍 SDK fully loaded:', isFullyLoaded);
+
+        const createMap = () => {
           if (!mapRef.current) return;
 
           const options = {
@@ -143,7 +184,9 @@ export function KakaoMap({
             disableDoubleClickZoom: false,
           };
 
+          console.log('🗺️ Creating Kakao Map instance...');
           const map = new window.kakao.maps.Map(mapRef.current, options);
+          console.log('✅ Map instance created:', !!map);
           mapInstanceRef.current = map;
 
           // 모바일 디바이스 감지 및 터치 최적화
@@ -202,6 +245,10 @@ export function KakaoMap({
 
           // 경로 그리기
           if (pathCoordinates.length > 0) {
+            console.log('🛤️ Drawing path with', pathCoordinates.length, 'points');
+            console.log('🛤️ First point:', pathCoordinates[0]);
+            console.log('🛤️ Last point:', pathCoordinates[pathCoordinates.length - 1]);
+
             const path = pathCoordinates.map(
               coord => new window.kakao.maps.LatLng(coord.lat, coord.lng)
             );
@@ -215,16 +262,42 @@ export function KakaoMap({
             });
 
             polyline.setMap(map);
+            console.log('✅ Polyline added to map');
 
             // 경로에 맞게 지도 범위 조정
             const bounds = new window.kakao.maps.LatLngBounds();
             path.forEach((point: any) => bounds.extend(point));
+            console.log('📏 Setting map bounds...');
             map.setBounds(bounds);
+            console.log('✅ Map bounds set');
+          } else {
+            console.log('⚠️ No path coordinates provided');
           }
 
           setIsLoading(false);
           console.log('✅ Kakao Map initialized successfully');
-        });
+
+          // 지도 상태 확인
+          setTimeout(() => {
+            if (mapInstanceRef.current) {
+              const center = mapInstanceRef.current.getCenter();
+              const currentLevel = mapInstanceRef.current.getLevel();
+              console.log('🗺️ Map state after init:', {
+                center: { lat: center.getLat(), lng: center.getLng() },
+                level: currentLevel
+              });
+            }
+          }, 500);
+        };
+
+        // SDK가 이미 완전히 로드되었으면 바로 지도 생성, 아니면 load() 콜백 사용
+        if (isFullyLoaded) {
+          console.log('📌 SDK already fully loaded, creating map directly');
+          createMap();
+        } else {
+          console.log('📌 Loading SDK via kakao.maps.load()');
+          window.kakao.maps.load(createMap);
+        }
       } catch (err) {
         console.error('❌ Error initializing map:', err);
         setError('지도 초기화 중 오류가 발생했습니다.');
@@ -246,41 +319,64 @@ export function KakaoMap({
     };
   }, [latitude, longitude, level, markers, pathCoordinates]);
 
-  // 에러 상태
-  if (error) {
-    return (
-      <div
-        className="w-full h-full rounded-lg flex items-center justify-center bg-gray-100"
-        style={{ minHeight: '300px' }}
-      >
-        <div className="text-center px-4">
-          <p className="text-red-600 font-medium mb-2">⚠️ {error}</p>
-          <p className="text-sm text-gray-600">새로고침 후 다시 시도해주세요</p>
-        </div>
-      </div>
-    );
-  }
-
-  // 로딩 상태
-  if (isLoading) {
-    return (
-      <div
-        className="w-full h-full rounded-lg flex items-center justify-center bg-gray-100"
-        style={{ minHeight: '300px' }}
-      >
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-forest-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-          <p className="text-sm text-gray-500">지도 로딩 중...</p>
-        </div>
-      </div>
-    );
-  }
-
+  // 항상 지도 컨테이너를 렌더링하고, 로딩/에러는 오버레이로 표시
+  // 이렇게 해야 mapRef가 항상 DOM에 연결되어 initializeMap()이 정상 작동함
   return (
     <div
-      ref={mapRef}
       className="w-full h-full rounded-lg"
-      style={{ minHeight: '300px', height: '100%' }}
-    />
+      style={{
+        minHeight: '300px',
+        height: '100%',
+        width: '100%',
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
+      {/* 지도 컨테이너 - 항상 렌더링 */}
+      <div
+        ref={mapRef}
+        className="w-full h-full"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0
+        }}
+      />
+
+      {/* 에러 오버레이 */}
+      {error && (
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-forest-50 to-sky-50 rounded-lg z-10"
+        >
+          <div className="text-center px-4">
+            <div className="w-16 h-16 mx-auto mb-3 bg-white rounded-2xl shadow-soft flex items-center justify-center">
+              <span className="text-3xl">🗺️</span>
+            </div>
+            <p className="text-gray-700 font-medium mb-1">지도를 불러올 수 없습니다</p>
+            <p className="text-sm text-gray-500 mb-3">경로 정보는 아래에서 확인하세요</p>
+            {pathCoordinates.length > 0 && (
+              <div className="bg-white/80 rounded-xl px-4 py-2 text-sm text-forest-700 inline-flex items-center gap-2">
+                <span>📍</span>
+                <span>경로 포인트: {pathCoordinates.length}개</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* 로딩 오버레이 */}
+      {isLoading && !error && (
+        <div
+          className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg z-10"
+        >
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-forest-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+            <p className="text-sm text-gray-500">지도 로딩 중...</p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
