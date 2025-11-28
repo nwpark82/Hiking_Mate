@@ -135,6 +135,7 @@ export default function RootLayout({
         <meta name="google-site-verification" content="QR3VcEuli9CbCjVQM6nxOchfxmKjwaARZRUD838ohvI" />
         <meta name="google-site-verification" content="xQ25wdTWhbrOBcB63lxctsqvbpe3DjKJ1ZiPt2athB0" />
         <meta name="naver-site-verification" content="b8c64384ae035e209858722340148f4bc24154f4" />
+        <meta name="naver-site-verification" content="2b16b2d40651f45db4ff34ca78022a0f98a30772" />
 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
