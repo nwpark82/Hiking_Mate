@@ -5,7 +5,6 @@ date: "2025-01-29"
 author: "하이킹메이트 편집팀"
 category: "등산 가이드"
 tags: ["지리산", "종주", "산장", "백패킹", "노고단", "천왕봉"]
-coverImage: "/images/blog/jirisan-trekking.jpg"
 ---
 
 # 지리산 종주 완벽 준비 - 초보자도 성공하는 노하우

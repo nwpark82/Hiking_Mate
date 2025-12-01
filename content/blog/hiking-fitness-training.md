@@ -5,7 +5,6 @@ date: "2025-01-30"
 author: "하이킹메이트 편집팀"
 category: "트레이닝"
 tags: ["등산 체력", "등산 운동", "체력 훈련", "근력 운동", "유산소"]
-coverImage: "/images/blog/hiking-training.jpg"
 ---
 
 # 등산 체력 기르기 - 4주 트레이닝 프로그램

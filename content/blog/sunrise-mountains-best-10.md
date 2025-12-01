@@ -5,7 +5,6 @@ date: "2024-12-15"
 author: "하이킹메이트 편집팀"
 category: "등산 가이드"
 tags: ["일출", "해돋이", "새해", "일출 명산", "일출 시간"]
-coverImage: "/images/blog/sunrise-mountains.jpg"
 ---
 
 # 일출 명산 BEST 10 - 2025년 새해 일출 산행지 추천
