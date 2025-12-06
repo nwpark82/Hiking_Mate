@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { AdSenseScript } from '@/components/analytics/AdSenseScript';
 import { Noto_Sans_KR } from 'next/font/google';
 import "./globals.css";
@@ -154,6 +155,9 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+
+        {/* Vercel Speed Insights */}
+        <SpeedInsights />
 
         {/* Google AdSense - 조건부 로딩 */}
         <AdSenseScript clientId={ADSENSE_CLIENT_ID} />
