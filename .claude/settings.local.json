@@ -60,7 +60,10 @@
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(git checkout:*)",
-      "Bash(git diff:*)"
+      "Bash(git diff:*)",
+      "Bash(del \".git\\index.lock\")",
+      "Bash(node scripts/upload-validated-trails.js:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: 등산로 데이터 검증 도구에 갭 감지 및 필터링 기능 추가\n\n- 등산로 로드 시 좌표 간 500m 이상 거리 점프를 자동 감지\n- 리스트에 갭 배지 표시 및 왼쪽 경고 테두리 추가\n- 상태 필터에 ''갭 있음'' 옵션 추가\n- 사이드바에 갭 있는 등산로 통계 표시\n- 문서 정리 및 중복 GPX 원본 파일 삭제\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ],
     "deny": [],
     "ask": []

@@ -1,0 +1,3672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>등산로 데이터 검증 도구</title>
+  <!-- Kakao Map API -->
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3f25ff1b596a18c75145032c8ace37dd&autoload=false"></script>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-900);
+      line-height: 1.6;
+    }
+
+    .header {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .main-container {
+      display: flex;
+      height: calc(100vh - 110px);
+      padding: 12px;
+      gap: 12px;
+    }
+
+    .sidebar {
+      width: 280px;
+      min-width: 280px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 12px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .trail-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .trail-item {
+      padding: 10px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 4px;
+      border: 2px solid transparent;
+    }
+
+    .trail-item:hover { background: var(--gray-50); }
+    .trail-item.selected { background: #eff6ff; border-color: var(--primary); }
+    .trail-item.validated { background: #f0fdf4; border-color: var(--success); }
+    .trail-item.failed { background: #fef2f2; border-color: var(--danger); }
+    .trail-item.has-gap { border-left: 3px solid var(--warning); }
+    .gap-badge { display: inline-block; background: #fef3c7; color: #92400e; font-size: 9px; padding: 1px 4px; border-radius: 3px; margin-left: 4px; font-weight: 600; }
+
+    .trail-item-name {
+      font-weight: 500;
+      font-size: 13px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .trail-item-meta {
+      font-size: 11px;
+      color: var(--gray-500);
+      display: flex;
+      gap: 8px;
+    }
+
+    .sidebar-footer {
+      padding: 10px 12px;
+      border-top: 1px solid var(--gray-200);
+      font-size: 12px;
+      color: var(--gray-500);
+      background: var(--gray-50);
+    }
+
+    .work-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      min-width: 0;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .card-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-200);
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gray-50);
+    }
+
+    .card-body { padding: 16px; }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 12px;
+    }
+
+    .info-item {
+      text-align: center;
+      padding: 12px 8px;
+      background: var(--gray-50);
+      border-radius: 8px;
+    }
+
+    .info-item label {
+      display: block;
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-bottom: 4px;
+    }
+
+    .info-item .value {
+      font-size: 14px;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .endpoint-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .endpoint-box {
+      padding: 14px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      border: 2px solid var(--gray-200);
+    }
+
+    .endpoint-box.start { border-color: var(--primary); background: #eff6ff; }
+    .endpoint-box.end { border-color: var(--danger); background: #fef2f2; }
+
+    .endpoint-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .endpoint-label .marker {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .endpoint-label .marker.start { background: var(--primary); }
+    .endpoint-label .marker.end { background: var(--danger); }
+
+    .endpoint-info { margin-bottom: 8px; }
+    .endpoint-info .coords {
+      font-size: 12px;
+      color: var(--gray-500);
+      font-family: monospace;
+    }
+    .endpoint-info .altitude {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-top: 4px;
+    }
+
+    .nearby-waypoints {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .nearby-waypoints-title {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-bottom: 6px;
+    }
+
+    .waypoint-tag {
+      display: inline-block;
+      padding: 3px 8px;
+      margin: 2px;
+      font-size: 11px;
+      border-radius: 4px;
+      background: white;
+      border: 1px solid var(--gray-200);
+    }
+
+    .waypoint-tag.highlight {
+      background: #fef3c7;
+      border-color: var(--warning);
+      font-weight: 500;
+    }
+
+    .waypoint-tag .distance {
+      color: var(--gray-500);
+      margin-left: 4px;
+    }
+
+    .endpoint-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .route-preview-container {
+      display: flex;
+      gap: 16px;
+    }
+
+    .route-canvas-wrapper {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .route-canvas {
+      width: 100%;
+      height: 250px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      background: white;
+      cursor: grab;
+    }
+
+    .route-canvas:active { cursor: grabbing; }
+
+    .canvas-controls {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+      justify-content: center;
+    }
+
+    .canvas-controls button {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--gray-300);
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .canvas-controls button:hover { background: var(--gray-100); }
+
+    .route-info-panel {
+      width: 160px;
+      padding: 12px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .route-info-item { margin-bottom: 8px; }
+    .route-info-item label {
+      display: block;
+      color: var(--gray-500);
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+    .route-info-item .value { font-weight: 600; }
+
+    #kakaoMap {
+      width: 100%;
+      height: 300px;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+
+    /* Gap Section */
+    .gap-section {
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--gray-50);
+      border-radius: 8px;
+    }
+
+    .gap-section.has-gap {
+      background: #fef3c7;
+      border: 1px solid var(--warning);
+    }
+
+    .gap-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .gap-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .length-validation {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .length-box {
+      text-align: center;
+      padding: 14px;
+      border-radius: 8px;
+      background: var(--gray-50);
+    }
+
+    .length-box label {
+      display: block;
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-bottom: 4px;
+    }
+
+    .length-box .value { font-size: 20px; font-weight: 700; }
+    .length-box.ratio .value.pass { color: var(--success); }
+    .length-box.ratio .value.fail { color: var(--danger); }
+
+    .btn {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .btn-sm { padding: 5px 10px; font-size: 11px; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #15803d; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-warning { background: var(--warning); color: white; }
+    .btn-warning:hover { background: #d97706; }
+    .btn-outline {
+      background: white;
+      border: 1px solid var(--gray-300);
+      color: var(--gray-700);
+    }
+    .btn-outline:hover { background: var(--gray-50); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      padding: 12px 16px;
+      border-top: 1px solid var(--gray-200);
+      background: var(--gray-50);
+      flex-wrap: wrap;
+    }
+
+    .footer {
+      background: white;
+      border-top: 1px solid var(--gray-200);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stats { display: flex; gap: 16px; }
+    .stat-item { display: flex; align-items: center; gap: 4px; font-size: 13px; }
+
+    .stat-badge {
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .stat-badge.completed { background: #dcfce7; color: var(--success); }
+    .stat-badge.failed { background: #fee2e2; color: var(--danger); }
+    .stat-badge.remaining { background: var(--gray-200); color: var(--gray-700); }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray-500);
+    }
+
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 16px; color: var(--gray-700); margin-bottom: 8px; }
+
+    .drop-zone {
+      border: 2px dashed var(--gray-300);
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .drop-zone .icon { font-size: 36px; margin-bottom: 12px; }
+
+    .coord-list {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+    }
+
+    .coord-item {
+      padding: 8px 12px;
+      font-size: 12px;
+      font-family: monospace;
+      border-bottom: 1px solid var(--gray-100);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .coord-item:hover { background: var(--gray-50); }
+    .coord-item:last-child { border-bottom: none; }
+    .coord-item.selected { background: #eff6ff; }
+
+    .log-panel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 360px;
+      height: 100vh;
+      background: white;
+      box-shadow: -4px 0 12px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s;
+      z-index: 1000;
+    }
+
+    .log-panel.open { transform: translateX(0); }
+
+    .log-panel-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .log-content {
+      padding: 12px;
+      height: calc(100% - 50px);
+      overflow-y: auto;
+    }
+
+    .log-entry {
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      background: var(--gray-50);
+    }
+
+    .log-entry .time { font-size: 10px; color: var(--gray-500); }
+
+    .toast-container {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 2000;
+    }
+
+    .toast {
+      padding: 10px 16px;
+      border-radius: 6px;
+      background: var(--gray-900);
+      color: white;
+      font-size: 13px;
+      margin-top: 6px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .toast.success { background: var(--success); }
+    .toast.error { background: var(--danger); }
+    .toast.warning { background: var(--warning); }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 16px;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
+
+    .modal-footer {
+      padding: 12px 16px;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .hidden { display: none !important; }
+    .text-success { color: var(--success); }
+    .text-danger { color: var(--danger); }
+    .text-warning { color: var(--warning); }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>등산로 데이터 검증 도구</h1>
+    <div class="header-actions">
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('importTrailFileHeader').click()">📂 저장된 경로 열기</button>
+      <input type="file" id="importTrailFileHeader" accept=".json" style="display: none;" onchange="importSavedTrail(event)">
+      <button class="btn btn-outline btn-sm" onclick="exportAllResults()">결과 내보내기</button>
+      <button class="btn btn-outline btn-sm" onclick="toggleLogPanel()">로그</button>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="등산로 검색..." oninput="filterTrails()">
+        </div>
+        <div style="margin-top: 8px;">
+          <select id="regionFilter" style="width: 100%; padding: 8px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 12px; background: white;" onchange="filterTrails()">
+            <option value="">🗺️ 전체 지역</option>
+          </select>
+        </div>
+        <div style="margin-top: 6px; display: flex; gap: 4px;">
+          <select id="statusFilter" style="flex: 1; padding: 6px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 11px; background: white;" onchange="filterTrails()">
+            <option value="">전체 상태</option>
+            <option value="pending">⏳ 미검증</option>
+            <option value="validated">✅ 완료</option>
+            <option value="failed">❌ 실패</option>
+            <option value="hasGap">⚠️ 갭 있음</option>
+          </select>
+          <div id="regionStats" style="flex: 1; padding: 6px; font-size: 10px; color: var(--gray-500); text-align: right;">-</div>
+        </div>
+      </div>
+      <div class="trail-list" id="trailList">
+        <div class="empty-state" id="emptyState">
+          <div class="icon">📂</div>
+          <h3>데이터를 로드해주세요</h3>
+          <p style="font-size: 12px;">JSON 파일을 드래그하거나<br>아래 버튼을 클릭</p>
+          <button class="btn btn-primary btn-sm" style="margin-top: 12px;" onclick="document.getElementById('fileInput').click()">파일 선택</button>
+          <input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleFileSelect(event)">
+        </div>
+      </div>
+      <div class="sidebar-footer" id="sidebarFooter" style="display:none;">
+        진행: <strong id="progressText">0/0</strong> | <span style="color: #f59e0b;">⚠️ 갭: <strong id="gapCountText">0</strong></span>
+      </div>
+    </aside>
+
+    <main class="work-area" id="workArea">
+      <div class="card" id="dropZoneCard">
+        <div class="card-body">
+          <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <div class="icon">📁</div>
+            <h3>등산로 데이터 파일을 드래그하세요</h3>
+            <p style="color: var(--gray-500); font-size: 13px; margin-top: 8px;">JSON 또는 trails.json 파일 지원</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hidden" id="trailInfoCard">
+        <div class="card-header">📋 경로 정보</div>
+        <div class="card-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <label>등산로</label>
+              <div class="value" id="infoName">-</div>
+            </div>
+            <div class="info-item">
+              <label>산</label>
+              <div class="value" id="infoMountain">-</div>
+            </div>
+            <div class="info-item">
+              <label>총 거리</label>
+              <div class="value" id="infoDistance">-</div>
+            </div>
+            <div class="info-item">
+              <label>좌표수</label>
+              <div class="value" id="infoCoordCount">-</div>
+            </div>
+            <div class="info-item">
+              <label>고도차</label>
+              <div class="value" id="infoElevationDiff">-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hidden" id="routePreviewCard">
+        <div class="card-header">
+          🗺️ 경로 미리보기
+          <div style="margin-left: auto;">
+            <button class="btn btn-primary btn-sm" onclick="toggleKakaoMap()">🗺️ 지도에 표시</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="route-preview-container">
+            <div class="route-canvas-wrapper">
+              <canvas id="routeCanvas" class="route-canvas"></canvas>
+              <div class="canvas-controls">
+                <button onclick="zoomCanvas(1.2)" title="확대">+</button>
+                <button onclick="zoomCanvas(0.8)" title="축소">-</button>
+                <button onclick="resetCanvasView()" title="초기화">↺</button>
+                <button onclick="panCanvas(-50, 0)" title="왼쪽">←</button>
+                <button onclick="panCanvas(50, 0)" title="오른쪽">→</button>
+                <button onclick="panCanvas(0, -50)" title="위">↑</button>
+                <button onclick="panCanvas(0, 50)" title="아래">↓</button>
+              </div>
+            </div>
+            <div class="route-info-panel">
+              <div class="route-info-item">
+                <label>출발점 고도</label>
+                <div class="value" id="routeStartAlt">-</div>
+              </div>
+              <div class="route-info-item">
+                <label>도착점 고도</label>
+                <div class="value" id="routeEndAlt">-</div>
+              </div>
+              <div class="route-info-item">
+                <label>최고점</label>
+                <div class="value" id="routeMaxAlt">-</div>
+              </div>
+              <div class="route-info-item">
+                <label>최저점</label>
+                <div class="value" id="routeMinAlt">-</div>
+              </div>
+              <div class="route-info-item">
+                <label>방향</label>
+                <div class="value" id="routeDirection">-</div>
+              </div>
+            </div>
+          </div>
+          <div id="kakaoMapContainer" class="hidden" style="margin-top: 12px;">
+            <div id="kakaoMap" style="width: 100%; height: 400px; border-radius: 8px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hidden" id="endpointCard">
+        <div class="card-header">🎯 출발점/도착점 설정</div>
+        <div class="card-body">
+          <div class="endpoint-container">
+            <div class="endpoint-box start">
+              <div class="endpoint-label">
+                <span class="marker start"></span>
+                출발점 (index: <span id="startIndex">0</span>)
+              </div>
+              <div class="endpoint-info">
+                <div class="coords" id="startCoords">-</div>
+                <div class="altitude" id="startAltitude">-</div>
+              </div>
+              <div class="nearby-waypoints">
+                <div class="nearby-waypoints-title">근처 waypoints:</div>
+                <div id="startWaypointTags">-</div>
+              </div>
+              <div class="endpoint-actions">
+                <button class="btn btn-outline btn-sm" onclick="openCoordSelector('start')">위치 변경</button>
+              </div>
+            </div>
+
+            <div class="endpoint-box end">
+              <div class="endpoint-label">
+                <span class="marker end"></span>
+                도착점 (index: <span id="endIndex">0</span>)
+              </div>
+              <div class="endpoint-info">
+                <div class="coords" id="endCoords">-</div>
+                <div class="altitude" id="endAltitude">-</div>
+              </div>
+              <div class="nearby-waypoints">
+                <div class="nearby-waypoints-title">근처 waypoints:</div>
+                <div id="endWaypointTags">-</div>
+              </div>
+              <div class="endpoint-actions">
+                <button class="btn btn-outline btn-sm" onclick="openCoordSelector('end')">위치 변경</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gap Section -->
+          <div class="gap-section" id="gapSection">
+            <div class="gap-info">
+              <div class="gap-status">
+                <span id="gapIcon">✅</span>
+                <span id="gapMessage">갭 없음</span>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                <button class="btn btn-success btn-sm" onclick="openPathAddModal()">➕ 경로 추가</button>
+                <button class="btn btn-warning btn-sm hidden" id="fillGapBtn" onclick="fillFrontBackGap()">앞/뒤 갭 복원</button>
+                <button class="btn btn-danger btn-sm hidden" id="fillMiddleGapBtn" onclick="fillMiddleGaps()">🔗 중간 갭 메꾸기</button>
+                <button class="btn btn-outline btn-sm" onclick="reverseTrail()">🔄 경로 반전</button>
+                <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:#6b7280;">
+                  <label>중간갭 임계값:</label>
+                  <input type="number" id="gapThreshold" value="500" min="50" max="5000" step="50" style="width:60px;padding:3px 6px;border:1px solid #d1d5db;border-radius:4px;font-size:11px;" onchange="onGapThresholdChange()">
+                  <span>m</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hidden" id="lengthCard">
+        <div class="card-header">📏 길이 검증</div>
+        <div class="card-body">
+          <div class="length-validation">
+            <div class="length-box">
+              <label>원본 길이</label>
+              <div class="value" id="originalLength">0 km</div>
+            </div>
+            <div class="length-box">
+              <label>현재 길이</label>
+              <div class="value" id="currentLength">0 km</div>
+            </div>
+            <div class="length-box ratio">
+              <label>비율</label>
+              <div class="value" id="lengthRatio">0x</div>
+            </div>
+          </div>
+        </div>
+        <div class="action-buttons">
+          <button class="btn btn-outline" onclick="skipTrail()">⏭️ 건너뛰기</button>
+          <button class="btn btn-danger" onclick="markAsFailed()">❌ 실패</button>
+          <button class="btn btn-success" id="validateBtn" onclick="validateTrail()">✅ 검증 완료</button>
+        </div>
+      </div>
+
+      <!-- 저장/불러오기 카드 -->
+      <div class="card hidden" id="saveLoadCard">
+        <div class="card-header">💾 저장 / 불러오기</div>
+        <div class="card-body">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- 현재 경로 저장 -->
+            <div>
+              <div style="font-size: 11px; color: var(--gray-600); margin-bottom: 6px; font-weight: 600;">📝 작업 중인 경로</div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-primary btn-sm" onclick="exportCurrentTrail()" style="flex: 1;">
+                  📥 현재 경로 저장
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="document.getElementById('importTrailFile').click()" style="flex: 1;">
+                  📤 불러오기
+                </button>
+                <input type="file" id="importTrailFile" accept=".json" style="display: none;" onchange="importSavedTrail(event)">
+              </div>
+            </div>
+
+            <!-- 검증 완료 경로 내보내기 -->
+            <div style="border-top: 1px solid var(--gray-200); padding-top: 12px;">
+              <div style="font-size: 11px; color: var(--gray-600); margin-bottom: 6px; font-weight: 600;">✅ 검증 완료 경로 내보내기</div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <select id="exportRegionSelect" onchange="updateValidatedCount()" style="flex: 1; min-width: 100px; padding: 6px 8px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 12px;">
+                  <option value="">전체 지역</option>
+                </select>
+                <button class="btn btn-success btn-sm" onclick="exportValidatedTrails()" style="white-space: nowrap;">
+                  📦 검증완료 내보내기
+                </button>
+              </div>
+              <div id="validatedCount" style="font-size: 11px; color: var(--gray-500); margin-top: 6px;">검증 완료: 0개</div>
+            </div>
+
+            <div style="font-size: 10px; color: var(--gray-400); padding: 8px; background: var(--gray-50); border-radius: 6px;">
+              <div>💡 <strong>현재 경로 저장</strong>: 작업 중단 시 나중에 이어서 작업 가능</div>
+              <div>💡 <strong>검증완료 내보내기</strong>: DB 업로드용 파일 생성</div>
+              <div id="autoSaveStatus" style="margin-top: 4px; color: var(--success);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <div class="stats">
+      <div class="stat-item">완료: <span class="stat-badge completed" id="statCompleted">0</span></div>
+      <div class="stat-item">실패: <span class="stat-badge failed" id="statFailed">0</span></div>
+      <div class="stat-item">남은: <span class="stat-badge remaining" id="statRemaining">0</span></div>
+    </div>
+    <div>
+      <button class="btn btn-outline btn-sm" onclick="prevTrail()" id="prevBtn" disabled>← 이전</button>
+      <button class="btn btn-primary btn-sm" onclick="nextTrail()" id="nextBtn" disabled style="margin-left: 6px;">다음 →</button>
+    </div>
+  </footer>
+
+  <div class="log-panel" id="logPanel">
+    <div class="log-panel-header">
+      <h3 style="font-size: 14px;">작업 로그</h3>
+      <button class="btn btn-outline btn-sm" onclick="toggleLogPanel()">✕</button>
+    </div>
+    <div class="log-content" id="logContent">
+      <div class="log-entry">
+        <div class="time">시스템 시작</div>
+        <div>등산로 데이터 검증 도구가 준비되었습니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="coordModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 style="font-size: 14px;" id="coordModalTitle">좌표 선택</h3>
+        <button class="btn btn-outline btn-sm" onclick="closeCoordModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 10px; color: var(--gray-500); font-size: 12px;">클릭하여 새로운 지점을 선택하세요</p>
+        <div class="coord-list" id="coordList"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline btn-sm" onclick="closeCoordModal()">취소</button>
+        <button class="btn btn-primary btn-sm" onclick="confirmCoordSelection()">선택 확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 경로 추가 모달 -->
+  <div class="modal-overlay" id="pathAddModal">
+    <div class="modal" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 style="font-size: 14px;">➕ 경로 추가</h3>
+        <button class="btn btn-outline btn-sm" onclick="closePathAddModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Step 1: 방향 선택 -->
+        <div id="pathAddStep1">
+          <p style="margin-bottom: 12px; font-weight: 600;">1단계: 추가 위치 선택</p>
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <button class="btn btn-primary" onclick="selectPathDirection('front')" style="flex: 1; padding: 16px;">
+              <div style="font-size: 24px; margin-bottom: 4px;">⬅️</div>
+              <div>앞에 추가</div>
+              <div style="font-size: 11px; opacity: 0.8;">현재 출발점 앞에 경로 추가</div>
+            </button>
+            <button class="btn btn-danger" onclick="selectPathDirection('back')" style="flex: 1; padding: 16px;">
+              <div style="font-size: 24px; margin-bottom: 4px;">➡️</div>
+              <div>뒤에 추가</div>
+              <div style="font-size: 11px; opacity: 0.8;">현재 도착점 뒤에 경로 추가</div>
+            </button>
+          </div>
+          <div style="background: var(--gray-50); padding: 12px; border-radius: 8px; font-size: 12px;">
+            <div><strong>현재 경로 정보:</strong></div>
+            <div id="pathAddCurrentInfo">-</div>
+          </div>
+        </div>
+
+        <!-- Step 2: 목표 지점 선택 -->
+        <div id="pathAddStep2" class="hidden">
+          <p style="margin-bottom: 8px; font-weight: 600;">2단계: 연결할 목표 지점 선택</p>
+          <div style="background: #eff6ff; padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 12px;">
+            <div id="pathAddDirectionInfo">-</div>
+          </div>
+
+          <!-- 보기 모드 토글 -->
+          <div style="display: flex; gap: 4px; margin-bottom: 12px;">
+            <button class="btn btn-sm" id="pathAddViewList" onclick="setPathAddView('list')" style="flex: 1; background: var(--primary); color: white;">📋 리스트</button>
+            <button class="btn btn-sm btn-outline" id="pathAddViewMap" onclick="setPathAddView('map')" style="flex: 1;">🗺️ 지도</button>
+          </div>
+
+          <!-- 리스트 뷰 -->
+          <div id="pathAddListView">
+            <div style="margin-bottom: 8px; display: flex; gap: 8px; align-items: center;">
+              <input type="text" id="pathAddSearch" placeholder="좌표 검색 (인덱스 또는 좌표)" style="flex: 1; padding: 8px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 12px;" oninput="filterPathAddCoords()">
+              <select id="pathAddFilter" style="padding: 8px; border: 1px solid var(--gray-300); border-radius: 6px; font-size: 12px;" onchange="filterPathAddCoords()">
+                <option value="all">전체</option>
+                <option value="waypoints">웨이포인트 근처</option>
+                <option value="peaks">정상/봉우리</option>
+                <option value="entrance">입구/매표소</option>
+              </select>
+            </div>
+            <div style="font-size: 11px; color: var(--gray-500); margin-bottom: 4px;" id="pathAddCoordCount">-</div>
+            <div class="coord-list" id="pathAddCoordList" style="max-height: 220px;"></div>
+          </div>
+
+          <!-- 지도 뷰 -->
+          <div id="pathAddMapView" class="hidden">
+            <div style="font-size: 11px; color: var(--gray-500); margin-bottom: 8px;">
+              🖱️ 지도에서 원하는 지점을 클릭하세요. 파란선: 현재 경로, 주황선: 원본 전체 경로
+            </div>
+            <div id="pathAddMapContainer" style="width: 100%; height: 300px; border-radius: 8px; border: 1px solid var(--gray-200);"></div>
+          </div>
+
+          <div style="margin-top: 12px; padding: 10px; background: var(--gray-50); border-radius: 8px;">
+            <div style="font-size: 12px; margin-bottom: 6px;"><strong>선택된 목표:</strong></div>
+            <div id="pathAddSelectedTarget" style="font-size: 13px; color: var(--primary);">선택 안됨</div>
+          </div>
+        </div>
+
+        <!-- Step 3: 연결 방식 선택 -->
+        <div id="pathAddStep3" class="hidden">
+          <p style="margin-bottom: 12px; font-weight: 600;">3단계: 연결 방식 선택</p>
+          <div style="background: #f0fdf4; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 12px;">
+            <div id="pathAddConnectionInfo">-</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button class="btn btn-success" onclick="executePathAdd('direct')" style="padding: 14px; text-align: left;">
+              <div style="font-weight: 600;">📍 직접 연결</div>
+              <div style="font-size: 11px; opacity: 0.8; margin-top: 4px;">선택한 지점을 직접 연결 (갭 발생 시 중간 갭 메꾸기로 처리 가능)</div>
+            </button>
+            <button class="btn btn-warning" onclick="executePathAdd('reverse')" style="padding: 14px; text-align: left;">
+              <div style="font-weight: 600;">🔄 역순 경로 삽입</div>
+              <div style="font-size: 11px; opacity: 0.8; margin-top: 4px;">현재 끝점에서 목표 지점까지 기존 경로를 역순으로 복사하여 삽입</div>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline btn-sm" id="pathAddBackBtn" onclick="pathAddGoBack()" style="display: none;">← 이전</button>
+        <button class="btn btn-outline btn-sm" onclick="closePathAddModal()">취소</button>
+        <button class="btn btn-primary btn-sm" id="pathAddNextBtn" onclick="pathAddGoNext()" style="display: none;">다음 →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // ========================================
+    // Global State
+    // ========================================
+    const state = {
+      trails: [],
+      currentIndex: -1,
+      currentTrail: null,
+      originalCoordinates: [],
+      modifiedCoordinates: [],
+      startIndex: 0,
+      endIndex: 0,
+      originalLength: 0,
+      currentLength: 0,
+      validatedTrails: [],  // 검증 완료된 트레일 (수정된 좌표 포함)
+      failedTrails: [],     // 실패한 트레일
+      regions: [],          // 지역 목록
+      trailStatus: {},      // {trailName: 'pending'|'validated'|'failed'}
+      logs: [],
+      map: null,
+      mapVisible: false,
+      polyline: null,
+      excludedPolylines: [],
+      markers: [],
+      coordSelectMode: null,
+      selectedCoordIndex: null,
+      hasGap: false,
+      gaps: [], // Array of all detected gaps
+      gapInfo: { startGap: [], endGap: [], startGapIndices: [], endGapIndices: [], startGapForDraw: [], endGapForDraw: [] },
+      // Canvas view state
+      canvasZoom: 1,
+      canvasPanX: 0,
+      canvasPanY: 0,
+      // Path add state
+      pathAdd: {
+        step: 1,
+        direction: null, // 'front' or 'back'
+        targetIndex: null,
+        allCoords: [], // 원본 좌표 전체 (선택용)
+        view: 'list', // 'list' or 'map'
+        map: null, // 지도 인스턴스
+        mapMarkers: [], // 지도 마커들
+        mapPolylines: [] // 지도 경로선들
+      }
+    };
+
+    const LOCATION_KEYWORDS = ['매표소', '입구', '주차장', '정류장', '버스', '탐방소', '안내소', '휴게소', '쉼터', '화장실', '정상', '봉', '대피소'];
+
+    // ========================================
+    // Utility Functions
+    // ========================================
+    function calculateDistance(lat1, lng1, lat2, lng2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function calculateTotalDistance(coordinates) {
+      let total = 0;
+      for (let i = 1; i < coordinates.length; i++) {
+        total += calculateDistance(
+          coordinates[i-1].lat, coordinates[i-1].lng,
+          coordinates[i].lat, coordinates[i].lng
+        );
+      }
+      return total;
+    }
+
+    function formatDistance(km) {
+      if (km < 1) return `${Math.round(km * 1000)}m`;
+      return `${km.toFixed(2)}km`;
+    }
+
+    function formatCoords(lat, lng) {
+      return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function addLog(message) {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('ko-KR');
+      state.logs.push({ time: timeStr, message });
+      const logContent = document.getElementById('logContent');
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      entry.innerHTML = `<div class="time">${timeStr}</div><div>${message}</div>`;
+      logContent.insertBefore(entry, logContent.firstChild);
+    }
+
+    function findNearbyWaypoints(coord, waypoints, radiusKm = 0.1) {
+      if (!waypoints || !coord) return [];
+      return waypoints
+        .map(wp => {
+          const wpLat = wp.lat || wp.latitude;
+          const wpLng = wp.lng || wp.lon || wp.longitude;
+          const dist = calculateDistance(coord.lat, coord.lng, wpLat, wpLng);
+          return { ...wp, distance: dist };
+        })
+        .filter(wp => wp.distance <= radiusKm)
+        .sort((a, b) => a.distance - b.distance);
+    }
+
+    function isLocationKeyword(name) {
+      return LOCATION_KEYWORDS.some(kw => name && name.includes(kw));
+    }
+
+    // ========================================
+    // File Loading
+    // ========================================
+    function handleFileSelect(event) {
+      const files = event.target.files;
+      if (files.length > 0) loadFiles(files);
+    }
+
+    function loadFiles(files) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          processLoadedData(data, file.name);
+        } catch (error) {
+          showToast('파일 파싱 오류: ' + error.message, 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function processLoadedData(data, filename) {
+      let trails = [];
+      if (Array.isArray(data)) {
+        trails = data.map((item, index) => normalizeTrailData(item, index));
+      } else if (data.trails && Array.isArray(data.trails)) {
+        trails = data.trails.map((item, index) => normalizeTrailData(item, index));
+      } else if (data.mountain || data.courseName) {
+        trails = [normalizeTrailData(data, 0)];
+      } else {
+        showToast('지원되지 않는 데이터 형식', 'error');
+        return;
+      }
+
+      state.trails = trails;
+      state.currentIndex = -1;
+
+      // 지역 목록 추출 및 필터 채우기
+      const uniqueRegions = [...new Set(trails.map(t => t.region))].sort();
+      state.regions = uniqueRegions;
+      populateRegionFilter(uniqueRegions);
+
+      // 트레일 상태 초기화
+      state.trailStatus = {};
+      trails.forEach(t => { state.trailStatus[t.id] = 'pending'; });
+
+      addLog(`${filename}에서 ${trails.length}개 등산로 로드됨`);
+      addLog(`  지역: ${uniqueRegions.join(', ')}`);
+      showToast(`${trails.length}개 등산로 로드 완료`, 'success');
+      renderTrailList();
+      updateStats();
+      updateRegionStats();
+      document.getElementById('dropZoneCard').classList.add('hidden');
+      document.getElementById('emptyState').classList.add('hidden');
+      document.getElementById('sidebarFooter').style.display = 'block';
+      if (trails.length > 0) selectTrail(0);
+    }
+
+    function populateRegionFilter(regions) {
+      // 사이드바 지역 필터
+      const select = document.getElementById('regionFilter');
+      select.innerHTML = '<option value="">🗺️ 전체 지역</option>';
+      regions.forEach(region => {
+        const count = state.trails.filter(t => t.region === region).length;
+        const option = document.createElement('option');
+        option.value = region;
+        option.textContent = `${region} (${count})`;
+        select.appendChild(option);
+      });
+
+      // 내보내기 지역 필터 (검증 완료 경로 내보내기용)
+      const exportSelect = document.getElementById('exportRegionSelect');
+      if (exportSelect) {
+        exportSelect.innerHTML = '<option value="">전체 지역</option>';
+        regions.forEach(region => {
+          const option = document.createElement('option');
+          option.value = region;
+          option.textContent = region;
+          exportSelect.appendChild(option);
+        });
+      }
+
+      // 검증 완료 개수 업데이트
+      updateValidatedCount();
+    }
+
+    function updateRegionStats() {
+      const regionFilter = document.getElementById('regionFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+
+      let filteredTrails = state.trails;
+      if (regionFilter) {
+        filteredTrails = filteredTrails.filter(t => t.region === regionFilter);
+      }
+
+      const total = filteredTrails.length;
+      const validated = filteredTrails.filter(t => t.status === 'validated').length;
+      const failed = filteredTrails.filter(t => t.status === 'failed').length;
+      const pending = total - validated - failed;
+
+      const statsEl = document.getElementById('regionStats');
+      if (regionFilter) {
+        statsEl.innerHTML = `✅${validated} ❌${failed} ⏳${pending}`;
+      } else {
+        statsEl.innerHTML = `전체 ${total}개`;
+      }
+    }
+
+    function normalizeTrailData(data, index) {
+      let coordinates = [];
+
+      // 1순위: path_coordinates (Supabase 내보내기 형식)
+      if (data.path_coordinates && Array.isArray(data.path_coordinates)) {
+        coordinates = data.path_coordinates.map(p => ({
+          lat: p.lat || p.latitude,
+          lng: p.lng || p.lon || p.longitude,
+          alt: p.alt || p.altitude || p.ele || p.elevation
+        }));
+      }
+      // 2순위: gpx_data.trackPoints (Supabase GPX 데이터)
+      else if (data.gpx_data && data.gpx_data.trackPoints && Array.isArray(data.gpx_data.trackPoints)) {
+        coordinates = data.gpx_data.trackPoints.map(p => ({
+          lat: p.lat || p.latitude,
+          lng: p.lng || p.lon || p.longitude,
+          alt: p.alt || p.ele || p.elevation
+        }));
+      }
+      // 3순위: trackPoints (GPX 파싱 형식)
+      else if (data.trackPoints && Array.isArray(data.trackPoints)) {
+        coordinates = data.trackPoints.map(p => ({
+          lat: p.lat || p.latitude,
+          lng: p.lng || p.lon || p.longitude,
+          alt: p.alt || p.ele || p.elevation
+        }));
+      }
+      // 4순위: coordinates 배열
+      else if (data.coordinates && Array.isArray(data.coordinates)) {
+        coordinates = data.coordinates.map(p => ({
+          lat: p.lat || p.latitude || p[1],
+          lng: p.lng || p.lon || p.longitude || p[0],
+          alt: p.alt || p.ele || p.elevation || p[2]
+        }));
+      }
+
+      // waypoints 추출 (gpx_data 내부 또는 최상위)
+      const rawWaypoints = data.waypoints || (data.gpx_data && data.gpx_data.waypoints) || [];
+      let waypoints = rawWaypoints.map(w => ({
+        ...w,
+        lat: w.lat || w.latitude,
+        lng: w.lng || w.lon || w.longitude
+      }));
+
+      // 지역 정보 추출 (3단계 fallback)
+      // 1단계: 원본 데이터의 region 필드
+      // 2단계: 산 이름 키워드 매칭
+      // 3단계: GPS 좌표 기반 판별
+      let region = data.region || '';
+
+      if (!region && data.mountain) {
+        // 2단계: 산 이름에서 지역 힌트 추출
+        region = extractRegionFromMountain(data.mountain);
+      }
+
+      if (!region && coordinates.length > 0) {
+        // 3단계: 출발점 GPS 좌표로 지역 판별
+        const startPoint = coordinates[0];
+        if (startPoint && startPoint.lat && startPoint.lng) {
+          region = getRegionFromCoordinates(startPoint.lat, startPoint.lng);
+        }
+      }
+
+      // 중간 갭 감지 (좌표 간 500m 이상 거리 점프)
+      let gapCount = 0;
+      const GAP_THRESHOLD = 0.5; // 500m in km
+      for (let i = 0; i < coordinates.length - 1; i++) {
+        const dist = calculateDistanceSimple(
+          coordinates[i].lat, coordinates[i].lng,
+          coordinates[i + 1].lat, coordinates[i + 1].lng
+        );
+        if (dist > GAP_THRESHOLD) {
+          gapCount++;
+        }
+      }
+
+      return {
+        id: data.id || `TRAIL_${index + 1}`,
+        name: data.name || data.courseName || `등산로 ${index + 1}`,
+        mountain: data.mountain || '-',
+        region: region || '미분류',
+        distance: data.distance || 0,
+        coordinates: coordinates,
+        waypoints: waypoints,
+        originalData: data,
+        status: 'pending',
+        hasGap: gapCount > 0,
+        gapCount: gapCount
+      };
+    }
+
+    // 간단한 거리 계산 함수 (Haversine, km 반환)
+    function calculateDistanceSimple(lat1, lng1, lat2, lng2) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    // 산 이름에서 지역 추출 (확장된 키워드 맵)
+    function extractRegionFromMountain(mountain) {
+      const regionMap = {
+        // 강원도
+        '설악': '강원도', '오대': '강원도', '치악': '강원도', '태백': '강원도', '두타': '강원도',
+        '점봉': '강원도', '방태': '강원도', '가리왕': '강원도', '발왕': '강원도', '청옥': '강원도',
+        '응봉': '강원도', '백덕': '강원도', '함백': '강원도', '민둥': '강원도', '대암': '강원도',
+        '덕항': '강원도', '삼악': '강원도', '용화': '강원도', '매봉': '강원도', '계방': '강원도',
+
+        // 서울/경기
+        '북한': '서울/경기', '관악': '서울/경기', '도봉': '서울/경기', '수락': '서울/경기', '불암': '서울/경기',
+        '청계': '서울/경기', '아차': '서울/경기', '용마': '서울/경기', '인왕': '서울/경기', '안산': '서울/경기',
+        '광교': '서울/경기', '명지': '강원도', '화악': '강원도', '운악': '서울/경기', '축령': '서울/경기',
+        '천마': '서울/경기', '유명': '강원도', '소요': '서울/경기', '감악': '서울/경기', '칼봉': '서울/경기',
+        '명성': '강원도', '백운': '서울/경기', '국망': '강원도', '연인': '서울/경기',
+
+        // 충청도
+        '계룡': '충청도', '속리': '충청도', '칠갑': '충청도', '대둔': '충청도', '천태': '충청도',
+        '서대': '충청도', '금산': '충청도', '백월': '충청도', '성주': '충청도', '월악': '충청도',
+        '주흘': '충청도', '천등': '충청도', '만뢰': '충청도', '갑하': '충청도', '가야': '충청도',
+
+        // 전라도
+        '지리': '전라도', '무등': '전라도', '내장': '전라도', '덕유': '전라도', '조계': '전라도',
+        '백암': '전라도', '월출': '전라도', '두륜': '전라도', '팔영': '전라도', '천관': '전라도',
+        '불갑': '전라도', '입암': '전라도', '천봉': '전라도', '마이': '전라도', '변산': '전라도',
+        '추월': '전라도', '방장': '전라도', '모악': '전라도', '선운': '전라도', '무룡': '전라도',
+
+        // 경상도
+        '팔공': '경상도', '주왕': '경상도', '비슬': '경상도', '금정': '경상도', '황악': '경상도',
+        '가지': '경상도', '운문': '경상도', '신불': '경상도', '재약': '경상도', '영축': '경상도',
+        '천성': '경상도', '화왕': '경상도', '황매': '경상도', '금오': '경상도', '주산': '경상도',
+        '가야': '경상도', '합천': '경상도', '청량': '경상도', '보경': '경상도', '토함': '경상도',
+        '남산': '경상도', '무학': '경상도', '천황': '경상도', '지룡': '경상도', '두무': '경상도',
+
+        // 제주도
+        '한라': '제주도', '성판악': '제주도', '어리목': '제주도', '영실': '제주도', '관음': '제주도',
+        '어승': '제주도', '돈내코': '제주도', '오름': '제주도', '산방': '제주도', '송악': '제주도'
+      };
+
+      for (const [keyword, region] of Object.entries(regionMap)) {
+        if (mountain.includes(keyword)) return region;
+      }
+      return '';
+    }
+
+    // GPS 좌표 기반 지역 판별 (출발점 기준)
+    function getRegionFromCoordinates(lat, lng) {
+      if (!lat || !lng) return '';
+
+      // 제주도 (가장 먼저 체크 - 섬 지역)
+      if (lat >= 33.1 && lat <= 33.6 && lng >= 126.1 && lng <= 126.98) {
+        return '제주도';
+      }
+
+      // 울릉도/독도 제외 (필요시)
+      if (lat >= 37.4 && lat <= 37.55 && lng >= 130.8 && lng <= 131.9) {
+        return '경상도'; // 울릉도는 경상북도
+      }
+
+      // 강원도 (동해안 + 산간 지역)
+      if (lat >= 37.0 && lat <= 38.6) {
+        if (lng >= 127.7 && lng <= 129.4) {
+          return '강원도';
+        }
+        // 강원도 서쪽 경계 (춘천, 원주 등)
+        if (lng >= 127.3 && lng <= 127.7 && lat >= 37.2 && lat <= 38.0) {
+          return '강원도';
+        }
+      }
+
+      // 경기도/서울 (수도권)
+      if (lat >= 36.9 && lat <= 38.0 && lng >= 126.3 && lng <= 127.5) {
+        // 서울 중심부
+        if (lat >= 37.4 && lat <= 37.7 && lng >= 126.8 && lng <= 127.2) {
+          return '서울/경기';
+        }
+        // 경기 북부 (연천, 포천, 가평 등) - 일부는 강원도와 겹침
+        if (lat >= 37.7 && lng >= 127.0 && lng <= 127.5) {
+          return '서울/경기';
+        }
+        // 경기 남부 및 서부
+        if (lat >= 36.9 && lat <= 37.7) {
+          return '서울/경기';
+        }
+      }
+
+      // 충청북도
+      if (lat >= 36.3 && lat <= 37.2 && lng >= 127.3 && lng <= 128.2) {
+        return '충청도';
+      }
+
+      // 충청남도
+      if (lat >= 35.9 && lat <= 37.0 && lng >= 125.9 && lng <= 127.4) {
+        return '충청도';
+      }
+
+      // 전라북도
+      if (lat >= 35.3 && lat <= 36.2 && lng >= 126.3 && lng <= 127.9) {
+        return '전라도';
+      }
+
+      // 전라남도
+      if (lat >= 34.0 && lat <= 35.5 && lng >= 125.9 && lng <= 127.8) {
+        return '전라도';
+      }
+
+      // 경상북도
+      if (lat >= 35.6 && lat <= 37.1 && lng >= 128.3 && lng <= 129.6) {
+        return '경상도';
+      }
+
+      // 경상남도
+      if (lat >= 34.5 && lat <= 35.9 && lng >= 127.6 && lng <= 129.4) {
+        return '경상도';
+      }
+
+      // 대구/부산 도심
+      if (lat >= 35.0 && lat <= 36.0 && lng >= 128.4 && lng <= 129.2) {
+        return '경상도';
+      }
+
+      // 경계가 애매한 경우 더 세밀하게 판단
+      // 지리산 권역 (전라도/경상도 경계)
+      if (lat >= 35.2 && lat <= 35.5 && lng >= 127.4 && lng <= 127.9) {
+        return '전라도'; // 지리산은 전라도로 분류
+      }
+
+      // 덕유산 권역
+      if (lat >= 35.7 && lat <= 36.0 && lng >= 127.6 && lng <= 128.0) {
+        return '전라도';
+      }
+
+      // 소백산 권역 (충청도/경상도 경계)
+      if (lat >= 36.8 && lat <= 37.1 && lng >= 128.3 && lng <= 128.6) {
+        return '충청도';
+      }
+
+      return ''; // 판별 불가
+    }
+
+    // ========================================
+    // Trail List
+    // ========================================
+    function renderTrailList() {
+      const container = document.getElementById('trailList');
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const regionFilter = document.getElementById('regionFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      container.innerHTML = '';
+
+      let filtered = state.trails;
+
+      // 지역 필터
+      if (regionFilter) {
+        filtered = filtered.filter(trail => trail.region === regionFilter);
+      }
+
+      // 상태 필터
+      if (statusFilter) {
+        if (statusFilter === 'hasGap') {
+          filtered = filtered.filter(trail => trail.hasGap === true);
+        } else {
+          filtered = filtered.filter(trail => trail.status === statusFilter);
+        }
+      }
+
+      // 검색어 필터
+      if (searchTerm) {
+        filtered = filtered.filter(trail =>
+          trail.name.toLowerCase().includes(searchTerm) ||
+          trail.mountain.toLowerCase().includes(searchTerm) ||
+          trail.region.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      filtered.forEach((trail) => {
+        const originalIndex = state.trails.indexOf(trail);
+        const item = document.createElement('div');
+        item.className = `trail-item ${trail.status}`;
+        if (originalIndex === state.currentIndex) item.classList.add('selected');
+        if (trail.hasGap) item.classList.add('has-gap');
+
+        const statusIcon = trail.status === 'validated' ? '✅' :
+                          trail.status === 'failed' ? '❌' : '○';
+        const gapBadge = trail.hasGap ? `<span class="gap-badge">갭${trail.gapCount}</span>` : '';
+
+        item.innerHTML = `
+          <div class="trail-item-name" title="${trail.name}">${statusIcon} ${trail.name}${gapBadge}</div>
+          <div class="trail-item-meta">
+            <span>${trail.mountain}</span>
+            <span style="color: var(--gray-400);">${trail.region}</span>
+            <span>${trail.coordinates.length}개</span>
+          </div>
+        `;
+        item.onclick = () => selectTrail(originalIndex);
+        container.appendChild(item);
+      });
+
+      // 필터된 결과 카운트 표시
+      const totalFiltered = filtered.length;
+      const totalAll = state.trails.length;
+      document.getElementById('progressText').textContent =
+        regionFilter || statusFilter || searchTerm
+          ? `${totalFiltered}/${totalAll} (필터됨)`
+          : `${state.validatedTrails.length + state.failedTrails.length}/${totalAll}`;
+
+      // 지역 통계 업데이트
+      updateRegionStats();
+    }
+
+    function filterTrails() {
+      renderTrailList();
+    }
+
+    // ========================================
+    // Trail Selection
+    // ========================================
+    function selectTrail(index) {
+      if (index < 0 || index >= state.trails.length) return;
+
+      state.currentIndex = index;
+      state.currentTrail = state.trails[index];
+      state.originalCoordinates = [...state.currentTrail.coordinates];
+      state.modifiedCoordinates = [...state.currentTrail.coordinates];
+      state.startIndex = 0;
+      state.endIndex = state.currentTrail.coordinates.length - 1;
+      state.originalLength = calculateTotalDistance(state.originalCoordinates);
+      state.currentLength = state.originalLength;
+
+      // Reset canvas view
+      state.canvasZoom = 1;
+      state.canvasPanX = 0;
+      state.canvasPanY = 0;
+
+      ['trailInfoCard', 'routePreviewCard', 'endpointCard', 'lengthCard', 'saveLoadCard'].forEach(id => {
+        document.getElementById(id).classList.remove('hidden');
+      });
+
+      updateTrailInfo();
+      updateEndpoints();
+      updateGapStatus();
+      updateLengthValidation();
+      drawRouteCanvas();
+      if (state.mapVisible) updateKakaoMap();
+      renderTrailList();
+      updateNavigationButtons();
+
+      // 선택 로그 및 갭 요약
+      addLog(`========================================`);
+      addLog(`선택: ${state.currentTrail.name}`);
+      addLog(`  전체 좌표: ${state.modifiedCoordinates.length}개`);
+      addLog(`  선택 범위: ${state.startIndex} ~ ${state.endIndex}`);
+
+      if (state.gaps.length > 0) {
+        addLog(`  ⚠️ 갭 ${state.gaps.length}개 감지됨:`);
+        state.gaps.forEach((gap, idx) => {
+          addLog(`     ${idx + 1}. ${gap.description}`);
+        });
+      } else {
+        addLog(`  ✅ 갭 없음`);
+      }
+      addLog(`========================================`);
+    }
+
+    function updateTrailInfo() {
+      const trail = state.currentTrail;
+      const coords = state.modifiedCoordinates;
+
+      document.getElementById('infoName').textContent = trail.name;
+      document.getElementById('infoMountain').textContent = trail.mountain;
+      document.getElementById('infoDistance').textContent = formatDistance(state.originalLength);
+      document.getElementById('infoCoordCount').textContent = coords.length;
+
+      if (coords.length > 0) {
+        const startAlt = coords[0].alt || 0;
+        const endAlt = coords[coords.length - 1].alt || 0;
+        document.getElementById('infoElevationDiff').textContent = `${Math.round(Math.abs(endAlt - startAlt))}m`;
+      }
+    }
+
+    function updateEndpoints() {
+      const coords = state.modifiedCoordinates;
+      const start = coords[state.startIndex];
+      const end = coords[state.endIndex];
+      const waypoints = state.currentTrail.waypoints;
+
+      document.getElementById('startIndex').textContent = state.startIndex;
+      document.getElementById('endIndex').textContent = state.endIndex;
+
+      if (start) {
+        document.getElementById('startCoords').textContent = formatCoords(start.lat, start.lng);
+        document.getElementById('startAltitude').textContent = start.alt ? `고도: ${Math.round(start.alt)}m` : '';
+        const nearbyStart = findNearbyWaypoints(start, waypoints, 0.1);
+        renderWaypointTags('startWaypointTags', nearbyStart);
+      }
+
+      if (end) {
+        document.getElementById('endCoords').textContent = formatCoords(end.lat, end.lng);
+        document.getElementById('endAltitude').textContent = end.alt ? `고도: ${Math.round(end.alt)}m` : '';
+        const nearbyEnd = findNearbyWaypoints(end, waypoints, 0.1);
+        renderWaypointTags('endWaypointTags', nearbyEnd);
+      }
+
+      updateRouteInfo();
+    }
+
+    function renderWaypointTags(containerId, waypoints) {
+      const container = document.getElementById(containerId);
+      if (!waypoints || waypoints.length === 0) {
+        container.innerHTML = '<span style="color: var(--gray-400); font-size: 11px;">없음</span>';
+        return;
+      }
+
+      container.innerHTML = waypoints.map(wp => {
+        const name = wp.name || wp.category || '-';
+        const dist = Math.round(wp.distance * 1000);
+        const isHighlight = isLocationKeyword(name);
+        return `<span class="waypoint-tag ${isHighlight ? 'highlight' : ''}">${name}<span class="distance">(${dist}m)</span></span>`;
+      }).join('');
+    }
+
+    function updateRouteInfo() {
+      const coords = state.modifiedCoordinates;
+      if (coords.length === 0) return;
+
+      const start = coords[state.startIndex];
+      const end = coords[state.endIndex];
+      const alts = coords.filter(c => c.alt).map(c => c.alt);
+
+      document.getElementById('routeStartAlt').textContent = start.alt ? `${Math.round(start.alt)}m` : '-';
+      document.getElementById('routeEndAlt').textContent = end.alt ? `${Math.round(end.alt)}m` : '-';
+
+      if (alts.length > 0) {
+        document.getElementById('routeMaxAlt').textContent = `${Math.round(Math.max(...alts))}m`;
+        document.getElementById('routeMinAlt').textContent = `${Math.round(Math.min(...alts))}m`;
+      }
+
+      const startAlt = start.alt || 0;
+      const endAlt = end.alt || 0;
+      let direction = '평지';
+      if (endAlt - startAlt > 50) direction = '상행 ↑';
+      else if (startAlt - endAlt > 50) direction = '하행 ↓';
+      document.getElementById('routeDirection').textContent = direction;
+    }
+
+    // ========================================
+    // Gap Detection & Filling
+    // ========================================
+
+    // 경로 중간 갭 감지를 위한 거리 임계값 (km)
+    // 두 연속 좌표 사이 거리가 이 값을 초과하면 갭으로 간주
+    // 기본값: 500m (0.5km), UI에서 변경 가능
+    let GAP_DISTANCE_THRESHOLD_KM = 0.5;
+
+    function onGapThresholdChange() {
+      const input = document.getElementById('gapThreshold');
+      const valueM = parseInt(input.value, 10);
+      if (valueM >= 50 && valueM <= 5000) {
+        GAP_DISTANCE_THRESHOLD_KM = valueM / 1000;
+        addLog(`중간 갭 임계값 변경: ${valueM}m`);
+        if (state.currentTrail) {
+          updateGapStatus();
+          drawRouteCanvas();
+          if (state.mapVisible) updateKakaoMap();
+        }
+      }
+    }
+
+    function detectGaps() {
+      const coords = state.modifiedCoordinates;
+
+      // 갭 정보 초기화
+      state.gapInfo = {
+        startGap: [],
+        endGap: [],
+        startGapIndices: [],
+        endGapIndices: [],
+        startGapForDraw: [],
+        endGapForDraw: []
+      };
+
+      // 전체 갭 배열 초기화 (모든 종류의 갭을 저장)
+      state.gaps = [];
+
+      // 1. 앞쪽 갭 감지 (startIndex > 0인 경우)
+      if (state.startIndex > 0) {
+        state.gapInfo.startGap = coords.slice(0, state.startIndex);
+        state.gapInfo.startGapIndices = Array.from({length: state.startIndex}, (_, i) => i);
+        state.gapInfo.startGapForDraw = coords.slice(0, state.startIndex + 1);
+
+        state.gaps.push({
+          type: 'front',
+          startIdx: 0,
+          endIdx: state.startIndex - 1,
+          pointCount: state.startIndex,
+          description: `앞쪽 ${state.startIndex}개 포인트 제외됨`
+        });
+      }
+
+      // 2. 뒤쪽 갭 감지 (endIndex < 마지막 인덱스인 경우)
+      if (state.endIndex < coords.length - 1) {
+        state.gapInfo.endGap = coords.slice(state.endIndex + 1);
+        state.gapInfo.endGapIndices = Array.from({length: coords.length - 1 - state.endIndex}, (_, i) => state.endIndex + 1 + i);
+        state.gapInfo.endGapForDraw = coords.slice(state.endIndex);
+
+        state.gaps.push({
+          type: 'back',
+          startIdx: state.endIndex + 1,
+          endIdx: coords.length - 1,
+          pointCount: coords.length - 1 - state.endIndex,
+          description: `뒤쪽 ${coords.length - 1 - state.endIndex}개 포인트 제외됨`
+        });
+      }
+
+      // 3. 중간 갭 감지 (선택된 경로 내에서 거리 점프 감지)
+      state.gapInfo.middleGaps = [];
+      for (let i = state.startIndex; i < state.endIndex; i++) {
+        const dist = calculateDistance(
+          coords[i].lat, coords[i].lng,
+          coords[i + 1].lat, coords[i + 1].lng
+        );
+
+        if (dist > GAP_DISTANCE_THRESHOLD_KM) {
+          const gapInfo = {
+            type: 'middle',
+            startIdx: i,
+            endIdx: i + 1,
+            distance: dist,
+            distanceM: Math.round(dist * 1000),
+            description: `인덱스 ${i}→${i+1} 사이 ${Math.round(dist * 1000)}m 거리 점프`
+          };
+          state.gapInfo.middleGaps.push(gapInfo);
+          state.gaps.push(gapInfo);
+        }
+      }
+
+      // 갭 유무 판단
+      state.hasGap = state.gaps.length > 0;
+    }
+
+    function updateGapStatus() {
+      detectGaps();
+
+      const section = document.getElementById('gapSection');
+      const icon = document.getElementById('gapIcon');
+      const message = document.getElementById('gapMessage');
+      const fillBtn = document.getElementById('fillGapBtn');
+
+      if (state.hasGap) {
+        section.classList.add('has-gap');
+        icon.textContent = '⚠️';
+
+        let gapDescriptions = [];
+        const startGapCount = state.gapInfo.startGap.length;
+        const endGapCount = state.gapInfo.endGap.length;
+        const middleGapCount = state.gapInfo.middleGaps ? state.gapInfo.middleGaps.length : 0;
+
+        if (startGapCount > 0) {
+          gapDescriptions.push(`앞쪽 ${startGapCount}개`);
+        }
+        if (endGapCount > 0) {
+          gapDescriptions.push(`뒤쪽 ${endGapCount}개`);
+        }
+        if (middleGapCount > 0) {
+          const totalDist = state.gapInfo.middleGaps.reduce((sum, g) => sum + g.distanceM, 0);
+          gapDescriptions.push(`중간 ${middleGapCount}개 거리 점프 (총 ${totalDist}m)`);
+        }
+
+        const activeCount = state.endIndex - state.startIndex + 1;
+
+        let messageHtml = `<strong>갭 ${state.gaps.length}개 감지:</strong> ${gapDescriptions.join(' + ')}`;
+        messageHtml += `<br><small style="color:#6b7280;">현재 선택: ${activeCount}개 / 전체: ${state.modifiedCoordinates.length}개</small>`;
+
+        // 상세 정보 표시
+        if (state.gaps.length > 0) {
+          messageHtml += '<div style="margin-top:8px;font-size:11px;max-height:100px;overflow-y:auto;">';
+          state.gaps.forEach((gap, idx) => {
+            const gapType = gap.type === 'front' ? '🔵 앞' : gap.type === 'back' ? '🔴 뒤' : '🟡 중간';
+            messageHtml += `<div style="padding:2px 0;">${idx + 1}. ${gapType}: ${gap.description}</div>`;
+          });
+          messageHtml += '</div>';
+        }
+
+        message.innerHTML = messageHtml;
+
+        const fillMiddleBtn = document.getElementById('fillMiddleGapBtn');
+
+        // 앞/뒤 갭 버튼
+        if (startGapCount > 0 || endGapCount > 0) {
+          fillBtn.classList.remove('hidden');
+        } else {
+          fillBtn.classList.add('hidden');
+        }
+
+        // 중간 갭 메꾸기 버튼
+        if (middleGapCount > 0) {
+          fillMiddleBtn.classList.remove('hidden');
+          fillMiddleBtn.textContent = `🔗 중간 갭 ${middleGapCount}개 메꾸기`;
+        } else {
+          fillMiddleBtn.classList.add('hidden');
+        }
+      } else {
+        section.classList.remove('has-gap');
+        icon.textContent = '✅';
+        message.textContent = `갭 없음 - 전체 ${state.modifiedCoordinates.length}개 좌표 선택됨`;
+        fillBtn.classList.add('hidden');
+        document.getElementById('fillMiddleGapBtn').classList.add('hidden');
+      }
+    }
+
+    // 앞/뒤 갭 복원: 제외된 앞/뒤 경로를 다시 선택 범위에 포함
+    // 왕복코스의 경우 역순 경로를 생성하여 추가
+    function fillFrontBackGap() {
+      const coords = state.modifiedCoordinates;
+      const currentStart = state.startIndex;
+      const currentEnd = state.endIndex;
+
+      addLog(`========================================`);
+      addLog(`앞/뒤 갭 복원 실행:`);
+      addLog(`  변경 전: 인덱스 ${currentStart} ~ ${currentEnd}`);
+      addLog(`  전체 좌표: ${coords.length}개`);
+
+      // 왕복코스 감지: 현재 선택된 경로의 끝점과 시작점 사이 거리 확인
+      const startCoord = coords[currentStart];
+      const endCoord = coords[currentEnd];
+      const startEndDistance = calculateDistance(startCoord.lat, startCoord.lng, endCoord.lat, endCoord.lng);
+
+      addLog(`  출발점-도착점 거리: ${Math.round(startEndDistance * 1000)}m`);
+
+      // 뒤쪽 갭이 있고, 도착점이 출발점과 멀리 떨어져 있는 경우 (왕복코스 가능성)
+      const hasBackGap = state.gapInfo.endGap && state.gapInfo.endGap.length > 0;
+      const hasFrontGap = state.gapInfo.startGap && state.gapInfo.startGap.length > 0;
+
+      // 왕복코스 판단 기준:
+      // 1. 뒤쪽 갭이 전체의 40% 이상이거나
+      // 2. 도착점이 출발점으로부터 500m 이상 떨어져 있고 뒤쪽 갭이 존재
+      const backGapRatio = state.gapInfo.endGap ? state.gapInfo.endGap.length / coords.length : 0;
+      const isRoundTripCandidate = (backGapRatio >= 0.4) || (startEndDistance > 0.5 && hasBackGap);
+
+      addLog(`  뒤쪽 갭 비율: ${(backGapRatio * 100).toFixed(1)}%`);
+      addLog(`  왕복코스 후보: ${isRoundTripCandidate ? '예' : '아니오'}`);
+
+      if (isRoundTripCandidate && hasBackGap && !hasFrontGap) {
+        // 왕복코스로 처리: 현재 경로를 역순으로 복사하여 추가
+        addLog(`  → 왕복코스로 처리: 역순 경로 생성`);
+
+        // 현재 선택된 경로 (출발 → 도착)
+        const selectedPath = coords.slice(currentStart, currentEnd + 1);
+
+        // 역순 경로 생성 (도착 → 출발, 첫 번째 점은 중복이므로 제외)
+        const returnPath = [];
+        for (let i = selectedPath.length - 2; i >= 0; i--) {
+          returnPath.push({
+            lat: selectedPath[i].lat,
+            lng: selectedPath[i].lng,
+            alt: selectedPath[i].alt
+          });
+        }
+
+        addLog(`  원래 경로: ${selectedPath.length}개`);
+        addLog(`  역순 경로: ${returnPath.length}개 (중복 제거)`);
+
+        // 새 좌표 배열 생성
+        state.modifiedCoordinates = [...selectedPath, ...returnPath];
+        state.startIndex = 0;
+        state.endIndex = state.modifiedCoordinates.length - 1;
+
+        addLog(`  최종 좌표: ${state.modifiedCoordinates.length}개`);
+        addLog(`  경로: 출발(${currentStart}) → 도착(${currentEnd}) → 출발(${state.endIndex})`);
+
+        showToast(`왕복코스 생성: ${returnPath.length}개 포인트 추가됨`, 'success');
+      } else {
+        // 일반적인 갭 복원: 전체 경로로 확장
+        state.startIndex = 0;
+        state.endIndex = coords.length - 1;
+
+        addLog(`  → 일반 갭 복원: 전체 범위로 확장`);
+        showToast(`앞/뒤 갭 복원됨: 전체 ${coords.length}개 좌표 선택`, 'success');
+      }
+
+      addLog(`  변경 후: 인덱스 0 ~ ${state.endIndex} (전체 ${state.modifiedCoordinates.length}개)`);
+      addLog(`========================================`);
+
+      updateEndpoints();
+      updateGapStatus();
+      updateLengthValidation();
+      drawRouteCanvas();
+      if (state.mapVisible) updateKakaoMap();
+    }
+
+    // ========================================
+    // 중간 갭 메꾸기 (등산로 특수성 반영)
+    // ========================================
+    //
+    // 알고리즘 설명:
+    // 1. 갭: 두 연속 좌표 사이 거리가 임계값 초과
+    // 2. 갭의 끝점(E)과 가장 가까운 기존 경로 지점을 찾음
+    // 3. 갭 시작점(D)에서 가장 가까운 지점까지 역순으로 경로 삽입
+    //
+    // 예시: A-B-C-D-[갭]-E-F-G, E가 A 근처
+    //       → A-B-C-D-C-B-A-E-F-G (D에서 A까지 역순 삽입)
+    //
+    function fillMiddleGaps() {
+      if (!state.gapInfo.middleGaps || state.gapInfo.middleGaps.length === 0) {
+        showToast('채울 중간 갭이 없습니다', 'warning');
+        return;
+      }
+
+      addLog(`========================================`);
+      addLog(`중간 갭 메꾸기 시작 (등산로 경로 보간)`);
+      addLog(`  갭 개수: ${state.gapInfo.middleGaps.length}개`);
+
+      // 갭을 뒤에서부터 처리 (인덱스 유지를 위해)
+      const gaps = [...state.gapInfo.middleGaps].sort((a, b) => b.startIdx - a.startIdx);
+      let coords = [...state.modifiedCoordinates];
+      let totalInserted = 0;
+
+      for (const gap of gaps) {
+        const gapStartIdx = gap.startIdx;  // 갭 시작점 (D)
+        const gapEndIdx = gap.endIdx;      // 갭 끝점 (E)
+        const gapStartCoord = coords[gapStartIdx];
+        const gapEndCoord = coords[gapEndIdx];
+
+        addLog(`  ─────────────────────────────`);
+        addLog(`  갭 처리: 인덱스 ${gapStartIdx} → ${gapEndIdx} (${gap.distanceM}m)`);
+
+        // 1. 갭 끝점(E)과 가장 가까운 기존 좌표를 찾음 (갭 시작점 이전 범위에서)
+        let nearestIdx = 0;
+        let nearestDist = Infinity;
+
+        for (let i = 0; i <= gapStartIdx; i++) {
+          const dist = calculateDistance(
+            coords[i].lat, coords[i].lng,
+            gapEndCoord.lat, gapEndCoord.lng
+          );
+          if (dist < nearestDist) {
+            nearestDist = dist;
+            nearestIdx = i;
+          }
+        }
+
+        addLog(`    갭 끝점(${gapEndIdx})과 가장 가까운 지점: 인덱스 ${nearestIdx} (거리: ${Math.round(nearestDist * 1000)}m)`);
+
+        // 2. 갭 시작점(D)에서 가장 가까운 지점(nearestIdx)까지 역순으로 경로 생성
+        // 예: D(3) → nearestIdx(0) 이면, 삽입할 포인트는 C(2), B(1), A(0)
+        const fillPoints = [];
+        for (let i = gapStartIdx - 1; i >= nearestIdx; i--) {
+          // 좌표 복사 (원본 수정 방지)
+          fillPoints.push({
+            lat: coords[i].lat,
+            lng: coords[i].lng,
+            alt: coords[i].alt
+          });
+        }
+
+        if (fillPoints.length === 0) {
+          addLog(`    ⚠️ 삽입할 포인트가 없음 (이미 가장 가까운 지점)`);
+          continue;
+        }
+
+        addLog(`    삽입 포인트: ${fillPoints.length}개 (인덱스 ${gapStartIdx - 1} → ${nearestIdx} 역순)`);
+
+        // 3. 새 좌표 배열 생성
+        // [0...gapStartIdx] + fillPoints + [gapEndIdx...]
+        coords = [
+          ...coords.slice(0, gapStartIdx + 1),  // 갭 시작점까지 포함
+          ...fillPoints,                         // 역순 경로 삽입
+          ...coords.slice(gapEndIdx)             // 갭 끝점부터 끝까지
+        ];
+
+        totalInserted += fillPoints.length;
+        addLog(`    결과: ${gapStartIdx + 1}개 + ${fillPoints.length}개(삽입) + ${state.modifiedCoordinates.length - gapEndIdx}개`);
+      }
+
+      // 상태 업데이트
+      state.modifiedCoordinates = coords;
+      state.startIndex = 0;
+      state.endIndex = coords.length - 1;
+
+      addLog(`  ─────────────────────────────`);
+      addLog(`  완료: 총 ${totalInserted}개 포인트 삽입됨`);
+      addLog(`  최종 좌표 개수: ${coords.length}개`);
+      addLog(`========================================`);
+
+      updateEndpoints();
+      updateGapStatus();
+      updateLengthValidation();
+      drawRouteCanvas();
+      if (state.mapVisible) updateKakaoMap();
+
+      showToast(`중간 갭 메꿔짐: ${totalInserted}개 포인트 삽입`, 'success');
+    }
+
+    // ========================================
+    // 왕복코스 생성 (명시적)
+    // ========================================
+    // 현재 선택된 경로를 왕복코스로 변환
+    // A → B → C → D → E → F 를
+    // A → B → C → D → E → F → E → D → C → B → A 로 변환
+    function generateRoundTrip() {
+      const coords = state.modifiedCoordinates;
+
+      addLog(`========================================`);
+      addLog(`왕복코스 생성 실행:`);
+      addLog(`  현재 좌표: ${coords.length}개`);
+      addLog(`  선택 범위: ${state.startIndex} ~ ${state.endIndex}`);
+
+      // 현재 선택된 경로
+      const selectedPath = coords.slice(state.startIndex, state.endIndex + 1);
+
+      if (selectedPath.length < 2) {
+        showToast('최소 2개 이상의 좌표가 필요합니다', 'error');
+        addLog(`  ❌ 오류: 좌표 부족 (${selectedPath.length}개)`);
+        return;
+      }
+
+      // 시작점과 끝점 거리 확인
+      const startCoord = selectedPath[0];
+      const endCoord = selectedPath[selectedPath.length - 1];
+      const startEndDist = calculateDistance(startCoord.lat, startCoord.lng, endCoord.lat, endCoord.lng);
+
+      addLog(`  출발점: ${startCoord.lat.toFixed(5)}, ${startCoord.lng.toFixed(5)}`);
+      addLog(`  도착점: ${endCoord.lat.toFixed(5)}, ${endCoord.lng.toFixed(5)}`);
+      addLog(`  출발-도착 거리: ${Math.round(startEndDist * 1000)}m`);
+
+      // 이미 왕복코스인지 확인 (시작점과 끝점이 매우 가까움)
+      if (startEndDist < 0.05) { // 50m 이내면 이미 왕복코스로 간주
+        showToast('이미 왕복코스입니다 (출발-도착 거리 50m 미만)', 'warning');
+        addLog(`  ⚠️ 이미 왕복코스 (거리 ${Math.round(startEndDist * 1000)}m)`);
+        return;
+      }
+
+      // 역순 경로 생성 (도착 → 출발, 첫 점은 중복이므로 제외)
+      const returnPath = [];
+      for (let i = selectedPath.length - 2; i >= 0; i--) {
+        returnPath.push({
+          lat: selectedPath[i].lat,
+          lng: selectedPath[i].lng,
+          alt: selectedPath[i].alt
+        });
+      }
+
+      addLog(`  원래 경로: ${selectedPath.length}개`);
+      addLog(`  역순 경로: ${returnPath.length}개`);
+
+      // 새 좌표 배열 생성
+      state.modifiedCoordinates = [...selectedPath, ...returnPath];
+      state.startIndex = 0;
+      state.endIndex = state.modifiedCoordinates.length - 1;
+
+      const newLength = state.modifiedCoordinates.length;
+      addLog(`  최종 좌표: ${newLength}개`);
+      addLog(`  경로: 출발(0) → 도착(${selectedPath.length - 1}) → 출발(${newLength - 1})`);
+      addLog(`========================================`);
+
+      updateEndpoints();
+      updateGapStatus();
+      updateLengthValidation();
+      drawRouteCanvas();
+      if (state.mapVisible) updateKakaoMap();
+
+      showToast(`왕복코스 생성 완료: ${selectedPath.length} → ${newLength}개 좌표`, 'success');
+    }
+
+    // ========================================
+    // Endpoint Modification
+    // ========================================
+    function reverseTrail() {
+      state.modifiedCoordinates = [...state.modifiedCoordinates].reverse();
+      state.startIndex = 0;
+      state.endIndex = state.modifiedCoordinates.length - 1;
+
+      updateEndpoints();
+      updateGapStatus();
+      updateLengthValidation();
+      drawRouteCanvas();
+      if (state.mapVisible) updateKakaoMap();
+
+      addLog('경로 방향 반전됨');
+      showToast('경로 방향이 반전되었습니다');
+    }
+
+    function updateLengthValidation() {
+      // Calculate length only for the segment between start and end
+      const segment = state.modifiedCoordinates.slice(state.startIndex, state.endIndex + 1);
+      state.currentLength = calculateTotalDistance(segment);
+      const ratio = state.originalLength > 0 ? state.currentLength / state.originalLength : 1;
+
+      document.getElementById('originalLength').textContent = formatDistance(state.originalLength);
+      document.getElementById('currentLength').textContent = formatDistance(state.currentLength);
+
+      const ratioEl = document.getElementById('lengthRatio');
+      ratioEl.textContent = `${ratio.toFixed(2)}x`;
+      ratioEl.className = 'value ' + (ratio <= 2.5 ? 'pass' : 'fail');
+
+      document.getElementById('validateBtn').disabled = ratio > 2.5;
+    }
+
+    function updateNavigationButtons() {
+      document.getElementById('prevBtn').disabled = state.currentIndex <= 0;
+      document.getElementById('nextBtn').disabled = state.currentIndex >= state.trails.length - 1;
+    }
+
+    function updateStats() {
+      document.getElementById('statCompleted').textContent = state.validatedTrails.length;
+      document.getElementById('statFailed').textContent = state.failedTrails.length;
+      document.getElementById('statRemaining').textContent =
+        state.trails.length - state.validatedTrails.length - state.failedTrails.length;
+
+      // 갭 통계 업데이트
+      const gapTrailCount = state.trails.filter(t => t.hasGap).length;
+      document.getElementById('gapCountText').textContent = gapTrailCount;
+    }
+
+    // ========================================
+    // Canvas Drawing with Zoom & Pan
+    // ========================================
+    function drawRouteCanvas() {
+      const canvas = document.getElementById('routeCanvas');
+      const ctx = canvas.getContext('2d');
+      const coords = state.modifiedCoordinates;
+
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = 250;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (coords.length < 2) return;
+
+      const lats = coords.map(c => c.lat);
+      const lngs = coords.map(c => c.lng);
+      const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+      const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
+
+      const padding = 30;
+      const baseScaleX = (canvas.width - padding * 2) / (maxLng - minLng || 1);
+      const baseScaleY = (canvas.height - padding * 2) / (maxLat - minLat || 1);
+      const baseScale = Math.min(baseScaleX, baseScaleY);
+      const scale = baseScale * state.canvasZoom;
+
+      const centerX = canvas.width / 2 + state.canvasPanX;
+      const centerY = canvas.height / 2 + state.canvasPanY;
+      const centerLng = (minLng + maxLng) / 2;
+      const centerLat = (minLat + maxLat) / 2;
+
+      const toX = lng => centerX + (lng - centerLng) * scale;
+      const toY = lat => centerY - (lat - centerLat) * scale;
+
+      // Grid
+      ctx.strokeStyle = '#e5e7eb';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padding + (canvas.height - padding * 2) * i / 4;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+      // Gap regions (orange dashed - to be filled)
+      if (state.gapInfo.startGapForDraw && state.gapInfo.startGapForDraw.length > 1) {
+        ctx.beginPath();
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        const gap = state.gapInfo.startGapForDraw;
+        ctx.moveTo(toX(gap[0].lng), toY(gap[0].lat));
+        for (let i = 1; i < gap.length; i++) {
+          ctx.lineTo(toX(gap[i].lng), toY(gap[i].lat));
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Mark gap start point
+        ctx.beginPath();
+        ctx.fillStyle = '#f59e0b';
+        ctx.arc(toX(gap[0].lng), toY(gap[0].lat), 6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (state.gapInfo.endGapForDraw && state.gapInfo.endGapForDraw.length > 1) {
+        ctx.beginPath();
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        const gap = state.gapInfo.endGapForDraw;
+        ctx.moveTo(toX(gap[0].lng), toY(gap[0].lat));
+        for (let i = 1; i < gap.length; i++) {
+          ctx.lineTo(toX(gap[i].lng), toY(gap[i].lat));
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Mark gap end point
+        const lastGap = gap[gap.length - 1];
+        ctx.beginPath();
+        ctx.fillStyle = '#f59e0b';
+        ctx.arc(toX(lastGap.lng), toY(lastGap.lat), 6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Middle gaps visualization (yellow/orange dashed circles)
+      if (state.gapInfo.middleGaps && state.gapInfo.middleGaps.length > 0) {
+        state.gapInfo.middleGaps.forEach(gap => {
+          const startCoord = coords[gap.startIdx];
+          const endCoord = coords[gap.endIdx];
+
+          // Draw dashed line for middle gap
+          ctx.beginPath();
+          ctx.strokeStyle = '#dc2626';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4, 4]);
+          ctx.moveTo(toX(startCoord.lng), toY(startCoord.lat));
+          ctx.lineTo(toX(endCoord.lng), toY(endCoord.lat));
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Draw warning circle at midpoint
+          const midX = (toX(startCoord.lng) + toX(endCoord.lng)) / 2;
+          const midY = (toY(startCoord.lat) + toY(endCoord.lat)) / 2;
+          ctx.beginPath();
+          ctx.fillStyle = '#fef3c7';
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = 2;
+          ctx.arc(midX, midY, 12, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+
+          // Draw distance text
+          ctx.fillStyle = '#92400e';
+          ctx.font = 'bold 9px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(`${gap.distanceM}m`, midX, midY);
+        });
+      }
+
+      // Main route (blue)
+      ctx.beginPath();
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 3;
+      ctx.moveTo(toX(coords[state.startIndex].lng), toY(coords[state.startIndex].lat));
+      for (let i = state.startIndex + 1; i <= state.endIndex; i++) {
+        // Skip drawing over middle gaps (they're drawn separately)
+        const isMiddleGap = state.gapInfo.middleGaps &&
+          state.gapInfo.middleGaps.some(g => g.startIdx === i - 1 && g.endIdx === i);
+        if (!isMiddleGap) {
+          ctx.lineTo(toX(coords[i].lng), toY(coords[i].lat));
+        } else {
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(toX(coords[i].lng), toY(coords[i].lat));
+        }
+      }
+      ctx.stroke();
+
+      // Start point
+      const startCoord = coords[state.startIndex];
+      ctx.beginPath();
+      ctx.fillStyle = '#2563eb';
+      ctx.arc(toX(startCoord.lng), toY(startCoord.lat), 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('S', toX(startCoord.lng), toY(startCoord.lat));
+
+      // End point
+      const endCoord = coords[state.endIndex];
+      ctx.beginPath();
+      ctx.fillStyle = '#dc2626';
+      ctx.arc(toX(endCoord.lng), toY(endCoord.lat), 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'white';
+      ctx.fillText('E', toX(endCoord.lng), toY(endCoord.lat));
+
+      // Waypoints
+      const waypoints = state.currentTrail.waypoints;
+      if (waypoints && waypoints.length > 0) {
+        waypoints.forEach(wp => {
+          const wpLat = wp.lat || wp.latitude;
+          const wpLng = wp.lng || wp.lon || wp.longitude;
+          if (wpLat && wpLng) {
+            ctx.beginPath();
+            ctx.fillStyle = isLocationKeyword(wp.name || '') ? '#f59e0b' : '#9ca3af';
+            ctx.arc(toX(wpLng), toY(wpLat), 5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+      }
+
+      // Zoom level indicator
+      ctx.fillStyle = '#6b7280';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(`줌: ${(state.canvasZoom * 100).toFixed(0)}%`, canvas.width - 10, 20);
+    }
+
+    function zoomCanvas(factor) {
+      state.canvasZoom = Math.max(0.5, Math.min(5, state.canvasZoom * factor));
+      drawRouteCanvas();
+    }
+
+    function panCanvas(dx, dy) {
+      state.canvasPanX += dx;
+      state.canvasPanY += dy;
+      drawRouteCanvas();
+    }
+
+    function resetCanvasView() {
+      state.canvasZoom = 1;
+      state.canvasPanX = 0;
+      state.canvasPanY = 0;
+      drawRouteCanvas();
+    }
+
+    // ========================================
+    // Kakao Map
+    // ========================================
+    function toggleKakaoMap() {
+      const container = document.getElementById('kakaoMapContainer');
+      state.mapVisible = !state.mapVisible;
+
+      if (state.mapVisible) {
+        container.classList.remove('hidden');
+        if (!state.map) {
+          initKakaoMap();
+        } else {
+          updateKakaoMap();
+        }
+      } else {
+        container.classList.add('hidden');
+      }
+    }
+
+    function initKakaoMap() {
+      if (typeof kakao === 'undefined' || typeof kakao.maps === 'undefined') {
+        showToast('카카오맵 API 로드 실패. 로컬 서버에서 실행해주세요.', 'error');
+        addLog('카카오맵 API 로드 실패 - file:// 프로토콜에서는 작동하지 않을 수 있습니다');
+        document.getElementById('kakaoMap').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f3f4f6;color:#6b7280;font-size:13px;text-align:center;padding:20px;">카카오맵을 로드할 수 없습니다.<br><br>로컬 서버 (localhost)에서 실행하거나<br>브라우저의 CORS 설정을 확인해주세요.</div>';
+        return;
+      }
+
+      try {
+        kakao.maps.load(() => {
+          const container = document.getElementById('kakaoMap');
+          const options = {
+            center: new kakao.maps.LatLng(37.5665, 126.9780),
+            level: 5
+          };
+          state.map = new kakao.maps.Map(container, options);
+
+          // Add zoom control
+          const zoomControl = new kakao.maps.ZoomControl();
+          state.map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+          // Add map type control
+          const mapTypeControl = new kakao.maps.MapTypeControl();
+          state.map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+          addLog('카카오맵 초기화 완료');
+          updateKakaoMap();
+        });
+      } catch (e) {
+        showToast('카카오맵 초기화 오류: ' + e.message, 'error');
+        addLog('카카오맵 초기화 오류: ' + e.message);
+      }
+    }
+
+    function updateKakaoMap() {
+      if (!state.map || !state.mapVisible) return;
+
+      const coords = state.modifiedCoordinates;
+      if (coords.length === 0) return;
+
+      // Clear existing
+      if (state.polyline) state.polyline.setMap(null);
+      state.excludedPolylines.forEach(p => p.setMap(null));
+      state.excludedPolylines = [];
+      state.markers.forEach(m => m.setMap(null));
+      state.markers = [];
+
+      // Gap paths (orange dashed)
+      if (state.gapInfo.startGapForDraw && state.gapInfo.startGapForDraw.length > 1) {
+        const gapPath = state.gapInfo.startGapForDraw.map(c => new kakao.maps.LatLng(c.lat, c.lng));
+        const gapLine = new kakao.maps.Polyline({
+          path: gapPath,
+          strokeWeight: 3,
+          strokeColor: '#f59e0b',
+          strokeOpacity: 0.7,
+          strokeStyle: 'dashed'
+        });
+        gapLine.setMap(state.map);
+        state.excludedPolylines.push(gapLine);
+      }
+
+      if (state.gapInfo.endGapForDraw && state.gapInfo.endGapForDraw.length > 1) {
+        const gapPath = state.gapInfo.endGapForDraw.map(c => new kakao.maps.LatLng(c.lat, c.lng));
+        const gapLine = new kakao.maps.Polyline({
+          path: gapPath,
+          strokeWeight: 3,
+          strokeColor: '#f59e0b',
+          strokeOpacity: 0.7,
+          strokeStyle: 'dashed'
+        });
+        gapLine.setMap(state.map);
+        state.excludedPolylines.push(gapLine);
+      }
+
+      // Middle gaps visualization (red dashed with warning marker)
+      if (state.gapInfo.middleGaps && state.gapInfo.middleGaps.length > 0) {
+        state.gapInfo.middleGaps.forEach(gap => {
+          const gapPath = [
+            new kakao.maps.LatLng(coords[gap.startIdx].lat, coords[gap.startIdx].lng),
+            new kakao.maps.LatLng(coords[gap.endIdx].lat, coords[gap.endIdx].lng)
+          ];
+          const gapLine = new kakao.maps.Polyline({
+            path: gapPath,
+            strokeWeight: 3,
+            strokeColor: '#dc2626',
+            strokeOpacity: 0.8,
+            strokeStyle: 'dashed'
+          });
+          gapLine.setMap(state.map);
+          state.excludedPolylines.push(gapLine);
+
+          // Add warning marker at midpoint
+          const midLat = (coords[gap.startIdx].lat + coords[gap.endIdx].lat) / 2;
+          const midLng = (coords[gap.startIdx].lng + coords[gap.endIdx].lng) / 2;
+          const warningMarker = new kakao.maps.CustomOverlay({
+            position: new kakao.maps.LatLng(midLat, midLng),
+            content: `<div style="padding:4px 8px;background:#fef3c7;border:2px solid #f59e0b;color:#92400e;border-radius:6px;font-size:11px;font-weight:bold;">⚠️ ${gap.distanceM}m 갭</div>`,
+            yAnchor: 0.5
+          });
+          warningMarker.setMap(state.map);
+          state.markers.push(warningMarker);
+        });
+      }
+
+      // Active path (blue) - split by middle gaps
+      if (state.gapInfo.middleGaps && state.gapInfo.middleGaps.length > 0) {
+        // Create segments between middle gaps
+        let segments = [];
+        let lastIdx = state.startIndex;
+
+        state.gapInfo.middleGaps.forEach(gap => {
+          if (gap.startIdx > lastIdx) {
+            segments.push({ start: lastIdx, end: gap.startIdx });
+          }
+          lastIdx = gap.endIdx;
+        });
+
+        // Add final segment
+        if (lastIdx <= state.endIndex) {
+          segments.push({ start: lastIdx, end: state.endIndex });
+        }
+
+        // Draw each segment
+        segments.forEach(seg => {
+          const segPath = coords.slice(seg.start, seg.end + 1)
+            .map(c => new kakao.maps.LatLng(c.lat, c.lng));
+          const segLine = new kakao.maps.Polyline({
+            path: segPath,
+            strokeWeight: 4,
+            strokeColor: '#2563eb',
+            strokeOpacity: 0.9,
+            strokeStyle: 'solid'
+          });
+          segLine.setMap(state.map);
+          state.excludedPolylines.push(segLine);
+        });
+      } else {
+        // No middle gaps - draw continuous path
+        const activePath = coords.slice(state.startIndex, state.endIndex + 1)
+          .map(c => new kakao.maps.LatLng(c.lat, c.lng));
+
+        state.polyline = new kakao.maps.Polyline({
+          path: activePath,
+          strokeWeight: 4,
+          strokeColor: '#2563eb',
+          strokeOpacity: 0.9,
+          strokeStyle: 'solid'
+        });
+        state.polyline.setMap(state.map);
+      }
+
+      // Start marker (blue)
+      const startMarkerImage = new kakao.maps.MarkerImage(
+        'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+        new kakao.maps.Size(24, 35)
+      );
+      const startMarker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(coords[state.startIndex].lat, coords[state.startIndex].lng),
+        map: state.map,
+        title: '출발점'
+      });
+      state.markers.push(startMarker);
+
+      // End marker
+      const endMarker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(coords[state.endIndex].lat, coords[state.endIndex].lng),
+        map: state.map,
+        title: '도착점'
+      });
+      state.markers.push(endMarker);
+
+      // Waypoint markers
+      const waypoints = state.currentTrail.waypoints;
+      if (waypoints && waypoints.length > 0) {
+        waypoints.forEach(wp => {
+          const wpLat = wp.lat || wp.latitude;
+          const wpLng = wp.lng || wp.lon || wp.longitude;
+          if (wpLat && wpLng) {
+            const wpMarker = new kakao.maps.CustomOverlay({
+              position: new kakao.maps.LatLng(wpLat, wpLng),
+              content: `<div style="padding:3px 6px;background:${isLocationKeyword(wp.name || '') ? '#f59e0b' : '#6b7280'};color:white;border-radius:4px;font-size:10px;">${wp.name || wp.category || '?'}</div>`,
+              yAnchor: 1.2
+            });
+            wpMarker.setMap(state.map);
+            state.markers.push(wpMarker);
+          }
+        });
+      }
+
+      // Fit bounds to include all points
+      const bounds = new kakao.maps.LatLngBounds();
+      coords.forEach(c => bounds.extend(new kakao.maps.LatLng(c.lat, c.lng)));
+      state.map.setBounds(bounds);
+    }
+
+    // ========================================
+    // Coordinate Selector
+    // ========================================
+    function openCoordSelector(mode) {
+      state.coordSelectMode = mode;
+      state.selectedCoordIndex = mode === 'start' ? state.startIndex : state.endIndex;
+
+      document.getElementById('coordModalTitle').textContent = mode === 'start' ? '출발점 선택' : '도착점 선택';
+
+      const list = document.getElementById('coordList');
+      list.innerHTML = '';
+
+      state.modifiedCoordinates.forEach((coord, idx) => {
+        const item = document.createElement('div');
+        item.className = 'coord-item' + (idx === state.selectedCoordIndex ? ' selected' : '');
+        item.innerHTML = `
+          <span>[${idx}] ${coord.lat.toFixed(5)}, ${coord.lng.toFixed(5)}</span>
+          <span>${coord.alt ? Math.round(coord.alt) + 'm' : '-'}</span>
+        `;
+        item.onclick = () => {
+          document.querySelectorAll('.coord-item').forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
+          state.selectedCoordIndex = idx;
+        };
+        list.appendChild(item);
+      });
+
+      document.getElementById('coordModal').classList.add('open');
+    }
+
+    function closeCoordModal() {
+      document.getElementById('coordModal').classList.remove('open');
+    }
+
+    function confirmCoordSelection() {
+      if (state.coordSelectMode === 'start') {
+        state.startIndex = state.selectedCoordIndex;
+      } else {
+        state.endIndex = state.selectedCoordIndex;
+      }
+
+      // Ensure startIndex < endIndex
+      if (state.startIndex > state.endIndex) {
+        const temp = state.startIndex;
+        state.startIndex = state.endIndex;
+        state.endIndex = temp;
+      }
+
+      updateEndpoints();
+      updateGapStatus();
+      updateLengthValidation();
+      drawRouteCanvas();
+      if (state.mapVisible) updateKakaoMap();
+      closeCoordModal();
+      addLog(`${state.coordSelectMode === 'start' ? '출발점' : '도착점'} 위치 변경: 인덱스 ${state.selectedCoordIndex}`);
+      showToast(`${state.coordSelectMode === 'start' ? '출발점' : '도착점'} 위치가 변경되었습니다`);
+    }
+
+    // ========================================
+    // Path Add Modal (경로 추가 기능)
+    // ========================================
+    function openPathAddModal() {
+      if (!state.currentTrail) {
+        showToast('먼저 등산로를 선택해주세요', 'error');
+        return;
+      }
+
+      // 원본 좌표 저장 (선택용)
+      state.pathAdd.allCoords = [...state.originalCoordinates];
+      state.pathAdd.step = 1;
+      state.pathAdd.direction = null;
+      state.pathAdd.targetIndex = null;
+
+      // Step 1 표시
+      document.getElementById('pathAddStep1').classList.remove('hidden');
+      document.getElementById('pathAddStep2').classList.add('hidden');
+      document.getElementById('pathAddStep3').classList.add('hidden');
+      document.getElementById('pathAddBackBtn').style.display = 'none';
+      document.getElementById('pathAddNextBtn').style.display = 'none';
+
+      // 뷰 토글 초기화
+      document.getElementById('pathAddListView').classList.remove('hidden');
+      document.getElementById('pathAddMapView').classList.add('hidden');
+      const listBtn = document.getElementById('pathAddViewList');
+      const mapBtn = document.getElementById('pathAddViewMap');
+      listBtn.style.background = 'var(--primary)';
+      listBtn.style.color = 'white';
+      listBtn.classList.remove('btn-outline');
+      mapBtn.style.background = '';
+      mapBtn.style.color = '';
+      mapBtn.classList.add('btn-outline');
+
+      // 현재 경로 정보 표시
+      const coords = state.modifiedCoordinates;
+      const startCoord = coords[state.startIndex];
+      const endCoord = coords[state.endIndex];
+      document.getElementById('pathAddCurrentInfo').innerHTML = `
+        <div>선택 범위: 인덱스 ${state.startIndex} ~ ${state.endIndex} (${state.endIndex - state.startIndex + 1}개)</div>
+        <div>출발점: ${startCoord.lat.toFixed(5)}, ${startCoord.lng.toFixed(5)} ${startCoord.alt ? `(${Math.round(startCoord.alt)}m)` : ''}</div>
+        <div>도착점: ${endCoord.lat.toFixed(5)}, ${endCoord.lng.toFixed(5)} ${endCoord.alt ? `(${Math.round(endCoord.alt)}m)` : ''}</div>
+      `;
+
+      document.getElementById('pathAddModal').classList.add('open');
+      addLog('경로 추가 모달 열림');
+    }
+
+    function closePathAddModal() {
+      document.getElementById('pathAddModal').classList.remove('open');
+
+      // 지도 정리
+      if (state.pathAdd.map) {
+        state.pathAdd.mapMarkers.forEach(m => m.setMap(null));
+        state.pathAdd.mapPolylines.forEach(p => p.setMap(null));
+        state.pathAdd.mapMarkers = [];
+        state.pathAdd.mapPolylines = [];
+      }
+
+      // 뷰 초기화
+      state.pathAdd.view = 'list';
+      document.getElementById('pathAddListView').classList.remove('hidden');
+      document.getElementById('pathAddMapView').classList.add('hidden');
+    }
+
+    function selectPathDirection(direction) {
+      state.pathAdd.direction = direction;
+      state.pathAdd.step = 2;
+
+      // Step 2로 이동
+      document.getElementById('pathAddStep1').classList.add('hidden');
+      document.getElementById('pathAddStep2').classList.remove('hidden');
+      document.getElementById('pathAddBackBtn').style.display = 'inline-flex';
+      document.getElementById('pathAddNextBtn').style.display = 'inline-flex';
+
+      // 방향 정보 표시
+      const coords = state.modifiedCoordinates;
+      const referencePoint = direction === 'front' ? coords[state.startIndex] : coords[state.endIndex];
+      const referenceIdx = direction === 'front' ? state.startIndex : state.endIndex;
+
+      document.getElementById('pathAddDirectionInfo').innerHTML = `
+        <div><strong>${direction === 'front' ? '⬅️ 앞에 추가' : '➡️ 뒤에 추가'}</strong></div>
+        <div>기준점: 인덱스 ${referenceIdx} (${referencePoint.lat.toFixed(5)}, ${referencePoint.lng.toFixed(5)})</div>
+        <div style="margin-top: 6px;">👇 이 지점과 연결할 <strong>목표 지점</strong>을 아래에서 선택하세요</div>
+      `;
+
+      // 좌표 목록 렌더링
+      state.pathAdd.view = 'list';
+      renderPathAddCoordList();
+    }
+
+    function setPathAddView(view) {
+      state.pathAdd.view = view;
+
+      const listBtn = document.getElementById('pathAddViewList');
+      const mapBtn = document.getElementById('pathAddViewMap');
+      const listView = document.getElementById('pathAddListView');
+      const mapView = document.getElementById('pathAddMapView');
+
+      if (view === 'list') {
+        listBtn.style.background = 'var(--primary)';
+        listBtn.style.color = 'white';
+        listBtn.classList.remove('btn-outline');
+        mapBtn.style.background = '';
+        mapBtn.style.color = '';
+        mapBtn.classList.add('btn-outline');
+        listView.classList.remove('hidden');
+        mapView.classList.add('hidden');
+      } else {
+        mapBtn.style.background = 'var(--primary)';
+        mapBtn.style.color = 'white';
+        mapBtn.classList.remove('btn-outline');
+        listBtn.style.background = '';
+        listBtn.style.color = '';
+        listBtn.classList.add('btn-outline');
+        listView.classList.add('hidden');
+        mapView.classList.remove('hidden');
+        initPathAddMap();
+      }
+    }
+
+    function initPathAddMap() {
+      const container = document.getElementById('pathAddMapContainer');
+
+      // 기존 지도 정리
+      if (state.pathAdd.map) {
+        state.pathAdd.mapMarkers.forEach(m => m.setMap(null));
+        state.pathAdd.mapPolylines.forEach(p => p.setMap(null));
+        state.pathAdd.mapMarkers = [];
+        state.pathAdd.mapPolylines = [];
+      }
+
+      if (typeof kakao === 'undefined' || typeof kakao.maps === 'undefined') {
+        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f3f4f6;color:#6b7280;font-size:13px;">카카오맵을 로드할 수 없습니다</div>';
+        return;
+      }
+
+      try {
+        kakao.maps.load(() => {
+          const allCoords = state.pathAdd.allCoords;
+          const modCoords = state.modifiedCoordinates;
+
+          if (allCoords.length === 0) return;
+
+          // 지도 중심 계산
+          const lats = allCoords.map(c => c.lat);
+          const lngs = allCoords.map(c => c.lng);
+          const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2;
+          const centerLng = (Math.min(...lngs) + Math.max(...lngs)) / 2;
+
+          const options = {
+            center: new kakao.maps.LatLng(centerLat, centerLng),
+            level: 5
+          };
+
+          // 지도가 이미 있으면 재사용, 없으면 생성
+          if (!state.pathAdd.map) {
+            state.pathAdd.map = new kakao.maps.Map(container, options);
+          } else {
+            state.pathAdd.map.setCenter(new kakao.maps.LatLng(centerLat, centerLng));
+          }
+
+          const map = state.pathAdd.map;
+
+          // 1. 원본 전체 경로 (주황색 점선)
+          const originalPath = allCoords.map(c => new kakao.maps.LatLng(c.lat, c.lng));
+          const originalPolyline = new kakao.maps.Polyline({
+            path: originalPath,
+            strokeWeight: 3,
+            strokeColor: '#f59e0b',
+            strokeOpacity: 0.6,
+            strokeStyle: 'dashed'
+          });
+          originalPolyline.setMap(map);
+          state.pathAdd.mapPolylines.push(originalPolyline);
+
+          // 2. 현재 선택된 경로 (파란색 실선)
+          const currentPath = modCoords.slice(state.startIndex, state.endIndex + 1)
+            .map(c => new kakao.maps.LatLng(c.lat, c.lng));
+          const currentPolyline = new kakao.maps.Polyline({
+            path: currentPath,
+            strokeWeight: 4,
+            strokeColor: '#2563eb',
+            strokeOpacity: 0.9,
+            strokeStyle: 'solid'
+          });
+          currentPolyline.setMap(map);
+          state.pathAdd.mapPolylines.push(currentPolyline);
+
+          // 3. 기준점 마커 (빨간색 큰 마커)
+          const direction = state.pathAdd.direction;
+          const refCoord = direction === 'front' ? modCoords[state.startIndex] : modCoords[state.endIndex];
+          const refMarkerContent = `
+            <div style="padding:6px 10px;background:#dc2626;color:white;border-radius:20px;font-size:12px;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+              📍 기준점
+            </div>
+          `;
+          const refMarker = new kakao.maps.CustomOverlay({
+            position: new kakao.maps.LatLng(refCoord.lat, refCoord.lng),
+            content: refMarkerContent,
+            yAnchor: 1.3
+          });
+          refMarker.setMap(map);
+          state.pathAdd.mapMarkers.push(refMarker);
+
+          // 4. 선택 가능한 좌표들에 클릭 마커 추가 (10개 단위로 샘플링, 웨이포인트 근처는 항상 표시)
+          const waypoints = state.currentTrail.waypoints || [];
+
+          allCoords.forEach((coord, idx) => {
+            const hasWaypoint = findNearbyWaypoints(coord, waypoints, 0.05).length > 0;
+            const isSampled = idx % 10 === 0;
+            const isSelected = idx === state.pathAdd.targetIndex;
+
+            if (!hasWaypoint && !isSampled && !isSelected) return;
+
+            const marker = new kakao.maps.Marker({
+              position: new kakao.maps.LatLng(coord.lat, coord.lng),
+              map: map,
+              opacity: isSelected ? 1 : 0.7
+            });
+
+            // 선택된 마커 강조
+            if (isSelected) {
+              const selectedOverlay = new kakao.maps.CustomOverlay({
+                position: new kakao.maps.LatLng(coord.lat, coord.lng),
+                content: `<div style="padding:4px 8px;background:#22c55e;color:white;border-radius:4px;font-size:11px;font-weight:bold;">✓ 선택됨 [${idx}]</div>`,
+                yAnchor: 2.5
+              });
+              selectedOverlay.setMap(map);
+              state.pathAdd.mapMarkers.push(selectedOverlay);
+            }
+
+            // 웨이포인트 라벨
+            if (hasWaypoint) {
+              const wp = findNearbyWaypoints(coord, waypoints, 0.05)[0];
+              const wpOverlay = new kakao.maps.CustomOverlay({
+                position: new kakao.maps.LatLng(coord.lat, coord.lng),
+                content: `<div style="padding:2px 6px;background:${isLocationKeyword(wp.name || '') ? '#f59e0b' : '#6b7280'};color:white;border-radius:4px;font-size:10px;">[${idx}] ${wp.name || wp.category || '?'}</div>`,
+                yAnchor: 2.2
+              });
+              wpOverlay.setMap(map);
+              state.pathAdd.mapMarkers.push(wpOverlay);
+            }
+
+            // 클릭 이벤트
+            kakao.maps.event.addListener(marker, 'click', () => {
+              state.pathAdd.targetIndex = idx;
+              updatePathAddSelectedTarget();
+              initPathAddMap(); // 지도 갱신
+              showToast(`인덱스 ${idx} 선택됨`, 'success');
+            });
+
+            state.pathAdd.mapMarkers.push(marker);
+          });
+
+          // 지도 범위 조정
+          const bounds = new kakao.maps.LatLngBounds();
+          allCoords.forEach(c => bounds.extend(new kakao.maps.LatLng(c.lat, c.lng)));
+          map.setBounds(bounds);
+        });
+      } catch (e) {
+        container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f3f4f6;color:#6b7280;font-size:13px;">지도 초기화 오류: ${e.message}</div>`;
+      }
+    }
+
+    function renderPathAddCoordList(filter = 'all', searchTerm = '') {
+      const list = document.getElementById('pathAddCoordList');
+      const countEl = document.getElementById('pathAddCoordCount');
+      list.innerHTML = '';
+
+      const allCoords = state.pathAdd.allCoords;
+      const waypoints = state.currentTrail.waypoints || [];
+
+      // 각 좌표에 대해 근처 웨이포인트 정보 추가
+      const coordsWithInfo = allCoords.map((coord, idx) => {
+        const nearby = findNearbyWaypoints(coord, waypoints, 0.1);
+        return {
+          ...coord,
+          idx,
+          nearbyWaypoints: nearby,
+          waypointNames: nearby.map(w => w.name || w.category || '').join(', ')
+        };
+      });
+
+      // 필터 적용
+      let filtered = coordsWithInfo;
+      if (filter === 'waypoints') {
+        filtered = coordsWithInfo.filter(c => c.nearbyWaypoints.length > 0);
+      } else if (filter === 'peaks') {
+        filtered = coordsWithInfo.filter(c =>
+          c.nearbyWaypoints.some(w => (w.name || '').includes('정상') || (w.name || '').includes('봉'))
+        );
+      } else if (filter === 'entrance') {
+        filtered = coordsWithInfo.filter(c =>
+          c.nearbyWaypoints.some(w =>
+            (w.name || '').includes('입구') || (w.name || '').includes('매표소') ||
+            (w.name || '').includes('주차장') || (w.name || '').includes('탐방')
+          )
+        );
+      }
+
+      // 검색어 적용
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        filtered = filtered.filter(c =>
+          c.idx.toString().includes(term) ||
+          c.lat.toFixed(5).includes(term) ||
+          c.lng.toFixed(5).includes(term) ||
+          c.waypointNames.toLowerCase().includes(term)
+        );
+      }
+
+      // 개수 표시
+      countEl.textContent = `총 ${allCoords.length}개 중 ${filtered.length}개 표시`;
+
+      // 기준점과의 거리 계산 및 정렬
+      const direction = state.pathAdd.direction;
+      const coords = state.modifiedCoordinates;
+      const referencePoint = direction === 'front' ? coords[state.startIndex] : coords[state.endIndex];
+
+      // 거리 정보 추가
+      filtered = filtered.map(coord => ({
+        ...coord,
+        distToRef: calculateDistance(referencePoint.lat, referencePoint.lng, coord.lat, coord.lng)
+      }));
+
+      // 가까운 순으로 정렬 옵션 (기본: 인덱스 순)
+      // filtered.sort((a, b) => a.distToRef - b.distToRef);
+
+      filtered.forEach(coord => {
+        const dist = coord.distToRef;
+        const item = document.createElement('div');
+        item.className = 'coord-item' + (coord.idx === state.pathAdd.targetIndex ? ' selected' : '');
+        item.style.cursor = 'pointer';
+
+        let waypointBadge = '';
+        if (coord.nearbyWaypoints.length > 0) {
+          const wpName = coord.nearbyWaypoints[0].name || coord.nearbyWaypoints[0].category || '?';
+          const isHighlight = isLocationKeyword(wpName);
+          waypointBadge = `<span class="waypoint-tag ${isHighlight ? 'highlight' : ''}" style="margin-left: 6px;">${wpName}</span>`;
+        }
+
+        item.innerHTML = `
+          <div style="flex: 1;">
+            <span style="font-weight: 500;">[${coord.idx}]</span>
+            <span style="color: var(--gray-500);">${coord.lat.toFixed(5)}, ${coord.lng.toFixed(5)}</span>
+            ${waypointBadge}
+          </div>
+          <div style="text-align: right; font-size: 11px;">
+            <div>${coord.alt ? Math.round(coord.alt) + 'm' : '-'}</div>
+            <div style="color: ${dist > 0.5 ? 'var(--danger)' : 'var(--success)'};">↔ ${formatDistance(dist)}</div>
+          </div>
+        `;
+
+        item.onclick = () => {
+          document.querySelectorAll('#pathAddCoordList .coord-item').forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
+          state.pathAdd.targetIndex = coord.idx;
+          updatePathAddSelectedTarget();
+        };
+
+        list.appendChild(item);
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--gray-500);">결과 없음</div>';
+      }
+    }
+
+    function filterPathAddCoords() {
+      const filter = document.getElementById('pathAddFilter').value;
+      const searchTerm = document.getElementById('pathAddSearch').value;
+      renderPathAddCoordList(filter, searchTerm);
+    }
+
+    function updatePathAddSelectedTarget() {
+      const targetEl = document.getElementById('pathAddSelectedTarget');
+      if (state.pathAdd.targetIndex === null) {
+        targetEl.innerHTML = '선택 안됨';
+        targetEl.style.color = 'var(--gray-500)';
+        return;
+      }
+
+      const coord = state.pathAdd.allCoords[state.pathAdd.targetIndex];
+      const waypoints = state.currentTrail.waypoints || [];
+      const nearby = findNearbyWaypoints(coord, waypoints, 0.1);
+
+      let wpInfo = '';
+      if (nearby.length > 0) {
+        wpInfo = ` (${nearby[0].name || nearby[0].category || '?'})`;
+      }
+
+      targetEl.innerHTML = `인덱스 ${state.pathAdd.targetIndex}: ${coord.lat.toFixed(5)}, ${coord.lng.toFixed(5)}${wpInfo}`;
+      targetEl.style.color = 'var(--primary)';
+    }
+
+    function pathAddGoBack() {
+      if (state.pathAdd.step === 2) {
+        state.pathAdd.step = 1;
+        document.getElementById('pathAddStep1').classList.remove('hidden');
+        document.getElementById('pathAddStep2').classList.add('hidden');
+        document.getElementById('pathAddBackBtn').style.display = 'none';
+        document.getElementById('pathAddNextBtn').style.display = 'none';
+      } else if (state.pathAdd.step === 3) {
+        state.pathAdd.step = 2;
+        document.getElementById('pathAddStep2').classList.remove('hidden');
+        document.getElementById('pathAddStep3').classList.add('hidden');
+        document.getElementById('pathAddNextBtn').style.display = 'inline-flex';
+      }
+    }
+
+    function pathAddGoNext() {
+      if (state.pathAdd.step === 2) {
+        if (state.pathAdd.targetIndex === null) {
+          showToast('목표 지점을 선택해주세요', 'error');
+          return;
+        }
+
+        state.pathAdd.step = 3;
+        document.getElementById('pathAddStep2').classList.add('hidden');
+        document.getElementById('pathAddStep3').classList.remove('hidden');
+        document.getElementById('pathAddNextBtn').style.display = 'none';
+
+        // 연결 정보 표시
+        const direction = state.pathAdd.direction;
+        const coords = state.modifiedCoordinates;
+        const allCoords = state.pathAdd.allCoords;
+        const referenceIdx = direction === 'front' ? state.startIndex : state.endIndex;
+        const referencePoint = coords[referenceIdx];
+        const targetPoint = allCoords[state.pathAdd.targetIndex];
+        const dist = calculateDistance(referencePoint.lat, referencePoint.lng, targetPoint.lat, targetPoint.lng);
+
+        document.getElementById('pathAddConnectionInfo').innerHTML = `
+          <div><strong>연결 구간:</strong></div>
+          <div style="margin: 8px 0; padding: 8px; background: white; border-radius: 6px;">
+            <div>기준점 (인덱스 ${referenceIdx}): ${referencePoint.lat.toFixed(5)}, ${referencePoint.lng.toFixed(5)}</div>
+            <div style="text-align: center; color: var(--primary); font-size: 16px; margin: 4px 0;">↕ ${formatDistance(dist)}</div>
+            <div>목표점 (인덱스 ${state.pathAdd.targetIndex}): ${targetPoint.lat.toFixed(5)}, ${targetPoint.lng.toFixed(5)}</div>
+          </div>
+          <div style="color: ${dist > GAP_DISTANCE_THRESHOLD_KM ? 'var(--danger)' : 'var(--success)'};">
+            ${dist > GAP_DISTANCE_THRESHOLD_KM ? '⚠️ 거리가 멀어 갭이 발생합니다. 역순 경로 삽입을 권장합니다.' : '✅ 적절한 거리입니다.'}
+          </div>
+        `;
+      }
+    }
+
+    function executePathAdd(method) {
+      const direction = state.pathAdd.direction;
+      const targetIdx = state.pathAdd.targetIndex;
+      const allCoords = state.pathAdd.allCoords;
+      const coords = state.modifiedCoordinates;
+
+      addLog(`========================================`);
+      addLog(`경로 추가 실행:`);
+      addLog(`  방향: ${direction === 'front' ? '앞에 추가' : '뒤에 추가'}`);
+      addLog(`  목표 인덱스: ${targetIdx}`);
+      addLog(`  방식: ${method === 'direct' ? '직접 연결' : '역순 경로 삽입'}`);
+
+      if (method === 'direct') {
+        // 직접 연결: 목표점만 추가
+        const targetCoord = {
+          lat: allCoords[targetIdx].lat,
+          lng: allCoords[targetIdx].lng,
+          alt: allCoords[targetIdx].alt
+        };
+
+        if (direction === 'front') {
+          // 앞에 추가
+          state.modifiedCoordinates = [targetCoord, ...coords];
+          state.startIndex = 0;
+          state.endIndex = state.modifiedCoordinates.length - 1;
+          addLog(`  결과: 앞에 1개 포인트 추가됨`);
+        } else {
+          // 뒤에 추가
+          state.modifiedCoordinates = [...coords, targetCoord];
+          state.startIndex = 0;
+          state.endIndex = state.modifiedCoordinates.length - 1;
+          addLog(`  결과: 뒤에 1개 포인트 추가됨`);
+        }
+
+        showToast('직접 연결 완료. 갭이 있으면 "중간 갭 메꾸기"를 사용하세요.', 'success');
+
+      } else if (method === 'reverse') {
+        // 역순 경로 삽입: 기존 경로에서 목표점까지 역순으로 경로 생성
+        const referenceIdx = direction === 'front' ? state.startIndex : state.endIndex;
+        const referencePoint = coords[referenceIdx];
+
+        // 원본 좌표에서 목표점 찾기
+        // 현재 기준점과 가장 가까운 원본 좌표 인덱스 찾기
+        let nearestToRefIdx = 0;
+        let nearestToRefDist = Infinity;
+        for (let i = 0; i < allCoords.length; i++) {
+          const dist = calculateDistance(referencePoint.lat, referencePoint.lng, allCoords[i].lat, allCoords[i].lng);
+          if (dist < nearestToRefDist) {
+            nearestToRefDist = dist;
+            nearestToRefIdx = i;
+          }
+        }
+
+        addLog(`  기준점과 가장 가까운 원본 인덱스: ${nearestToRefIdx} (거리: ${Math.round(nearestToRefDist * 1000)}m)`);
+
+        // 역순 경로 생성
+        const insertPath = [];
+
+        if (direction === 'front') {
+          // 앞에 추가: targetIdx → nearestToRefIdx 역순
+          if (targetIdx < nearestToRefIdx) {
+            // targetIdx가 더 앞에 있으면: targetIdx → nearestToRefIdx 순방향 복사
+            for (let i = targetIdx; i < nearestToRefIdx; i++) {
+              insertPath.push({
+                lat: allCoords[i].lat,
+                lng: allCoords[i].lng,
+                alt: allCoords[i].alt
+              });
+            }
+          } else {
+            // targetIdx가 더 뒤에 있으면: targetIdx → nearestToRefIdx 역순 복사
+            for (let i = targetIdx; i > nearestToRefIdx; i--) {
+              insertPath.push({
+                lat: allCoords[i].lat,
+                lng: allCoords[i].lng,
+                alt: allCoords[i].alt
+              });
+            }
+          }
+
+          state.modifiedCoordinates = [...insertPath, ...coords];
+          state.startIndex = 0;
+          state.endIndex = state.modifiedCoordinates.length - 1;
+
+        } else {
+          // 뒤에 추가: nearestToRefIdx → targetIdx
+          if (nearestToRefIdx < targetIdx) {
+            // nearestToRefIdx가 더 앞에 있으면: nearestToRefIdx → targetIdx 순방향 복사
+            for (let i = nearestToRefIdx + 1; i <= targetIdx; i++) {
+              insertPath.push({
+                lat: allCoords[i].lat,
+                lng: allCoords[i].lng,
+                alt: allCoords[i].alt
+              });
+            }
+          } else {
+            // nearestToRefIdx가 더 뒤에 있으면: nearestToRefIdx → targetIdx 역순 복사
+            for (let i = nearestToRefIdx - 1; i >= targetIdx; i--) {
+              insertPath.push({
+                lat: allCoords[i].lat,
+                lng: allCoords[i].lng,
+                alt: allCoords[i].alt
+              });
+            }
+          }
+
+          state.modifiedCoordinates = [...coords, ...insertPath];
+          state.startIndex = 0;
+          state.endIndex = state.modifiedCoordinates.length - 1;
+        }
+
+        addLog(`  삽입된 포인트: ${insertPath.length}개`);
+        addLog(`  최종 좌표 수: ${state.modifiedCoordinates.length}개`);
+
+        showToast(`역순 경로 삽입 완료: ${insertPath.length}개 포인트 추가됨`, 'success');
+      }
+
+      addLog(`  최종 선택 범위: ${state.startIndex} ~ ${state.endIndex}`);
+      addLog(`========================================`);
+
+      // UI 업데이트
+      updateEndpoints();
+      updateGapStatus();
+      updateLengthValidation();
+      drawRouteCanvas();
+      if (state.mapVisible) updateKakaoMap();
+
+      closePathAddModal();
+    }
+
+    // ========================================
+    // Export / Import Trail (저장/불러오기)
+    // ========================================
+    function exportCurrentTrail() {
+      if (!state.currentTrail) {
+        showToast('저장할 등산로가 없습니다', 'error');
+        return;
+      }
+
+      const trail = state.currentTrail;
+      const exportData = {
+        // 메타 정보
+        exportVersion: '1.0',
+        exportDate: new Date().toISOString(),
+        toolVersion: 'trail-validation-tool-v2',
+
+        // 원본 트레일 정보
+        trailInfo: {
+          name: trail.name,
+          mountain: trail.mountain,
+          region: trail.region,
+          originalDistance: trail.originalDistance || state.originalLength,
+          waypoints: trail.waypoints || [],
+          metadata: trail.metadata || {}
+        },
+
+        // 원본 좌표 (복원용)
+        originalCoordinates: state.originalCoordinates,
+
+        // 수정된 좌표 (현재 작업 상태)
+        modifiedCoordinates: state.modifiedCoordinates,
+
+        // 선택 범위
+        selection: {
+          startIndex: state.startIndex,
+          endIndex: state.endIndex
+        },
+
+        // 계산된 정보
+        calculated: {
+          originalLength: state.originalLength,
+          currentLength: state.currentLength,
+          ratio: state.currentLength / state.originalLength
+        }
+      };
+
+      // JSON 파일로 다운로드
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+
+      // 파일명: 등산로명_날짜시간.json
+      const timestamp = new Date().toISOString().slice(0, 16).replace(/[:-]/g, '').replace('T', '_');
+      const safeName = trail.name.replace(/[<>:"/\\|?*]/g, '_');
+      a.download = `${safeName}_${timestamp}.json`;
+
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      addLog(`========================================`);
+      addLog(`경로 저장됨: ${a.download}`);
+      addLog(`  좌표 수: ${state.modifiedCoordinates.length}개`);
+      addLog(`  선택 범위: ${state.startIndex} ~ ${state.endIndex}`);
+      addLog(`========================================`);
+
+      showToast(`경로 저장됨: ${a.download}`, 'success');
+      updateAutoSaveStatus('저장됨: ' + new Date().toLocaleTimeString());
+    }
+
+    function importSavedTrail(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+
+          // 버전 확인
+          if (!data.exportVersion || !data.modifiedCoordinates) {
+            throw new Error('올바른 경로 저장 파일이 아닙니다');
+          }
+
+          addLog(`========================================`);
+          addLog(`경로 불러오기: ${file.name}`);
+
+          // 트레일 정보 복원
+          if (data.trailInfo) {
+            // 가상의 트레일 객체 생성
+            const restoredTrail = {
+              name: data.trailInfo.name || '불러온 경로',
+              mountain: data.trailInfo.mountain || '-',
+              region: data.trailInfo.region || '-',
+              originalDistance: data.trailInfo.originalDistance || 0,
+              coordinates: data.originalCoordinates || data.modifiedCoordinates,
+              waypoints: data.trailInfo.waypoints || [],
+              metadata: data.trailInfo.metadata || {}
+            };
+
+            // 현재 트레일 목록에 추가 (또는 기존 트레일 교체)
+            state.currentTrail = restoredTrail;
+            state.currentIndex = -1; // 특수 인덱스로 표시
+
+            // 좌표 복원
+            state.originalCoordinates = data.originalCoordinates || data.modifiedCoordinates;
+            state.modifiedCoordinates = [...data.modifiedCoordinates];
+
+            // 선택 범위 복원
+            if (data.selection) {
+              state.startIndex = data.selection.startIndex || 0;
+              state.endIndex = data.selection.endIndex || (state.modifiedCoordinates.length - 1);
+            } else {
+              state.startIndex = 0;
+              state.endIndex = state.modifiedCoordinates.length - 1;
+            }
+
+            // 길이 계산
+            state.originalLength = calculateTotalDistance(state.originalCoordinates);
+            state.currentLength = calculateTotalDistance(
+              state.modifiedCoordinates.slice(state.startIndex, state.endIndex + 1)
+            );
+
+            // Canvas view 리셋
+            state.canvasZoom = 1;
+            state.canvasPanX = 0;
+            state.canvasPanY = 0;
+
+            // UI 카드 표시
+            ['trailInfoCard', 'routePreviewCard', 'endpointCard', 'lengthCard', 'saveLoadCard'].forEach(id => {
+              document.getElementById(id).classList.remove('hidden');
+            });
+
+            // UI 업데이트
+            updateTrailInfo();
+            updateEndpoints();
+            updateGapStatus();
+            updateLengthValidation();
+            drawRouteCanvas();
+            if (state.mapVisible) updateKakaoMap();
+
+            addLog(`  등산로: ${restoredTrail.name}`);
+            addLog(`  원본 좌표: ${state.originalCoordinates.length}개`);
+            addLog(`  수정 좌표: ${state.modifiedCoordinates.length}개`);
+            addLog(`  선택 범위: ${state.startIndex} ~ ${state.endIndex}`);
+            addLog(`  저장 시점: ${data.exportDate || '알 수 없음'}`);
+            addLog(`========================================`);
+
+            showToast(`경로 불러옴: ${restoredTrail.name}`, 'success');
+            updateAutoSaveStatus('불러옴: ' + new Date().toLocaleTimeString());
+          }
+
+        } catch (err) {
+          console.error('Import error:', err);
+          addLog(`❌ 불러오기 실패: ${err.message}`);
+          showToast(`불러오기 실패: ${err.message}`, 'error');
+        }
+      };
+
+      reader.readAsText(file);
+
+      // 파일 입력 초기화 (같은 파일 다시 선택 가능하도록)
+      event.target.value = '';
+    }
+
+    function updateAutoSaveStatus(message) {
+      const statusEl = document.getElementById('autoSaveStatus');
+      if (statusEl) {
+        statusEl.textContent = message ? `✓ ${message}` : '';
+      }
+    }
+
+    // ========================================
+    // Validation Actions
+    // ========================================
+    function validateTrail() {
+      const trail = state.currentTrail;
+      const ratio = state.currentLength / state.originalLength;
+
+      if (ratio > 2.5) {
+        showToast('길이 비율이 2.5x를 초과합니다', 'error');
+        return;
+      }
+
+      trail.status = 'validated';
+      // Save only the segment between start and end
+      const validatedCoords = state.modifiedCoordinates.slice(state.startIndex, state.endIndex + 1);
+      trail.validatedData = {
+        coordinates: validatedCoords,
+        originalLength: state.originalLength,
+        validatedLength: state.currentLength,
+        ratio: ratio,
+        validatedAt: new Date().toISOString()
+      };
+
+      // trailStatus 업데이트
+      state.trailStatus[trail.id] = 'validated';
+
+      // 이미 validatedTrails에 있으면 중복 추가하지 않음
+      if (!state.validatedTrails.find(t => t.id === trail.id)) {
+        state.validatedTrails.push(trail);
+      }
+
+      addLog(`✅ 검증 완료: ${trail.name} (비율: ${ratio.toFixed(2)}x)`);
+      showToast(`${trail.name} 검증 완료!`, 'success');
+      updateStats();
+      updateValidatedCount();
+      renderTrailList();
+
+      if (state.currentIndex < state.trails.length - 1) nextTrail();
+    }
+
+    function markAsFailed() {
+      const trail = state.currentTrail;
+      trail.status = 'failed';
+      trail.failedData = {
+        reason: 'manual',
+        ratio: state.currentLength / state.originalLength,
+        failedAt: new Date().toISOString()
+      };
+
+      // trailStatus 업데이트
+      state.trailStatus[trail.id] = 'failed';
+
+      // 이미 failedTrails에 있으면 중복 추가하지 않음
+      if (!state.failedTrails.find(t => t.id === trail.id)) {
+        state.failedTrails.push(trail);
+      }
+
+      addLog(`❌ 실패 처리: ${trail.name}`);
+      showToast(`${trail.name} 실패 처리됨`, 'error');
+      updateStats();
+      updateValidatedCount();
+      renderTrailList();
+
+      if (state.currentIndex < state.trails.length - 1) nextTrail();
+    }
+
+    function skipTrail() {
+      if (state.currentIndex < state.trails.length - 1) nextTrail();
+    }
+
+    function nextTrail() {
+      if (state.currentIndex < state.trails.length - 1) selectTrail(state.currentIndex + 1);
+    }
+
+    function prevTrail() {
+      if (state.currentIndex > 0) selectTrail(state.currentIndex - 1);
+    }
+
+    // ========================================
+    // Export
+    // ========================================
+    function exportAllResults() {
+      const results = {
+        exportedAt: new Date().toISOString(),
+        summary: {
+          total: state.trails.length,
+          validated: state.validatedTrails.length,
+          failed: state.failedTrails.length,
+          pending: state.trails.length - state.validatedTrails.length - state.failedTrails.length
+        },
+        validated: state.validatedTrails.map(t => ({
+          id: t.id,
+          name: t.name,
+          mountain: t.mountain,
+          coordinates: t.validatedData?.coordinates || t.coordinates,
+          originalLength: t.validatedData?.originalLength,
+          validatedLength: t.validatedData?.validatedLength,
+          ratio: t.validatedData?.ratio,
+          validatedAt: t.validatedData?.validatedAt
+        })),
+        failed: state.failedTrails.map(t => ({
+          id: t.id,
+          name: t.name,
+          mountain: t.mountain,
+          reason: t.failedData?.reason,
+          ratio: t.failedData?.ratio,
+          failedAt: t.failedData?.failedAt
+        })),
+        logs: state.logs
+      };
+
+      const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `trail_validation_results_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      addLog('결과 내보내기 완료');
+      showToast('결과가 내보내기 되었습니다', 'success');
+    }
+
+    function toggleLogPanel() {
+      document.getElementById('logPanel').classList.toggle('open');
+    }
+
+    // 검증 완료된 경로 내보내기 (지역별)
+    function exportValidatedTrails() {
+      const selectedRegion = document.getElementById('exportRegionSelect').value;
+
+      // 검증 완료된 트레일 필터링
+      let trailsToExport = state.validatedTrails;
+
+      if (selectedRegion) {
+        trailsToExport = trailsToExport.filter(t => t.region === selectedRegion);
+      }
+
+      if (trailsToExport.length === 0) {
+        showToast(selectedRegion ? `${selectedRegion} 지역에 검증 완료된 경로가 없습니다` : '검증 완료된 경로가 없습니다', 'error');
+        return;
+      }
+
+      // DB 업로드용 형식으로 변환
+      const exportData = {
+        exportVersion: '2.0',
+        exportType: 'validated_trails',
+        exportDate: new Date().toISOString(),
+        region: selectedRegion || '전체',
+        summary: {
+          totalCount: trailsToExport.length,
+          totalOriginalLength: 0,
+          totalValidatedLength: 0
+        },
+        trails: trailsToExport.map(trail => {
+          const coords = trail.validatedData?.coordinates || trail.coordinates;
+          const originalLen = trail.validatedData?.originalLength || 0;
+          const validatedLen = trail.validatedData?.validatedLength || 0;
+
+          return {
+            id: trail.id,
+            name: trail.name,
+            mountain: trail.mountain,
+            region: trail.region,
+            distance: validatedLen,
+            originalDistance: originalLen,
+            ratio: trail.validatedData?.ratio || 1,
+            validatedAt: trail.validatedData?.validatedAt,
+            trackPoints: coords.map((c, idx) => ({
+              seq: idx + 1,
+              lat: c.lat,
+              lng: c.lng,
+              alt: c.alt || 0
+            })),
+            waypoints: (trail.waypoints || []).map((w, idx) => ({
+              seq: idx + 1,
+              name: w.name,
+              lat: w.lat,
+              lng: w.lng,
+              type: w.type
+            }))
+          };
+        })
+      };
+
+      // summary 계산
+      exportData.trails.forEach(t => {
+        exportData.summary.totalOriginalLength += t.originalDistance || 0;
+        exportData.summary.totalValidatedLength += t.distance || 0;
+      });
+
+      // 파일 다운로드
+      const regionSuffix = selectedRegion ? `_${selectedRegion.replace(/[/\\]/g, '_')}` : '';
+      const fileName = `validated_trails${regionSuffix}_${new Date().toISOString().slice(0, 10)}.json`;
+
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      addLog(`📦 검증 완료 경로 내보내기: ${trailsToExport.length}개 (${selectedRegion || '전체'})`);
+      showToast(`${trailsToExport.length}개 경로 내보내기 완료`, 'success');
+    }
+
+    // 검증 완료 개수 업데이트
+    function updateValidatedCount() {
+      const selectedRegion = document.getElementById('exportRegionSelect').value;
+      let count = state.validatedTrails.length;
+
+      if (selectedRegion) {
+        count = state.validatedTrails.filter(t => t.region === selectedRegion).length;
+      }
+
+      const countEl = document.getElementById('validatedCount');
+      if (countEl) {
+        countEl.textContent = `검증 완료: ${count}개${selectedRegion ? ` (${selectedRegion})` : ''}`;
+      }
+    }
+
+    // ========================================
+    // Drag & Drop
+    // ========================================
+    const dropZone = document.getElementById('dropZone');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+      document.body.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      const files = e.dataTransfer.files;
+      if (files.length > 0) loadFiles(files);
+    });
+
+    // ========================================
+    // Keyboard Shortcuts
+    // ========================================
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+
+      switch(e.key) {
+        case 'Enter':
+          if (!document.getElementById('validateBtn').disabled) validateTrail();
+          break;
+        case 'ArrowRight':
+          nextTrail();
+          break;
+        case 'ArrowLeft':
+          prevTrail();
+          break;
+        case 's':
+          if (e.ctrlKey) {
+            e.preventDefault();
+            exportAllResults();
+          }
+          break;
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (state.currentTrail) drawRouteCanvas();
+    });
+
+    // Initialize
+    addLog('등산로 데이터 검증 도구가 준비되었습니다');
+  </script>
+</body>
+</html>
