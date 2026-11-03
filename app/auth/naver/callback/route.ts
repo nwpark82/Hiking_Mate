@@ -8,6 +8,13 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
+  // 현재 커스텀 OAuth 구현은 세션 생성이 불완전하므로 소셜 로그인이 켜져 있을 때만 허용
+  if (process.env.NEXT_PUBLIC_ENABLE_SOCIAL_LOGIN !== 'true') {
+    return NextResponse.redirect(
+      new URL('/auth/login?error=naver_disabled', request.url)
+    );
+  }
+
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
   const state = requestUrl.searchParams.get('state');
