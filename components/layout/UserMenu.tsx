@@ -1,17 +1,19 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { User, LogIn, UserPlus, LogOut, Settings as SettingsIcon, ChevronDown, MessageSquare } from 'lucide-react';
+import { User, LogIn, UserPlus, LogOut, Settings as SettingsIcon, ChevronDown, MessageSquare, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
+import { getUserRole } from '@/lib/services/feedback';
 
 export function UserMenu() {
   const router = useRouter();
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // 사용자 정보 가져오기
@@ -33,6 +35,15 @@ export function UserMenu() {
       subscription.unsubscribe();
     };
   }, []);
+
+  // 관리자 메뉴 표시 여부
+  useEffect(() => {
+    if (!user) {
+      setIsAdmin(false);
+      return;
+    }
+    getUserRole().then((role) => setIsAdmin(role === 'admin'));
+  }, [user]);
 
   // 드롭다운 외부 클릭 감지
   useEffect(() => {
@@ -173,6 +184,17 @@ export function UserMenu() {
               <MessageSquare className="w-4 h-4" />
               <span>문의하기</span>
             </Link>
+
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-3 px-4 py-2 text-sm text-forest-700 font-medium hover:bg-gray-50 transition"
+                onClick={() => setIsOpen(false)}
+              >
+                <ShieldCheck className="w-4 h-4" />
+                <span>관리자</span>
+              </Link>
+            )}
           </div>
 
           {/* 로그아웃 */}

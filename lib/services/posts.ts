@@ -26,8 +26,8 @@ export async function getPosts(category?: string, limit = 20, offset = 0) {
         `
         *,
         users:user_id (username, avatar_url),
-        likes:post_likes(count),
-        comments:post_comments(count)
+        likes:likes(count),
+        comments:comments(count)
       `,
         { count: 'exact' }
       )

@@ -16,7 +16,7 @@ export interface Comment {
 export async function getComments(postId: string) {
   try {
     const { data, error } = await supabase
-      .from('post_comments')
+      .from('comments')
       .select(
         `
         *,
@@ -37,7 +37,7 @@ export async function getComments(postId: string) {
 export async function createComment(postId: string, userId: string, content: string) {
   try {
     const { data, error } = await supabase
-      .from('post_comments')
+      .from('comments')
       .insert({
         post_id: postId,
         user_id: userId,
@@ -63,7 +63,7 @@ export async function updateComment(commentId: string, userId: string, content: 
   try {
     // Check if user owns the comment
     const { data: comment, error: checkError } = await supabase
-      .from('post_comments')
+      .from('comments')
       .select('user_id')
       .eq('id', commentId)
       .single();
@@ -72,7 +72,7 @@ export async function updateComment(commentId: string, userId: string, content: 
     if (comment.user_id !== userId) throw new Error('권한이 없습니다.');
 
     const { data, error } = await supabase
-      .from('post_comments')
+      .from('comments')
       .update({
         content,
         updated_at: new Date().toISOString(),
@@ -98,7 +98,7 @@ export async function deleteComment(commentId: string, userId: string) {
   try {
     // Check if user owns the comment
     const { data: comment, error: checkError } = await supabase
-      .from('post_comments')
+      .from('comments')
       .select('user_id')
       .eq('id', commentId)
       .single();
@@ -106,7 +106,7 @@ export async function deleteComment(commentId: string, userId: string) {
     if (checkError) throw checkError;
     if (comment.user_id !== userId) throw new Error('권한이 없습니다.');
 
-    const { error } = await supabase.from('post_comments').delete().eq('id', commentId);
+    const { error } = await supabase.from('comments').delete().eq('id', commentId);
 
     if (error) throw error;
 

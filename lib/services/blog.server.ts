@@ -3,7 +3,7 @@ import type { Blog } from './blog.types';
 
 // Server-side functions only
 export async function getAllBlogs(publishedOnly = true) {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   let query = supabase
     .from('blogs')
@@ -20,7 +20,7 @@ export async function getAllBlogs(publishedOnly = true) {
 }
 
 export async function getBlogBySlug(slug: string) {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from('blogs')
@@ -41,7 +41,7 @@ export async function getBlogBySlug(slug: string) {
 }
 
 export async function getBlogsByCategory(category: string) {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const { data, error } = await supabase
     .from('blogs')

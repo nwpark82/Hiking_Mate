@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase/client';
 export async function getLikesCount(postId: string) {
   try {
     const { count, error } = await supabase
-      .from('post_likes')
+      .from('likes')
       .select('*', { count: 'exact', head: true })
       .eq('post_id', postId);
 
@@ -18,7 +18,7 @@ export async function getLikesCount(postId: string) {
 export async function checkUserLiked(postId: string, userId: string) {
   try {
     const { data, error } = await supabase
-      .from('post_likes')
+      .from('likes')
       .select('id')
       .eq('post_id', postId)
       .eq('user_id', userId)
@@ -36,7 +36,7 @@ export async function toggleLike(postId: string, userId: string) {
   try {
     // Check if already liked
     const { data: existingLike, error: checkError } = await supabase
-      .from('post_likes')
+      .from('likes')
       .select('id')
       .eq('post_id', postId)
       .eq('user_id', userId)
@@ -47,7 +47,7 @@ export async function toggleLike(postId: string, userId: string) {
     if (existingLike) {
       // Unlike
       const { error: deleteError } = await supabase
-        .from('post_likes')
+        .from('likes')
         .delete()
         .eq('id', existingLike.id);
 
@@ -56,7 +56,7 @@ export async function toggleLike(postId: string, userId: string) {
       return { liked: false, error: null };
     } else {
       // Like
-      const { error: insertError } = await supabase.from('post_likes').insert({
+      const { error: insertError } = await supabase.from('likes').insert({
         post_id: postId,
         user_id: userId,
       });

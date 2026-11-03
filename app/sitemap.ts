@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createPublicSupabaseClient } from '@/lib/supabase/server';
 import { getAllBlogPosts } from '@/lib/blog';
 
 // Sitemap은 동적으로 생성 (Supabase 데이터를 가져오기 때문)
@@ -88,14 +88,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let trailPages: MetadataRoute.Sitemap = [];
 
   try {
-    const supabase = createServerSupabaseClient();
-    const { data: trails } = await supabase
-      .from('trails')
-      .select('id, updated_at')
-      .order('updated_at', { ascending: false })
-      .limit(1000); // 최대 1000개 등산로
+    const supabase = createPublicSupabaseClient();
+    // Supabase는 요청당 최대 1000행이므로 나눠서 조회
+    const trails: { id: string; updated_at: string | null }[] = [];
+    for (let from = 0; ; from += 1000) {
+      const { data, error } = await supabase
+        .from('trails')
+        .select('id, updated_at')
+        .order('id')
+        .range(from, from + 999);
+      if (error) throw error;
+      trails.push(...(data || []));
+      if (!data || data.length < 1000) break;
+    }
 
-    if (trails) {
+    if (trails.length > 0) {
       trailPages = trails.map((trail) => ({
         url: `${baseUrl}/explore/${trail.id}`,
         lastModified: trail.updated_at ? new Date(trail.updated_at) : new Date(),

@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og';
-import { getBlogBySlug } from '@/lib/services/blog.server';
+import { getBlogPostBySlug } from '@/lib/blog';
 
 export const alt = '하이킹메이트 블로그';
 export const size = {
@@ -8,8 +8,10 @@ export const size = {
 };
 export const contentType = 'image/png';
 
-export default async function Image({ params }: { params: { slug: string } }) {
-  const { blog } = await getBlogBySlug(params.slug);
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  // 공개 블로그는 content/blog 마크다운 파일 기준
+  const blog = getBlogPostBySlug(slug);
 
   if (!blog) {
     // Fallback image
@@ -91,7 +93,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
           {/* Category Badge */}
           <div
             style={{
-              display: 'inline-flex',
+              display: 'flex',
               alignItems: 'center',
               background: '#10B981',
               color: 'white',
@@ -133,7 +135,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              ✍️ {blog.author_name}
+              ✍️ {blog.author}
             </div>
             {blog.tags.length > 0 && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

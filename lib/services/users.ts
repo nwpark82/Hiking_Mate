@@ -280,20 +280,12 @@ export async function deleteAccount() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('로그인이 필요합니다.');
 
-    // 1. users 테이블에서 프로필 삭제 (CASCADE로 관련 데이터 자동 삭제)
-    const { error: profileError } = await supabase
-      .from('users')
-      .delete()
-      .eq('id', user.id);
-
-    if (profileError) throw profileError;
-
-    // 2. Supabase Auth에서 계정 삭제
+    // auth.users 삭제 시 CASCADE로 프로필과 관련 데이터가 함께 삭제됨
     const { error: authError } = await supabase.rpc('delete_user');
 
-    // RPC 함수가 없는 경우 사용자에게 알림
     if (authError) {
-      console.warn('Auth deletion failed, user should contact support:', authError);
+      console.error('Auth deletion failed:', authError);
+      throw new Error('계정 삭제에 실패했습니다. 문의하기를 통해 요청해주세요.');
     }
 
     return { error: null };

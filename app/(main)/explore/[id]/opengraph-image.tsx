@@ -148,7 +148,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                 color: 'white',
               }}
             >
-              {trail.distance.toFixed(1)}km
+              {`${trail.distance.toFixed(1)}km`}
             </div>
           </div>
 
@@ -179,7 +179,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                 color: 'white',
               }}
             >
-              {Math.floor(trail.duration / 60)}h {trail.duration % 60}m
+              {`${Math.floor(trail.duration / 60)}h ${trail.duration % 60}m`}
             </div>
           </div>
 
@@ -226,7 +226,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             zIndex: 1,
           }}
         >
-          📍 {trail.region} · {trail.mountain}
+          {`📍 ${trail.region} · ${trail.mountain}`}
         </div>
       </div>
     ),
