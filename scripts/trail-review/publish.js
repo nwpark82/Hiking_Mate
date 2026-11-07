@@ -18,11 +18,20 @@ const headers = { apikey: KEY, Authorization: `Bearer ${KEY}`, 'Content-Type': '
 (async () => {
   const rel = JSON.parse(fs.readFileSync(path.join(DIR, 'reliability.json'), 'utf8'));
 
-  const res = await fetch(`${URL_}/rest/v1/trails?select=id,name,is_published,quality_status&limit=2000`, { headers });
-  const current = await res.json();
-  if (!Array.isArray(current)) {
-    console.error('조회 실패 — SQL(20261108000001_trail_publish_status.sql)을 먼저 실행하세요:', current);
-    process.exit(1);
+  // Supabase 는 요청당 최대 1000행이므로 나눠서 조회
+  const current = [];
+  for (let offset = 0; ; offset += 1000) {
+    const res = await fetch(
+      `${URL_}/rest/v1/trails?select=id,name,is_published,quality_status&order=id&offset=${offset}&limit=1000`,
+      { headers }
+    );
+    const rows = await res.json();
+    if (!Array.isArray(rows)) {
+      console.error('조회 실패 — SQL(20261108000001_trail_publish_status.sql)을 먼저 실행하세요:', rows);
+      process.exit(1);
+    }
+    current.push(...rows);
+    if (rows.length < 1000) break;
   }
   const byId = Object.fromEntries(current.map((t) => [t.id, t]));
 
