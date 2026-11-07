@@ -97,9 +97,8 @@ export async function getTrailById(id: string) {
 
 export async function incrementViewCount(trailId: string) {
   try {
-    const { error } = await supabase.rpc('increment_view_count', {
-      table_name: 'trails',
-      row_id: trailId
+    const { error } = await supabase.rpc('increment_trail_view', {
+      p_trail_id: trailId
     });
 
     if (error) throw error;
