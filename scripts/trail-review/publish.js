@@ -58,19 +58,34 @@ const headers = { apikey: KEY, Authorization: `Bearer ${KEY}`, 'Content-Type': '
   fs.writeFileSync(backup, JSON.stringify(current));
   console.log(`백업: ${backup}`);
 
+  // 판정이 바뀌었거나 아직 반영되지 않은 등산로만, 10개씩 동시에 처리 (중간 실패 시 다시 실행하면 남은 것만 처리)
   const now = new Date().toISOString();
+  const todo = rel.filter((r) => {
+    const cur = byId[r.id];
+    return cur && (cur.is_published !== r.reliable || cur.quality_status !== (r.reliable ? 'reliable' : 'unreliable'));
+  });
+  console.log(`처리 대상 ${todo.length}개`);
   let ok = 0;
-  for (const r of rel) {
-    if (!byId[r.id]) continue;
-    const body = {
-      is_published: r.reliable,
-      quality_status: r.reliable ? 'reliable' : 'unreliable',
-      quality_note: r.reasons.join(' / ') || null,
-      quality_checked_at: now,
-    };
-    const u = await fetch(`${URL_}/rest/v1/trails?id=eq.${r.id}`, { method: 'PATCH', headers, body: JSON.stringify(body) });
-    if (u.ok) ok++;
-    else console.log(`실패: ${r.name} HTTP ${u.status}`);
+  for (let i = 0; i < todo.length; i += 10) {
+    const batch = todo.slice(i, i + 10);
+    const results = await Promise.all(
+      batch.map((r) =>
+        fetch(`${URL_}/rest/v1/trails?id=eq.${r.id}`, {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify({
+            is_published: r.reliable,
+            quality_status: r.reliable ? 'reliable' : 'unreliable',
+            quality_note: r.reasons.join(' / ') || null,
+            quality_checked_at: now,
+          }),
+        }).catch((error) => ({ ok: false, status: error.message }))
+      )
+    );
+    results.forEach((res, k) => {
+      if (res.ok) ok++;
+      else console.log(`실패: ${batch[k].name} (${res.status}) — 다시 실행하면 남은 것만 처리합니다`);
+    });
   }
   console.log(`반영 ${ok}개`);
 })();
