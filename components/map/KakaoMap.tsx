@@ -12,6 +12,7 @@ interface KakaoMapProps {
     title?: string;
   }>;
   pathCoordinates?: Array<{ lat: number; lng: number }>;
+  highlightSegments?: Array<[{ lat: number; lng: number }, { lat: number; lng: number }]>;
 }
 
 declare global {
@@ -26,7 +27,8 @@ export function KakaoMap({
   longitude,
   level = 3,
   markers = [],
-  pathCoordinates = []
+  pathCoordinates = [],
+  highlightSegments = []
 }: KakaoMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
@@ -264,6 +266,20 @@ export function KakaoMap({
             polyline.setMap(map);
             console.log('✅ Polyline added to map');
 
+            // 강조 구간 (관리자 화면의 끊긴 구간 등)
+            highlightSegments.forEach(([from, to]) => {
+              new window.kakao.maps.Polyline({
+                path: [
+                  new window.kakao.maps.LatLng(from.lat, from.lng),
+                  new window.kakao.maps.LatLng(to.lat, to.lng),
+                ],
+                strokeWeight: 5,
+                strokeColor: '#dc2626',
+                strokeOpacity: 0.9,
+                strokeStyle: 'shortdash',
+              }).setMap(map);
+            });
+
             // 경로에 맞게 지도 범위 조정
             const bounds = new window.kakao.maps.LatLngBounds();
             path.forEach((point: any) => bounds.extend(point));
@@ -317,7 +333,7 @@ export function KakaoMap({
         mapInstanceRef.current = null;
       }
     };
-  }, [latitude, longitude, level, markers, pathCoordinates]);
+  }, [latitude, longitude, level, markers, pathCoordinates, highlightSegments]);
 
   // 항상 지도 컨테이너를 렌더링하고, 로딩/에러는 오버레이로 표시
   // 이렇게 해야 mapRef가 항상 DOM에 연결되어 initializeMap()이 정상 작동함

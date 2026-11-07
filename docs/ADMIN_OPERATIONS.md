@@ -59,6 +59,7 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
 | `supabase/migrations/20261107000001_fix_trails_update_policy.sql` | 일반 회원의 등산로 수정 권한 제거, 등산로 조회수 함수 |
 | `supabase/migrations/20261108000000_skip_smoketest_notify.sql` | 자동 점검 계정(`smoketest_`) 활동은 Discord 알림 제외 |
 | `supabase/migrations/20261108000001_trail_publish_status.sql` | 등산로 공개 여부·신뢰도 컬럼, 공개된 등산로만 조회되도록 정책 변경 |
+| `supabase/migrations/20261108000002_trail_quality_detail.sql` | 등산로 판정 상세(JSON) 저장, 관리자 대시보드 등산로 품질 요약 함수 |
 
 모든 파일은 여러 번 실행해도 안전하도록 작성되어 있습니다.
 
@@ -92,10 +93,14 @@ node --max-old-space-size=6144 scripts/trail-review/analyze_v2.js .rawdata   # �
 node scripts/trail-review/reliability.js 0.6 2.5                      # 신뢰도 (소요시간 허용 범위)
 node scripts/trail-review/convert_roundtrip.js [--apply]              # 정상/중턱 종료 편도 → 왕복 (백업 포함)
 node scripts/trail-review/publish.js [--apply]                        # 공개 여부 반영 (백업 포함)
+node scripts/trail-review/sync_quality.js [--apply]                   # 판정 상세 → 관리자 화면
 ```
 
 - `--apply` 없이 실행하면 미리보기만 한다. 반영 전 데이터는 `data/trail-review/backup-*.json` 에 저장된다
 - 개별 등산로는 `/admin/trails` 에서 공개/비공개를 직접 바꿀 수 있다
+- `/admin/trails` 필터: 공개/비공개, 판정(사용 가능·보정 가능·사용 불가), 왕복 전환 대상
+- 등산로 수정 화면 상단 '경로 점검': 지도(끊긴 구간 빨간 점선), 출발/도착 분류와 근거, 끊김 원인·메우기 가능 여부, 반복·고도 급변, 소요시간 비교, 판정 사유
+- 대시보드 '등산로 품질': 공개 수, 판정별 수, 비신뢰 수
 
 ## 6. 주간 자동 점검
 

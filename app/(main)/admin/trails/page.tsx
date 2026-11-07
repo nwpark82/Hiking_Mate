@@ -3,7 +3,19 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
-import { searchTrails, type AdminTrail, type TrailPublishFilter } from '@/lib/services/admin';
+import {
+  searchTrails,
+  VERDICT_LABELS,
+  type AdminTrail,
+  type TrailPublishFilter,
+  type TrailVerdictFilter,
+} from '@/lib/services/admin';
+
+const VERDICT_STYLES: Record<string, string> = {
+  USABLE: 'bg-green-100 text-green-700',
+  FIXABLE: 'bg-yellow-100 text-yellow-800',
+  UNUSABLE: 'bg-red-100 text-red-700',
+};
 import { Loader2, Search, Edit, ExternalLink } from 'lucide-react';
 
 export default function AdminTrailsPage() {
@@ -12,10 +24,11 @@ export default function AdminTrailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<TrailPublishFilter>('all');
+  const [verdict, setVerdict] = useState<TrailVerdictFilter>('all');
 
   const load = async (keyword = search) => {
     setLoading(true);
-    const result = await searchTrails(keyword, filter);
+    const result = await searchTrails(keyword, filter, verdict);
     setTrails(result.trails);
     setError(result.error);
     setLoading(false);
@@ -23,7 +36,7 @@ export default function AdminTrailsPage() {
 
   useEffect(() => {
     load();
-  }, [filter]);
+  }, [filter, verdict]);
 
   return (
     <>
@@ -38,7 +51,8 @@ export default function AdminTrailsPage() {
           비공개 등산로는 사용자에게 보이지 않습니다. 신뢰도 판정 기준은 docs/TRAIL_DATA_REVIEW.md 참고.
         </p>
 
-        <div className="flex bg-white rounded-lg border border-gray-200 p-1 w-fit mb-4">
+        <div className="flex flex-wrap gap-3 mb-4">
+        <div className="flex bg-white rounded-lg border border-gray-200 p-1 w-fit">
           {(
             [
               ['all', '전체'],
@@ -56,6 +70,29 @@ export default function AdminTrailsPage() {
               {label}
             </button>
           ))}
+        </div>
+
+        <div className="flex flex-wrap bg-white rounded-lg border border-gray-200 p-1 w-fit">
+          {(
+            [
+              ['all', '판정 전체'],
+              ['USABLE', '사용 가능'],
+              ['FIXABLE', '보정 가능'],
+              ['UNUSABLE', '사용 불가'],
+              ['CONVERT', '왕복 전환 대상'],
+            ] as [TrailVerdictFilter, string][]
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              onClick={() => setVerdict(value)}
+              className={`px-3 py-1.5 text-sm rounded-md transition ${
+                verdict === value ? 'bg-forest-600 text-white' : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         </div>
 
         <form
@@ -95,6 +132,16 @@ export default function AdminTrailsPage() {
                     >
                       {trail.is_published ? '공개' : '비공개'}
                     </span>
+                    {trail.quality_detail && (
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-xs font-semibold flex-shrink-0 ${
+                          VERDICT_STYLES[trail.quality_detail.verdict]
+                        }`}
+                      >
+                        {VERDICT_LABELS[trail.quality_detail.verdict]}
+                        {trail.quality_detail.fix.length > 0 && ` · ${trail.quality_detail.fix.join('+')}`}
+                      </span>
+                    )}
                     <span className="font-medium text-gray-900 truncate">{trail.name}</span>
                   </div>
                   {trail.quality_note && <div className="text-xs text-amber-700 truncate">{trail.quality_note}</div>}

@@ -7,9 +7,11 @@ import {
   getAdminStats,
   listUsers,
   getUsage,
+  getTrailQualitySummary,
   type AdminStats,
   type AdminUser,
   type AdminUsage,
+  type TrailQualitySummary,
 } from '@/lib/services/admin';
 import {
   Users,
@@ -54,6 +56,7 @@ export default function AdminDashboardPage() {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [recentUsers, setRecentUsers] = useState<AdminUser[]>([]);
   const [usage, setUsage] = useState<AdminUsage | null>(null);
+  const [trailSummary, setTrailSummary] = useState<TrailQualitySummary | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -63,6 +66,7 @@ export default function AdminDashboardPage() {
         listUsers(),
         getUsage(),
       ]);
+      getTrailQualitySummary().then(({ summary }) => setTrailSummary(summary));
       setStats(statsData);
       setRecentUsers(users.slice(0, 5));
       setUsage(usageData);
@@ -142,6 +146,44 @@ export default function AdminDashboardPage() {
               ) : (
                 <p className="text-sm text-gray-500">
                   사용량을 불러올 수 없습니다. DB 관리자 함수(admin_usage)가 설치되었는지 확인하세요.
+                </p>
+              )}
+            </section>
+
+            <section className="bg-white rounded-2xl p-6 shadow-soft border border-gray-100 mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Mountain className="w-5 h-5 text-forest-600" />
+                  <h2 className="text-lg font-bold text-gray-900">등산로 품질</h2>
+                </div>
+                <Link href="/admin/trails" className="text-sm text-forest-600 hover:underline">
+                  등산로 관리
+                </Link>
+              </div>
+              {trailSummary ? (
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
+                  {[
+                    { label: '공개', value: trailSummary.published, sub: `전체 ${trailSummary.total}`, href: '/admin/trails' },
+                    { label: '사용 가능', value: trailSummary.verdicts.USABLE || 0, color: 'text-green-700' },
+                    { label: '보정 가능', value: trailSummary.verdicts.FIXABLE || 0, color: 'text-yellow-700' },
+                    { label: '사용 불가', value: trailSummary.verdicts.UNUSABLE || 0, color: 'text-red-700' },
+                    { label: '비신뢰(비공개)', value: trailSummary.unreliable, color: 'text-gray-700' },
+                  ].map((item) => (
+                    <div key={item.label} className="rounded-xl bg-gray-50 p-3">
+                      <div className={`text-2xl font-bold ${item.color || 'text-gray-900'}`}>{item.value}</div>
+                      <div className="text-xs text-gray-600">{item.label}</div>
+                      {item.sub && <div className="text-xs text-gray-400">{item.sub}</div>}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500">
+                  등산로 품질 정보를 불러올 수 없습니다. DB 함수(admin_trail_quality_summary)가 설치되었는지 확인하세요.
+                </p>
+              )}
+              {trailSummary?.checked_at && (
+                <p className="text-xs text-gray-400 mt-3">
+                  마지막 판정: {new Date(trailSummary.checked_at).toLocaleString('ko-KR')}
                 </p>
               )}
             </section>

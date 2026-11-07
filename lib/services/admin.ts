@@ -185,6 +185,46 @@ export async function deleteContent(type: 'post' | 'comment', id: string) {
 
 export const TRAIL_DIFFICULTIES = ['초급', '중급', '고급', '전문가'] as const;
 
+// 등산로 분석 판정 상세 (scripts/trail-review/sync_quality.js 가 저장)
+export type TrailVerdict = 'USABLE' | 'FIXABLE' | 'UNUSABLE';
+export type TrailEndpoint = 'TRAILHEAD' | 'SUMMIT' | 'MIDWAY';
+
+export interface TrailQualityDetail {
+  verdict: TrailVerdict;
+  fix: string[];
+  reasons: string[];
+  start: TrailEndpoint | null;
+  start_hint: string | null;
+  end: TrailEndpoint | null;
+  end_hint: string | null;
+  start_end_m: number | null;
+  gap_count: number;
+  gap_fillable: number;
+  max_gap_m: number;
+  big_gap_causes: Record<string, number>;
+  fill_sources: string;
+  repeat3_share: number;
+  alt_spikes: number;
+  alt_spike_causes: Record<string, number>;
+  est_min: number | null;
+  duration_ratio: number | null;
+  will_convert: boolean;
+  reliability_reasons: string[];
+  analyzed_at: string;
+}
+
+export const VERDICT_LABELS: Record<TrailVerdict, string> = {
+  USABLE: '사용 가능',
+  FIXABLE: '보정 가능',
+  UNUSABLE: '사용 불가',
+};
+
+export const ENDPOINT_LABELS: Record<TrailEndpoint, string> = {
+  TRAILHEAD: '산 초입',
+  SUMMIT: '정상',
+  MIDWAY: '중턱',
+};
+
 export interface AdminTrail {
   id: string;
   name: string;
@@ -200,26 +240,56 @@ export interface AdminTrail {
   is_published: boolean;
   quality_status: 'reliable' | 'unreliable' | null;
   quality_note: string | null;
+  quality_detail: TrailQualityDetail | null;
+}
+
+export interface AdminTrailWithPath extends AdminTrail {
+  path_coordinates: { lat: number; lng: number; altitude?: number }[];
 }
 
 const TRAIL_FIELDS =
-  'id, name, mountain, region, difficulty, distance, duration, description, access_info, warnings, updated_at, is_published, quality_status, quality_note';
+  'id, name, mountain, region, difficulty, distance, duration, description, access_info, warnings, updated_at, is_published, quality_status, quality_note, quality_detail';
 
 export type TrailPublishFilter = 'all' | 'published' | 'hidden';
+export type TrailVerdictFilter = 'all' | TrailVerdict | 'CONVERT';
 
-export async function searchTrails(search: string, filter: TrailPublishFilter = 'all') {
+export async function searchTrails(
+  search: string,
+  filter: TrailPublishFilter = 'all',
+  verdict: TrailVerdictFilter = 'all'
+) {
   const keyword = search.trim().replace(/[,()]/g, ' ');
   let query = supabase.from('trails').select(TRAIL_FIELDS).order('name').limit(50);
   if (keyword) query = query.or(`name.ilike.%${keyword}%,mountain.ilike.%${keyword}%`);
   if (filter !== 'all') query = query.eq('is_published', filter === 'published');
+  if (verdict === 'CONVERT') query = query.eq('quality_detail->>will_convert', 'true');
+  else if (verdict !== 'all') query = query.eq('quality_detail->>verdict', verdict);
 
   const { data, error } = await query;
   return { trails: (data as AdminTrail[] | null) || [], error: error?.message || null };
 }
 
 export async function getTrail(id: string) {
-  const { data, error } = await supabase.from('trails').select(TRAIL_FIELDS).eq('id', id).single();
-  return { trail: data as AdminTrail | null, error: error?.message || null };
+  const { data, error } = await supabase
+    .from('trails')
+    .select(`${TRAIL_FIELDS}, path_coordinates`)
+    .eq('id', id)
+    .single();
+  return { trail: data as AdminTrailWithPath | null, error: error?.message || null };
+}
+
+export interface TrailQualitySummary {
+  total: number;
+  published: number;
+  reliable: number;
+  unreliable: number;
+  verdicts: Record<string, number>;
+  checked_at: string | null;
+}
+
+export async function getTrailQualitySummary() {
+  const { data, error } = await supabase.rpc('admin_trail_quality_summary');
+  return { summary: data as TrailQualitySummary | null, error: error?.message || null };
 }
 
 export async function updateTrail(

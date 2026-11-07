@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
-import { getTrail, updateTrail, TRAIL_DIFFICULTIES, type AdminTrail } from '@/lib/services/admin';
+import { getTrail, updateTrail, TRAIL_DIFFICULTIES, type AdminTrailWithPath } from '@/lib/services/admin';
+import { TrailQualityPanel } from '@/components/admin/TrailQualityPanel';
 import { Loader2, ArrowLeft, ExternalLink } from 'lucide-react';
 
 const inputClass =
@@ -15,7 +16,7 @@ export default function AdminTrailEditPage() {
   const router = useRouter();
   const id = params.id as string;
 
-  const [trail, setTrail] = useState<AdminTrail | null>(null);
+  const [trail, setTrail] = useState<AdminTrailWithPath | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -99,7 +100,7 @@ export default function AdminTrailEditPage() {
     <>
       <Header title="등산로 수정" />
 
-      <main className="max-w-screen-md mx-auto p-6 pb-24 bg-gray-50 min-h-screen">
+      <main className="max-w-screen-lg mx-auto p-6 pb-24 bg-gray-50 min-h-screen">
         <div className="flex items-center justify-between mb-6">
           <Link href="/admin/trails" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
             <ArrowLeft className="w-4 h-4" /> 목록
@@ -112,6 +113,8 @@ export default function AdminTrailEditPage() {
             사이트에서 보기 <ExternalLink className="w-4 h-4" />
           </Link>
         </div>
+
+        <TrailQualityPanel trail={trail} />
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-soft border border-gray-100 space-y-5">
           <div className="text-sm text-gray-500">
