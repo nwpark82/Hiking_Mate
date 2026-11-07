@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
-import { getPosts, Post } from '@/lib/services/posts';
-import { Plus, MessageCircle, Heart, Eye, TrendingUp, Loader2, ArrowRight } from 'lucide-react';
+import { getPosts, getNotices, Post } from '@/lib/services/posts';
+import { Plus, MessageCircle, Heart, Eye, TrendingUp, Loader2, ArrowRight, Megaphone } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 const CATEGORIES = [
   { id: 'all', label: '전체' },
+  { id: 'notice', label: '공지' },
   { id: 'review', label: '후기' },
   { id: 'question', label: '질문' },
   { id: 'info', label: '정보' },
@@ -22,6 +23,11 @@ export default function CommunityPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [notices, setNotices] = useState<{ id: string; title: string; created_at: string }[]>([]);
+
+  useEffect(() => {
+    getNotices().then(({ notices: data }) => setNotices(data));
+  }, []);
 
   useEffect(() => {
     loadPosts();
@@ -71,6 +77,25 @@ export default function CommunityPage() {
             ))}
           </div>
         </div>
+
+        {/* Pinned Notices */}
+        {selectedCategory === 'all' && notices.length > 0 && (
+          <section className="mb-4 bg-white rounded-2xl border border-red-100 shadow-soft divide-y divide-gray-100">
+            {notices.map((notice) => (
+              <Link
+                key={notice.id}
+                href={`/community/${notice.id}`}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-red-50/50 transition"
+              >
+                <span className="flex items-center gap-1 px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs font-semibold flex-shrink-0">
+                  <Megaphone className="w-3 h-3" /> 공지
+                </span>
+                <span className="flex-1 text-sm font-medium text-gray-900 truncate">{notice.title}</span>
+                <span className="text-xs text-gray-500 flex-shrink-0">{formatTimeAgo(notice.created_at)}</span>
+              </Link>
+            ))}
+          </section>
+        )}
 
         {/* Post List */}
         <section>

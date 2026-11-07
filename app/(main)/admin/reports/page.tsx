@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
-import { getReports, updateReport, deleteReportedContent, type Report } from '@/lib/services/admin';
+import { getReports, updateReport, deleteContent, type Report } from '@/lib/services/admin';
 import { Loader2, Trash2, ExternalLink } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -58,7 +58,7 @@ export default function AdminReportsPage() {
     const label = TARGET_LABELS[report.target_type];
     if (!confirm(`신고된 ${label}을(를) 삭제하시겠습니까? 되돌릴 수 없습니다.`)) return;
 
-    const { error: deleteError } = await deleteReportedContent(report.target_type, report.target_id);
+    const { error: deleteError } = await deleteContent(report.target_type, report.target_id);
     if (deleteError) {
       alert('삭제 실패: ' + deleteError);
       return;

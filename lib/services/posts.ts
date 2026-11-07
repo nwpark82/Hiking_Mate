@@ -36,6 +36,9 @@ export async function getPosts(category?: string, limit = 20, offset = 0) {
 
     if (category && category !== 'all') {
       query = query.eq('category', category);
+    } else {
+      // 전체 탭에서는 공지를 상단 고정 영역에 따로 표시
+      query = query.neq('category', 'notice');
     }
 
     const { data, error, count } = await query;
@@ -55,6 +58,17 @@ export async function getPosts(category?: string, limit = 20, offset = 0) {
   }
 }
 
+export async function getNotices(limit = 3) {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('id, title, created_at')
+    .eq('category', 'notice')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  return { notices: data || [], error: error?.message || null };
+}
+
 export async function getPost(id: string) {
   try {
     const { data, error } = await supabase
@@ -70,11 +84,8 @@ export async function getPost(id: string) {
 
     if (error) throw error;
 
-    // Increment view count
-    await supabase
-      .from('posts')
-      .update({ view_count: (data.view_count || 0) + 1 })
-      .eq('id', id);
+    // Increment view count (작성자가 아니어도 증가하도록 DB 함수 사용)
+    await supabase.rpc('increment_post_view', { p_post_id: id });
 
     return { post: data, error: null };
   } catch (error: any) {

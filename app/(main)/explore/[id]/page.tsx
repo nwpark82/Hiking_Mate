@@ -620,6 +620,16 @@ export default function TrailDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Report Wrong Info */}
+          <div className="mb-24 text-center">
+            <Link
+              href={`/feedback?trail=${trail.id}&name=${encodeURIComponent(trail.name)}`}
+              className="text-sm text-gray-500 underline underline-offset-2 hover:text-gray-700"
+            >
+              등산로 정보가 실제와 다른가요? 정보 오류 제보하기
+            </Link>
+          </div>
         </section>
 
         {/* Action Buttons */}

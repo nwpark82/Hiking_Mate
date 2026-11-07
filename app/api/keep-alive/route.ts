@@ -5,6 +5,26 @@ import { createClient } from '@supabase/supabase-js';
 // Supabase Free tier는 1주일 동안 활동이 없으면 일시 중지됨
 // 이 엔드포인트를 매일 실행하여 DB 연결 유지
 
+// DB 장애 시 Discord로 알림 (DB가 죽어 있을 수 있으므로 웹훅 URL은 Vercel 환경변수로 관리)
+async function notifyFailure(reason: string) {
+  const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+  if (!webhookUrl) return;
+
+  try {
+    await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        content: `⚠️ **DB 상태 점검 실패** — ${reason.slice(0, 500)}
+Supabase 대시보드에서 프로젝트 상태(일시정지 여부)를 확인하세요.`,
+        allowed_mentions: { parse: [] },
+      }),
+    });
+  } catch (error) {
+    console.error('Failed to send failure notification:', error);
+  }
+}
+
 export async function GET(request: Request) {
   // Vercel Cron 인증 확인 (선택적 보안)
   const authHeader = request.headers.get('authorization');
@@ -40,6 +60,7 @@ export async function GET(request: Request) {
 
     if (error) {
       console.error('Keep-alive query failed:', error);
+      await notifyFailure(error.message);
       return NextResponse.json(
         {
           success: false,
@@ -61,6 +82,7 @@ export async function GET(request: Request) {
 
   } catch (error) {
     console.error('Keep-alive error:', error);
+    await notifyFailure(error instanceof Error ? error.message : 'Unknown error');
     return NextResponse.json(
       {
         success: false,

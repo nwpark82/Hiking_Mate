@@ -30,6 +30,7 @@ const CATEGORIES = [
   { id: 'question', label: '질문' },
   { id: 'info', label: '정보' },
   { id: 'companion', label: '동행찾기' },
+  { id: 'notice', label: '공지' },
 ];
 
 export default function PostDetailPage() {

@@ -112,7 +112,7 @@ export default function AdminFeedbackPage() {
                 <textarea
                   value={notes[item.id] ?? ''}
                   onChange={(e) => setNotes({ ...notes, [item.id]: e.target.value })}
-                  placeholder="관리자 메모 (처리 내용 기록용)"
+                  placeholder="답변 (로그인한 작성자에게 문의하기 화면에서 표시됩니다)"
                   rows={2}
                   className="w-full border border-gray-300 rounded-lg p-3 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-forest-500"
                 />

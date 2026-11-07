@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/lib/hooks/useAuth';
+import { getUserRole } from '@/lib/services/feedback';
 import { getPost, updatePost } from '@/lib/services/posts';
 import { uploadMultipleImages } from '@/lib/services/storage';
 import { Loader2, Image as ImageIcon, X } from 'lucide-react';
@@ -15,6 +16,9 @@ const CATEGORIES = [
   { id: 'companion', label: '동행찾기', imageLimit: 3 },
 ];
 
+// 공지는 관리자만 작성 가능 (DB 정책에서도 제한)
+const NOTICE_CATEGORY = { id: 'notice', label: '공지', imageLimit: 5 };
+
 export default function EditPostPage() {
   const router = useRouter();
   const params = useParams();
@@ -24,10 +28,16 @@ export default function EditPostPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('question');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const categories = isAdmin ? [NOTICE_CATEGORY, ...CATEGORIES] : CATEGORIES;
   const [images, setImages] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (user) getUserRole().then((role) => setIsAdmin(role === 'admin'));
+  }, [user]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -77,7 +87,7 @@ export default function EditPostPage() {
     if (!files || files.length === 0) return;
 
     // 카테고리별 이미지 제한 확인
-    const selectedCat = CATEGORIES.find(cat => cat.id === category);
+    const selectedCat = categories.find(cat => cat.id === category);
     const maxImages = selectedCat?.imageLimit || 3;
 
     if (images.length + files.length > maxImages) {
@@ -173,7 +183,7 @@ export default function EditPostPage() {
               카테고리
             </label>
             <div className="flex gap-2 flex-wrap">
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <button
                   key={cat.id}
                   type="button"

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Header } from '@/components/layout/Header';
-import { listUsers, setUserBan, type AdminUser } from '@/lib/services/admin';
+import { listUsers, setUserBan, setUserRole, type AdminUser } from '@/lib/services/admin';
+import { supabase } from '@/lib/supabase/client';
 import { Loader2, Search, Ban, CheckCircle } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -17,6 +18,7 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState('');
+  const [myId, setMyId] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -28,7 +30,19 @@ export default function AdminUsersPage() {
 
   useEffect(() => {
     load();
+    supabase.auth.getUser().then(({ data }) => setMyId(data.user?.id ?? null));
   }, []);
+
+  const handleRole = async (user: AdminUser, role: AdminUser['role']) => {
+    if (role === user.role) return;
+    if (!confirm(`"${user.username}" 회원의 권한을 ${user.role} → ${role}(으)로 변경하시겠습니까?`)) return;
+
+    const { error: roleError } = await setUserRole(user.id, role);
+    if (roleError) {
+      alert('권한 변경 실패: ' + roleError);
+    }
+    load();
+  };
 
   const handleBan = async (user: AdminUser) => {
     const banned = !isBanned(user);
@@ -111,6 +125,18 @@ export default function AdminUsersPage() {
                     {user.posts_count}
                   </div>
                 </div>
+                {user.id !== myId && (
+                  <select
+                    value={user.role}
+                    onChange={(e) => handleRole(user, e.target.value as AdminUser['role'])}
+                    className="px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 bg-white"
+                    title="권한 변경"
+                  >
+                    <option value="user">일반 회원</option>
+                    <option value="moderator">운영자</option>
+                    <option value="admin">관리자</option>
+                  </select>
+                )}
                 {user.role === 'user' && (
                   <button
                     onClick={() => handleBan(user)}

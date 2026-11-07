@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { createFeedback, type CreateFeedbackData } from '@/lib/services/feedback';
+import { createFeedback, getMyFeedback, type CreateFeedbackData, type Feedback } from '@/lib/services/feedback';
 import { Bug, Lightbulb, HelpCircle, TrendingUp, MessageSquare, Send } from 'lucide-react';
 
 const CATEGORIES = [
@@ -14,6 +14,13 @@ const CATEGORIES = [
   { value: 'question', label: '문의사항', icon: HelpCircle, description: '궁금한 점이 있으신가요?' },
   { value: 'other', label: '기타', icon: MessageSquare, description: '그 외 의견을 남겨주세요' },
 ] as const;
+
+const STATUS_LABELS: Record<Feedback['status'], { label: string; className: string }> = {
+  new: { label: '접수', className: 'bg-gray-100 text-gray-700' },
+  in_progress: { label: '처리 중', className: 'bg-yellow-100 text-yellow-700' },
+  resolved: { label: '답변 완료', className: 'bg-green-100 text-green-700' },
+  closed: { label: '종료', className: 'bg-gray-100 text-gray-500' },
+};
 
 export default function FeedbackPage() {
   const router = useRouter();
@@ -25,6 +32,32 @@ export default function FeedbackPage() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [myFeedback, setMyFeedback] = useState<Feedback[]>([]);
+
+  const loadMyFeedback = async () => {
+    setMyFeedback(await getMyFeedback());
+  };
+
+  useEffect(() => {
+    if (user) loadMyFeedback();
+  }, [user]);
+
+  // 등산로 상세의 '정보 오류 제보'에서 넘어온 경우 내용 미리 채우기
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const trailId = params.get('trail');
+    if (!trailId) return;
+    const trailName = params.get('name') || '';
+    setSelectedCategory('bug');
+    setTitle(`[등산로 정보 오류] ${trailName}`.slice(0, 100));
+    setMessage(
+      `등산로: ${trailName}
+링크: ${window.location.origin}/explore/${trailId}
+
+잘못된 정보와 올바른 정보를 알려주세요.
+- `
+    );
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,6 +94,7 @@ export default function FeedbackPage() {
       setMessage('');
       setEmail('');
       setSelectedCategory('other');
+      if (user) loadMyFeedback();
 
       // 3초 후 자동으로 성공 메시지 숨김
       setTimeout(() => {
@@ -231,6 +265,36 @@ export default function FeedbackPage() {
             (예: 어떤 페이지에서, 어떤 버튼을 눌렀을 때, 어떤 오류가 발생했는지)
           </p>
         </div>
+
+        {/* My Feedback */}
+        {user && myFeedback.length > 0 && (
+          <section className="mt-8">
+            <h3 className="text-lg font-bold text-gray-900 mb-3">내 문의 내역</h3>
+            <div className="space-y-3">
+              {myFeedback.map((item) => (
+                <div key={item.id} className="bg-white rounded-xl p-4 border border-gray-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-xs font-semibold ${STATUS_LABELS[item.status].className}`}
+                    >
+                      {STATUS_LABELS[item.status].label}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {new Date(item.created_at).toLocaleDateString('ko-KR')}
+                    </span>
+                  </div>
+                  <p className="font-semibold text-gray-900">{item.title}</p>
+                  {item.admin_note && (
+                    <div className="mt-2 p-3 bg-forest-50 rounded-lg text-sm text-gray-800 whitespace-pre-wrap">
+                      <span className="font-semibold text-forest-700">답변: </span>
+                      {item.admin_note}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
     </>
   );

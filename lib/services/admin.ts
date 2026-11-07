@@ -126,8 +126,143 @@ export async function updateReport(id: string, status: Report['status'], adminNo
   return { error: error?.message || null };
 }
 
-export async function deleteReportedContent(targetType: 'post' | 'comment', targetId: string) {
-  const table = targetType === 'post' ? 'posts' : 'comments';
-  const { error } = await supabase.from(table).delete().eq('id', targetId);
+export async function setUserRole(userId: string, role: AdminUser['role']) {
+  const { error } = await supabase.rpc('admin_set_user_role', { p_user_id: userId, p_role: role });
   return { error: error?.message || null };
+}
+
+// ===== 콘텐츠 관리 =====
+
+export interface AdminPost {
+  id: string;
+  title: string;
+  category: string;
+  created_at: string;
+  view_count: number;
+  users?: { username: string } | null;
+}
+
+export interface AdminComment {
+  id: string;
+  post_id: string;
+  content: string;
+  created_at: string;
+  users?: { username: string } | null;
+}
+
+export async function listPosts(search = '') {
+  let query = supabase
+    .from('posts')
+    .select('id, title, category, created_at, view_count, users:user_id (username)')
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  if (search.trim()) query = query.ilike('title', `%${search.trim()}%`);
+
+  const { data, error } = await query;
+  return { posts: (data as unknown as AdminPost[] | null) || [], error: error?.message || null };
+}
+
+export async function listRecentComments(search = '') {
+  let query = supabase
+    .from('comments')
+    .select('id, post_id, content, created_at, users:user_id (username)')
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  if (search.trim()) query = query.ilike('content', `%${search.trim()}%`);
+
+  const { data, error } = await query;
+  return { comments: (data as unknown as AdminComment[] | null) || [], error: error?.message || null };
+}
+
+export async function deleteContent(type: 'post' | 'comment', id: string) {
+  const { error } = await supabase.from(type === 'post' ? 'posts' : 'comments').delete().eq('id', id);
+  return { error: error?.message || null };
+}
+
+// ===== 등산로 관리 =====
+
+export const TRAIL_DIFFICULTIES = ['초급', '중급', '고급', '전문가'] as const;
+
+export interface AdminTrail {
+  id: string;
+  name: string;
+  mountain: string;
+  region: string;
+  difficulty: string;
+  distance: number;
+  duration: number;
+  description: string | null;
+  access_info: string | null;
+  warnings: string[] | null;
+  updated_at: string | null;
+}
+
+const TRAIL_FIELDS =
+  'id, name, mountain, region, difficulty, distance, duration, description, access_info, warnings, updated_at';
+
+export async function searchTrails(search: string) {
+  const keyword = search.trim().replace(/[,()]/g, ' ');
+  let query = supabase.from('trails').select(TRAIL_FIELDS).order('name').limit(50);
+  if (keyword) query = query.or(`name.ilike.%${keyword}%,mountain.ilike.%${keyword}%`);
+
+  const { data, error } = await query;
+  return { trails: (data as AdminTrail[] | null) || [], error: error?.message || null };
+}
+
+export async function getTrail(id: string) {
+  const { data, error } = await supabase.from('trails').select(TRAIL_FIELDS).eq('id', id).single();
+  return { trail: data as AdminTrail | null, error: error?.message || null };
+}
+
+export async function updateTrail(
+  id: string,
+  input: Pick<AdminTrail, 'name' | 'difficulty' | 'distance' | 'duration' | 'description' | 'access_info' | 'warnings'>
+) {
+  const { data, error } = await supabase
+    .from('trails')
+    .update({ ...input, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .select('id');
+
+  if (!error && (!data || data.length === 0)) {
+    return { error: '수정 권한이 없습니다. DB 관리자 설정(SQL)이 적용되었는지 확인하세요.' };
+  }
+  return { error: error?.message || null };
+}
+
+// ===== 작업 기록 / 사용량 =====
+
+export interface AdminLog {
+  id: string;
+  admin_name: string | null;
+  action: string;
+  target_type: string | null;
+  target_id: string | null;
+  detail: Record<string, any>;
+  created_at: string;
+}
+
+export async function getAdminLogs() {
+  const { data, error } = await supabase
+    .from('admin_logs')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(200);
+  return { logs: (data as AdminLog[] | null) || [], error: error?.message || null };
+}
+
+export interface AdminUsage {
+  db_bytes: number;
+  storage_bytes: number;
+  storage_files: number;
+  trails: number;
+  comments: number;
+  tracking_sessions: number;
+}
+
+export async function getUsage() {
+  const { data, error } = await supabase.rpc('admin_usage');
+  return { usage: data as AdminUsage | null, error: error?.message || null };
 }
