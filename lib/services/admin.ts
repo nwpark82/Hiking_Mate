@@ -25,6 +25,8 @@ export interface Report {
   admin_note: string | null;
   created_at: string;
   updated_at: string;
+  target_preview?: string | null;
+  target_link?: string | null;
 }
 
 export interface AdminStats {
@@ -86,7 +88,34 @@ export async function getReports() {
     .from('reports')
     .select('*')
     .order('created_at', { ascending: false });
-  return { reports: (data as Report[] | null) || [], error: error?.message || null };
+
+  const reports = (data as Report[] | null) || [];
+  const idsOf = (type: Report['target_type']) =>
+    reports.filter((r) => r.target_type === type).map((r) => r.target_id);
+
+  // 신고 대상 내용 미리보기 (이미 삭제된 대상은 미리보기 없음)
+  const [{ data: posts }, { data: comments }] = await Promise.all([
+    supabase.from('posts').select('id, title').in('id', idsOf('post')),
+    supabase.from('comments').select('id, post_id, content').in('id', idsOf('comment')),
+  ]);
+
+  const enriched = reports.map((report) => {
+    if (report.target_type === 'post') {
+      const post = posts?.find((p) => p.id === report.target_id);
+      return { ...report, target_preview: post?.title ?? null, target_link: post ? `/community/${post.id}` : null };
+    }
+    if (report.target_type === 'comment') {
+      const comment = comments?.find((c) => c.id === report.target_id);
+      return {
+        ...report,
+        target_preview: comment?.content ?? null,
+        target_link: comment ? `/community/${comment.post_id}` : null,
+      };
+    }
+    return { ...report, target_preview: null, target_link: null };
+  });
+
+  return { reports: enriched, error: error?.message || null };
 }
 
 export async function updateReport(id: string, status: Report['status'], adminNote?: string) {

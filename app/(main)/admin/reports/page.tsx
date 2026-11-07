@@ -103,14 +103,21 @@ export default function AdminReportsPage() {
                 {report.description && (
                   <p className="text-gray-700 whitespace-pre-wrap mb-3">{report.description}</p>
                 )}
+                <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-700 mb-3 whitespace-pre-wrap">
+                  {report.target_preview ?? (
+                    <span className="text-gray-400">
+                      {report.target_type === 'user' ? '회원 신고' : '삭제되었거나 찾을 수 없는 콘텐츠'}
+                    </span>
+                  )}
+                </div>
                 {report.admin_note && (
                   <p className="text-sm text-gray-500 mb-3">메모: {report.admin_note}</p>
                 )}
 
                 <div className="flex gap-2 flex-wrap items-center">
-                  {report.target_type === 'post' && (
+                  {report.target_link && (
                     <Link
-                      href={`/community/${report.target_id}`}
+                      href={report.target_link}
                       target="_blank"
                       className="flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50"
                     >

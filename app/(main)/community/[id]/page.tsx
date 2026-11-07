@@ -7,6 +7,8 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { getPost, deletePost, Post } from '@/lib/services/posts';
 import { getComments, createComment, deleteComment, Comment } from '@/lib/services/comments';
 import { getLikesCount, checkUserLiked, toggleLike } from '@/lib/services/likes';
+import { ReportDialog } from '@/components/community/ReportDialog';
+import type { ReportTargetType } from '@/lib/services/reports';
 import {
   Loader2,
   Eye,
@@ -18,6 +20,7 @@ import {
   Share2,
   Send,
   X,
+  Flag,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -42,6 +45,7 @@ export default function PostDetailPage() {
   const [showMenu, setShowMenu] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [reportTarget, setReportTarget] = useState<{ type: ReportTargetType; id: string } | null>(null);
 
   useEffect(() => {
     if (params.id) {
@@ -264,6 +268,17 @@ export default function PostDetailPage() {
               </div>
             </div>
 
+            {user && !isAuthor && (
+              <button
+                onClick={() => setReportTarget({ type: 'post', id: post.id })}
+                className="flex items-center gap-1 p-2 hover:bg-gray-100 rounded-lg transition text-gray-500"
+                title="신고"
+              >
+                <Flag className="w-4 h-4" />
+                <span className="text-xs">신고</span>
+              </button>
+            )}
+
             {isAuthor && (
               <div className="relative">
                 <button
@@ -427,6 +442,15 @@ export default function PostDetailPage() {
                           <X className="w-4 h-4 text-gray-500" />
                         </button>
                       )}
+                      {user && comment.user_id !== user.id && (
+                        <button
+                          onClick={() => setReportTarget({ type: 'comment', id: comment.id })}
+                          className="p-1 hover:bg-gray-100 rounded transition"
+                          title="댓글 신고"
+                        >
+                          <Flag className="w-3.5 h-3.5 text-gray-400" />
+                        </button>
+                      )}
                     </div>
                     <p className="text-gray-700 text-sm">{comment.content}</p>
                   </div>
@@ -436,6 +460,14 @@ export default function PostDetailPage() {
           )}
         </div>
       </main>
+
+      {reportTarget && (
+        <ReportDialog
+          targetType={reportTarget.type}
+          targetId={reportTarget.id}
+          onClose={() => setReportTarget(null)}
+        />
+      )}
     </>
   );
 }
