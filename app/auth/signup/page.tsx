@@ -8,7 +8,8 @@ import { Mail, Lock, User, Loader2, Mountain, Eye, EyeOff } from 'lucide-react';
 import { PasswordRequirements, validatePassword } from '@/components/auth/PasswordRequirements';
 import { PasswordStrengthMeter } from '@/components/auth/PasswordStrengthMeter';
 import { validateEmail, validateEmailRealtime } from '@/lib/utils/email-validation';
-import { EmailValidationFeedback } from '@/components/auth/EmailValidationFeedback';
+import { EmailValidationFeedback } from '@/components/auth/EmailValidationFeedback';
+import { trackSignup } from '@/lib/analytics/gtag';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -74,6 +75,7 @@ export default function SignUpPage() {
     }
 
     if (user) {
+      trackSignup('email');
       alert('회원가입이 완료되었습니다! 이메일을 확인해주세요.');
       router.push('/auth/login');
     }

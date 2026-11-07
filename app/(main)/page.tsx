@@ -4,15 +4,42 @@ import { TrailCard } from '@/components/home/TrailCard';
 import { TrailCarousel } from '@/components/home/TrailCarousel';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
-import { Mountain, TrendingUp, Users, Activity, Sparkles, ArrowRight } from 'lucide-react';
+import { Mountain, TrendingUp, Users, Activity, MapPin, Map as MapIcon, Sparkles, ArrowRight } from 'lucide-react';
 import { getPopularTrails } from '@/lib/services/trails';
+import { createPublicSupabaseClient } from '@/lib/supabase/server';
 
 // ISR: 1시간마다 재생성
 export const revalidate = 3600;
 
+// 홈 화면 통계 (실제 DB 기준, ISR 주기마다 갱신)
+async function getSiteStats() {
+  try {
+    const supabase = createPublicSupabaseClient();
+    const rows: { mountain: string | null; region: string | null }[] = [];
+    for (let from = 0; ; from += 1000) {
+      const { data, error } = await supabase
+        .from('trails')
+        .select('mountain, region')
+        .order('id')
+        .range(from, from + 999);
+      if (error) throw error;
+      rows.push(...(data || []));
+      if (!data || data.length < 1000) break;
+    }
+    return {
+      trails: rows.length,
+      mountains: new Set(rows.map((r) => r.mountain).filter(Boolean)).size,
+      regions: new Set(rows.map((r) => r.region).filter(Boolean)).size,
+    };
+  } catch (error) {
+    console.error('Failed to load site stats:', error);
+    return null;
+  }
+}
+
 export default async function HomePage() {
   // 서버에서 데이터 fetch
-  const trails = await getPopularTrails(6);
+  const [trails, stats] = await Promise.all([getPopularTrails(6), getSiteStats()]);
   const popularTrails = trails.slice(0, 3);
   const weekendTrails = trails.slice(3, 6);
 
@@ -25,37 +52,39 @@ export default async function HomePage() {
         <SearchSection />
 
         {/* Quick Stats */}
-        <section className="grid grid-cols-3 gap-3 mb-6">
-          <Card className="border-forest-100/50 bg-gradient-to-br from-background to-forest-50/30 hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-              <div className="p-2 bg-forest-100 rounded-xl w-fit mb-2">
-                <Mountain className="w-8 h-8 text-forest-600" />
-              </div>
-              <p className="text-2xl font-bold text-forest-700 mb-1">663</p>
-              <span className="text-xs text-muted-foreground font-medium">등산로</span>
-            </CardContent>
-          </Card>
+        {stats && (
+          <section className="grid grid-cols-3 gap-3 mb-6">
+            <Card className="border-forest-100/50 bg-gradient-to-br from-background to-forest-50/30 hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <div className="p-2 bg-forest-100 rounded-xl w-fit mb-2">
+                  <MapIcon className="w-8 h-8 text-forest-600" />
+                </div>
+                <p className="text-2xl font-bold text-forest-700 mb-1">{stats.trails.toLocaleString()}</p>
+                <span className="text-xs text-muted-foreground font-medium">등산로</span>
+              </CardContent>
+            </Card>
 
-          <Card className="border-sky-100/50 bg-gradient-to-br from-background to-sky-50/30 hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-              <div className="p-2 bg-sky-100 rounded-xl w-fit mb-2">
-                <Users className="w-8 h-8 text-sky-600" />
-              </div>
-              <p className="text-2xl font-bold text-sky-700 mb-1">5.6K+</p>
-              <span className="text-xs text-muted-foreground font-medium">사용자</span>
-            </CardContent>
-          </Card>
+            <Card className="border-sky-100/50 bg-gradient-to-br from-background to-sky-50/30 hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <div className="p-2 bg-sky-100 rounded-xl w-fit mb-2">
+                  <Mountain className="w-8 h-8 text-sky-600" />
+                </div>
+                <p className="text-2xl font-bold text-sky-700 mb-1">{stats.mountains.toLocaleString()}</p>
+                <span className="text-xs text-muted-foreground font-medium">명산</span>
+              </CardContent>
+            </Card>
 
-          <Card className="border-sunset-100/50 bg-gradient-to-br from-background to-sunset-50/30 hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-              <div className="p-2 bg-sunset-100 rounded-xl w-fit mb-2">
-                <Activity className="w-8 h-8 text-sunset-600" />
-              </div>
-              <p className="text-2xl font-bold text-sunset-700 mb-1">12K+</p>
-              <span className="text-xs text-muted-foreground font-medium">기록</span>
-            </CardContent>
-          </Card>
-        </section>
+            <Card className="border-sunset-100/50 bg-gradient-to-br from-background to-sunset-50/30 hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <div className="p-2 bg-sunset-100 rounded-xl w-fit mb-2">
+                  <MapPin className="w-8 h-8 text-sunset-600" />
+                </div>
+                <p className="text-2xl font-bold text-sunset-700 mb-1">{stats.regions.toLocaleString()}</p>
+                <span className="text-xs text-muted-foreground font-medium">지역</span>
+              </CardContent>
+            </Card>
+          </section>
+        )}
 
         {/* Features */}
         <section className="mb-8">

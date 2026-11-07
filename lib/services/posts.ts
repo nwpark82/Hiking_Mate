@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase/client';
 export interface Post {
   id: string;
   user_id: string;
+  trail_id?: string | null;
+  trails?: { id: string; name: string } | null;
   title: string;
   content: string;
   category: string;
@@ -76,7 +78,8 @@ export async function getPost(id: string) {
       .select(
         `
         *,
-        users:user_id (username, avatar_url)
+        users:user_id (username, avatar_url),
+        trails:trail_id (id, name)
       `
       )
       .eq('id', id)
@@ -98,7 +101,8 @@ export async function createPost(
   title: string,
   content: string,
   category: string,
-  images?: string[]
+  images?: string[],
+  trailId?: string | null
 ) {
   try {
     const { data, error } = await supabase
@@ -109,6 +113,7 @@ export async function createPost(
         content,
         category,
         images: images || [],
+        trail_id: trailId || null,
       })
       .select()
       .single();

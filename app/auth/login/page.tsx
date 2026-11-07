@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signIn } from '@/lib/services/auth';
 import { signInWithGoogle, signInWithKakao, signInWithNaver } from '@/lib/services/social-auth';
-import { Mail, Lock, Loader2, Mountain, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Loader2, Mountain, Eye, EyeOff } from 'lucide-react';
+import { trackLogin } from '@/lib/analytics/gtag';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,6 +63,7 @@ export default function LoginPage() {
     }
 
     if (user) {
+      trackLogin('email');
       router.push('/');
       router.refresh();
     }

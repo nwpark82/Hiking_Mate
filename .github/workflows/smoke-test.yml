@@ -1,0 +1,45 @@
+# 운영 사이트 핵심 흐름 주간 자동 점검
+# - 매주 월요일 09:00 (KST) 자동 실행, Actions 탭에서 수동 실행 가능
+# - 필요한 Repository secrets: SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY (선택: DISCORD_WEBHOOK_URL)
+# - 점검 항목: scripts/smoke-test.mjs 참고
+
+name: Smoke Test
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run smoke test
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/smoke-test.mjs
+
+      - name: Notify failure
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -n "$DISCORD_WEBHOOK_URL" ]; then
+            curl -s -X POST -H "Content-Type: application/json" \
+              -d "{\"content\":\"⚠️ **주간 자동 점검 실패** — 핵심 기능에 문제가 있습니다.\n→ $RUN_URL\",\"allowed_mentions\":{\"parse\":[]}}" \
+              "$DISCORD_WEBHOOK_URL"
+          fi

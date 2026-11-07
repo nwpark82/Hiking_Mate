@@ -6,6 +6,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { Header } from '@/components/layout/Header';
 import { getTrailById } from '@/lib/services/trails';
+import { trackTrailView } from '@/lib/analytics/gtag';
 import { isFavorite as checkIsFavorite, toggleFavorite } from '@/lib/services/favorites';
 import type { Trail } from '@/types';
 
@@ -90,6 +91,7 @@ export default function TrailDetailPage() {
         has_gps: !!(data?.start_latitude && data?.start_longitude)
       });
       setTrail(data);
+      if (data) trackTrailView(data.id, data.name);
 
       // Check if this trail is favorited (임시 비활성화 - 디버깅용)
       // const favorited = await checkIsFavorite(params.id as string);
@@ -642,7 +644,11 @@ export default function TrailDetailPage() {
               🚀 이 코스로 산행 시작
             </button>
             <button
-              onClick={() => router.push('/community?createPost=true')}
+              onClick={() =>
+                router.push(
+                  `/community/new?category=review&trail=${trail.id}&trailName=${encodeURIComponent(trail.name)}`
+                )
+              }
               className="px-6 py-4 border-2 border-forest-200 text-forest-700 rounded-xl font-bold hover:bg-forest-50 transition-all duration-300 hover:border-forest-300"
             >
               ✍️ 후기 작성

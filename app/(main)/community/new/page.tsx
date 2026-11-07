@@ -7,7 +7,8 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { getUserRole } from '@/lib/services/feedback';
 import { createPost } from '@/lib/services/posts';
 import { uploadMultipleImages } from '@/lib/services/storage';
-import { Loader2, Image as ImageIcon, X } from 'lucide-react';
+import { Loader2, Image as ImageIcon, X, Mountain } from 'lucide-react';
+import { trackPostCreate } from '@/lib/analytics/gtag';
 
 const CATEGORIES = [
   { id: 'review', label: '후기', imageLimit: 5 },
@@ -26,11 +27,23 @@ export default function NewPostPage() {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('question');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [trail, setTrail] = useState<{ id: string; name: string } | null>(null);
   const categories = isAdmin ? [NOTICE_CATEGORY, ...CATEGORIES] : CATEGORIES;
   const [images, setImages] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 등산로 상세의 '후기 작성'에서 넘어온 경우 해당 등산로와 연결
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const trailId = params.get('trail');
+    if (!trailId) return;
+    const trailName = params.get('trailName') || '';
+    setTrail({ id: trailId, name: trailName });
+    setCategory('review');
+    setTitle(`${trailName} 후기`.slice(0, 100));
+  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -119,7 +132,8 @@ export default function NewPostPage() {
       title.trim(),
       content.trim(),
       category,
-      images
+      images,
+      trail?.id
     );
 
     if (error) {
@@ -129,6 +143,7 @@ export default function NewPostPage() {
     }
 
     if (post) {
+      trackPostCreate(category);
       router.push(`/community/${post.id}`);
     }
   };
@@ -150,6 +165,16 @@ export default function NewPostPage() {
 
       <main className="max-w-screen-lg mx-auto p-4 pb-24">
         <form onSubmit={handleSubmit} className="space-y-4">
+          {trail && (
+            <div className="flex items-center gap-2 p-3 bg-forest-50 border border-forest-200 rounded-lg text-sm text-forest-800">
+              <Mountain className="w-4 h-4 flex-shrink-0" />
+              <span className="flex-1 truncate">등산로 후기: {trail.name}</span>
+              <button type="button" onClick={() => setTrail(null)} className="p-1 hover:bg-forest-100 rounded" title="연결 해제">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
           {/* Category Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

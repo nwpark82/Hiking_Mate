@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { getPost, deletePost, Post } from '@/lib/services/posts';
@@ -248,6 +249,15 @@ export default function PostDetailPage() {
               </div>
 
               <h1 className="text-2xl font-bold text-gray-900 mb-4">{post.title}</h1>
+
+              {post.trails && (
+                <Link
+                  href={`/explore/${post.trails.id}`}
+                  className="inline-flex items-center gap-1 mb-4 px-3 py-1.5 bg-forest-50 text-forest-700 rounded-lg text-sm hover:bg-forest-100 transition"
+                >
+                  🏔️ {post.trails.name}
+                </Link>
+              )}
 
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">

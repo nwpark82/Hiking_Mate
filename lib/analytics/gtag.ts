@@ -68,3 +68,11 @@ export const trackHikeComplete = (trailId: string, duration: number) => {
     value: Math.round(duration / 60), // 분 단위
   });
 };
+
+export const trackPostCreate = (category: string) => {
+  event({
+    action: 'create_post',
+    category: 'engagement',
+    label: category,
+  });
+};
