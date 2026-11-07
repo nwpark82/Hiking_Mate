@@ -9,6 +9,11 @@ const compare = Object.fromEntries(
   JSON.parse(fs.readFileSync(path.join(DIR, 'raw_compare.json'), 'utf8')).map((r) => [r.id, r])
 );
 
+const v2Path = path.join(DIR, 'analysis_v2.json');
+const v2 = fs.existsSync(v2Path) ? Object.fromEntries(JSON.parse(fs.readFileSync(v2Path, 'utf8')).map((r) => [r.id, r])) : {};
+const VERDICT_LABEL = { USABLE: '사용 가능', FIXABLE: '보정 가능', UNUSABLE: '사용 불가' };
+const END_LABEL = { TRAILHEAD: '산 초입', SUMMIT: '정상', MIDWAY: '중턱' };
+
 const GRADE_LABEL = { A: 'A 사용 가능', B: 'B 주의/보정 필요', C: 'C 비공개 권장' };
 
 const sourceStatus = (c) => {
@@ -18,7 +23,18 @@ const sourceStatus = (c) => {
 
 const columns = [
   ['id', (r) => r.id],
-  ['등급', (r) => GRADE_LABEL[r.grade]],
+  ['사용 판정', (r) => VERDICT_LABEL[v2[r.id]?.verdict] || ''],
+  ['보정 방법', (r) => (v2[r.id]?.fix || []).join(' + ')],
+  ['판정 사유', (r) => (v2[r.id]?.reasons || []).join(' / ')],
+  ['시작', (r) => END_LABEL[v2[r.id]?.start] || ''],
+  ['시작 근거', (r) => v2[r.id]?.start_hint || ''],
+  ['끝', (r) => END_LABEL[v2[r.id]?.end] || ''],
+  ['끝 근거', (r) => v2[r.id]?.end_hint || ''],
+  ['끊김 수(100m+)', (r) => v2[r.id]?.gap_count ?? ''],
+  ['메울 수 있는 끊김', (r) => v2[r.id]?.gap_fillable ?? ''],
+  ['300m+ 끊김 원인', (r) => Object.entries(v2[r.id]?.big_gap_causes || {}).filter(([, v]) => v).map(([k, v]) => `${k} ${v}`).join(', ')],
+  ['같은 길 3회+ 비율', (r) => v2[r.id]?.repeat3_share ?? ''],
+  ['1차 등급', (r) => GRADE_LABEL[r.grade]],
   ['이름', (r) => r.name],
   ['산', (r) => r.mountain],
   ['지역', (r) => r.region],
@@ -45,8 +61,8 @@ const escape = (v) => {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 };
 
-const order = { C: 0, B: 1, A: 2 };
-const rows = [...analysis].sort((a, b) => order[a.grade] - order[b.grade] || b.views - a.views);
+const order = { UNUSABLE: 0, FIXABLE: 1, USABLE: 2 };
+const rows = [...analysis].sort((a, b) => (order[v2[a.id]?.verdict] ?? 0) - (order[v2[b.id]?.verdict] ?? 0) || b.views - a.views);
 
 const csv = [
   columns.map(([h]) => h).join(','),

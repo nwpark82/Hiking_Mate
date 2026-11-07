@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
-import { searchTrails, type AdminTrail } from '@/lib/services/admin';
+import { searchTrails, type AdminTrail, type TrailPublishFilter } from '@/lib/services/admin';
 import { Loader2, Search, Edit, ExternalLink } from 'lucide-react';
 
 export default function AdminTrailsPage() {
@@ -11,18 +11,19 @@ export default function AdminTrailsPage() {
   const [trails, setTrails] = useState<AdminTrail[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<TrailPublishFilter>('all');
 
   const load = async (keyword = search) => {
     setLoading(true);
-    const result = await searchTrails(keyword);
+    const result = await searchTrails(keyword, filter);
     setTrails(result.trails);
     setError(result.error);
     setLoading(false);
   };
 
   useEffect(() => {
-    load('');
-  }, []);
+    load();
+  }, [filter]);
 
   return (
     <>
@@ -33,6 +34,29 @@ export default function AdminTrailsPage() {
         <p className="text-gray-600 mb-6">
           이름·난이도·소요시간·설명·주의사항 등을 수정합니다. GPS 경로 데이터는 스크립트로 관리합니다.
         </p>
+        <p className="text-sm text-gray-500 mb-6">
+          비공개 등산로는 사용자에게 보이지 않습니다. 신뢰도 판정 기준은 docs/TRAIL_DATA_REVIEW.md 참고.
+        </p>
+
+        <div className="flex bg-white rounded-lg border border-gray-200 p-1 w-fit mb-4">
+          {(
+            [
+              ['all', '전체'],
+              ['published', '공개'],
+              ['hidden', '비공개'],
+            ] as [TrailPublishFilter, string][]
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              onClick={() => setFilter(value)}
+              className={`px-4 py-1.5 text-sm rounded-md transition ${
+                filter === value ? 'bg-forest-600 text-white' : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
 
         <form
           onSubmit={(e) => {
@@ -63,7 +87,17 @@ export default function AdminTrailsPage() {
             {trails.map((trail) => (
               <div key={trail.id} className="p-4 flex items-center gap-3">
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-gray-900 truncate">{trail.name}</div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-xs font-semibold flex-shrink-0 ${
+                        trail.is_published ? 'bg-forest-100 text-forest-700' : 'bg-gray-200 text-gray-600'
+                      }`}
+                    >
+                      {trail.is_published ? '공개' : '비공개'}
+                    </span>
+                    <span className="font-medium text-gray-900 truncate">{trail.name}</span>
+                  </div>
+                  {trail.quality_note && <div className="text-xs text-amber-700 truncate">{trail.quality_note}</div>}
                   <div className="text-xs text-gray-500">
                     {trail.region} · {trail.mountain} · {trail.difficulty} · {trail.distance?.toFixed(1)}km ·{' '}
                     {Math.floor(trail.duration / 60)}시간 {trail.duration % 60}분

@@ -623,6 +623,16 @@ export default function TrailDetailPage() {
             </div>
           )}
 
+          {/* Safety Notice */}
+          <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-sm text-amber-900 leading-relaxed">
+            <p className="font-semibold mb-1">⚠️ 안전 안내</p>
+            <p>
+              이 경로는 공공데이터 GPS 기록을 바탕으로 한 참고용 정보입니다. 실제 산행에서는 현장 이정표와 안내를
+              우선하고, 출입 통제·기상 상황을 미리 확인하세요. 소요시간은 개인 체력과 휴식에 따라 크게 달라질 수
+              있으니 일몰 전 하산할 수 있도록 여유 있게 출발하세요.
+            </p>
+          </div>
+
           {/* Report Wrong Info */}
           <div className="mb-24 text-center">
             <Link

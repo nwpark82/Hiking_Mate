@@ -197,15 +197,21 @@ export interface AdminTrail {
   access_info: string | null;
   warnings: string[] | null;
   updated_at: string | null;
+  is_published: boolean;
+  quality_status: 'reliable' | 'unreliable' | null;
+  quality_note: string | null;
 }
 
 const TRAIL_FIELDS =
-  'id, name, mountain, region, difficulty, distance, duration, description, access_info, warnings, updated_at';
+  'id, name, mountain, region, difficulty, distance, duration, description, access_info, warnings, updated_at, is_published, quality_status, quality_note';
 
-export async function searchTrails(search: string) {
+export type TrailPublishFilter = 'all' | 'published' | 'hidden';
+
+export async function searchTrails(search: string, filter: TrailPublishFilter = 'all') {
   const keyword = search.trim().replace(/[,()]/g, ' ');
   let query = supabase.from('trails').select(TRAIL_FIELDS).order('name').limit(50);
   if (keyword) query = query.or(`name.ilike.%${keyword}%,mountain.ilike.%${keyword}%`);
+  if (filter !== 'all') query = query.eq('is_published', filter === 'published');
 
   const { data, error } = await query;
   return { trails: (data as AdminTrail[] | null) || [], error: error?.message || null };
@@ -218,7 +224,10 @@ export async function getTrail(id: string) {
 
 export async function updateTrail(
   id: string,
-  input: Pick<AdminTrail, 'name' | 'difficulty' | 'distance' | 'duration' | 'description' | 'access_info' | 'warnings'>
+  input: Pick<
+    AdminTrail,
+    'name' | 'difficulty' | 'distance' | 'duration' | 'description' | 'access_info' | 'warnings' | 'is_published'
+  >
 ) {
   const { data, error } = await supabase
     .from('trails')

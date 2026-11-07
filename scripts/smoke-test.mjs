@@ -62,10 +62,10 @@ for (const path of ['/', '/explore', '/community', '/blog', '/feedback']) {
   });
 }
 
-await check('사이트맵 등산로 1,000개 이상', async () => {
+await check('사이트맵 등산로 100개 이상 (공개된 등산로만 포함)', async () => {
   const xml = await (await fetch(`${SITE}/sitemap.xml`)).text();
   const count = (xml.match(/\/explore\//g) || []).length;
-  assert(count >= 1000, `${count}개`);
+  assert(count >= 100, `${count}개`);
 });
 
 await check('DB 유지 크론 외부 호출 차단', async () => {

@@ -58,6 +58,7 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
 | `supabase/migrations/20261107000000_admin_infra.sql` | 작업 기록, 권한 변경, 공지, 조회수, 등산로 수정, 비로그인 문의, 사용량 |
 | `supabase/migrations/20261107000001_fix_trails_update_policy.sql` | 일반 회원의 등산로 수정 권한 제거, 등산로 조회수 함수 |
 | `supabase/migrations/20261108000000_skip_smoketest_notify.sql` | 자동 점검 계정(`smoketest_`) 활동은 Discord 알림 제외 |
+| `supabase/migrations/20261108000001_trail_publish_status.sql` | 등산로 공개 여부·신뢰도 컬럼, 공개된 등산로만 조회되도록 정책 변경 |
 
 모든 파일은 여러 번 실행해도 안전하도록 작성되어 있습니다.
 
@@ -81,11 +82,26 @@ pg_restore --data-only --table=posts --dbname "$TARGET_DB_URL" backup.dump
 
 전체 복원은 기존 데이터를 덮어쓸 수 있으므로 새 Supabase 프로젝트에 먼저 복원해 확인한 뒤 진행합니다.
 
+## 5-1. 등산로 신뢰도와 공개
+
+신뢰할 수 있는 등산로만 사용자에게 공개한다. 기준과 분석 결과는 `docs/TRAIL_DATA_REVIEW.md`.
+
+```bash
+node scripts/trail-review/export.js                                   # DB 내려받기
+node --max-old-space-size=6144 scripts/trail-review/analyze_v2.js .rawdata   # 경로 판정
+node scripts/trail-review/reliability.js 0.6 2.5                      # 신뢰도 (소요시간 허용 범위)
+node scripts/trail-review/convert_roundtrip.js [--apply]              # 정상/중턱 종료 편도 → 왕복 (백업 포함)
+node scripts/trail-review/publish.js [--apply]                        # 공개 여부 반영 (백업 포함)
+```
+
+- `--apply` 없이 실행하면 미리보기만 한다. 반영 전 데이터는 `data/trail-review/backup-*.json` 에 저장된다
+- 개별 등산로는 `/admin/trails` 에서 공개/비공개를 직접 바꿀 수 있다
+
 ## 6. 주간 자동 점검
 
 - 매주 월요일 09:00 (KST), GitHub → Actions → **Smoke Test** (수동 실행 가능)
 - `smoketest_` 임시 계정으로 확인 후 탈퇴(테스트 데이터 자동 삭제)
-  - 주요 페이지 응답, 사이트맵 등산로 수, 크론/관리자 페이지 보호
+  - 주요 페이지 응답, 사이트맵 등산로 수(공개된 것만, 100개 이상), 크론/관리자 페이지 보호
   - 가입 → 로그인 → 글/댓글/좋아요/신고 → 커뮤니티 목록 → 조회수 → 탈퇴
   - 보안: 권한 상승, 등산로 수정, 공지 작성이 일반 회원에게 막혀 있는지
 - 실패 시 Discord 알림. 로컬 실행: `SUPABASE_URL=... SUPABASE_ANON_KEY=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/smoke-test.mjs`

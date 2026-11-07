@@ -26,6 +26,7 @@ export default function AdminTrailEditPage() {
   const [description, setDescription] = useState('');
   const [accessInfo, setAccessInfo] = useState('');
   const [warnings, setWarnings] = useState('');
+  const [isPublished, setIsPublished] = useState(true);
 
   useEffect(() => {
     const load = async () => {
@@ -43,6 +44,7 @@ export default function AdminTrailEditPage() {
       setDescription(data.description || '');
       setAccessInfo(data.access_info || '');
       setWarnings((data.warnings || []).join('\n'));
+      setIsPublished(data.is_published);
       setLoading(false);
     };
     load();
@@ -70,6 +72,7 @@ export default function AdminTrailEditPage() {
         .split('\n')
         .map((line) => line.trim())
         .filter(Boolean),
+      is_published: isPublished,
     });
     setSaving(false);
 
@@ -113,6 +116,27 @@ export default function AdminTrailEditPage() {
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-soft border border-gray-100 space-y-5">
           <div className="text-sm text-gray-500">
             {trail.region} · {trail.mountain}
+          </div>
+
+          <div className="rounded-lg border border-gray-200 p-4 space-y-2">
+            <label className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                checked={isPublished}
+                onChange={(e) => setIsPublished(e.target.checked)}
+                className="w-5 h-5 accent-forest-600"
+              />
+              <span className="font-medium text-gray-800">사용자에게 공개</span>
+            </label>
+            {trail.quality_status && (
+              <p className={`text-sm ${trail.quality_status === 'reliable' ? 'text-forest-700' : 'text-amber-700'}`}>
+                자동 판정: {trail.quality_status === 'reliable' ? '신뢰' : '비신뢰'}
+                {trail.quality_note && ` — ${trail.quality_note}`}
+              </p>
+            )}
+            <p className="text-xs text-gray-500">
+              경로 데이터(끊김·순서·반복)에 문제가 있는 등산로를 공개하면 사용자가 길을 잃을 수 있습니다.
+            </p>
           </div>
 
           <label className="block">
