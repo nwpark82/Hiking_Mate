@@ -55,6 +55,7 @@ ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
 | `supabase/migrations/20261103000000_security_hardening.sql` | role 권한 상승 차단, 블로그 관리자 전용, 작성자 위조 차단 |
 | `supabase/migrations/20261103000001_admin_ops.sql` | 회원 탈퇴 함수, Discord 알림, 회원 목록/정지 함수 |
 | `supabase/migrations/20261107000000_admin_infra.sql` | 작업 기록, 권한 변경, 공지, 조회수, 등산로 수정, 비로그인 문의, 사용량 |
+| `supabase/migrations/20261107000001_fix_trails_update_policy.sql` | 일반 회원의 등산로 수정 권한 제거, 등산로 조회수 함수 |
 
 모든 파일은 여러 번 실행해도 안전하도록 작성되어 있습니다.
 
