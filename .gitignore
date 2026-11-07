@@ -33,3 +33,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 data/trails-export.json
+
+# 등산로 검토 원본/중간 데이터 (용량이 커서 제외, CSV 결과만 커밋)
+data/trail-review/*.json
